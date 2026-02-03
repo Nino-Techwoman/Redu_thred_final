@@ -400,9 +400,22 @@ body {
     background-color: #262626;
 }
 
+[data-theme="dark"] .page-header-dropdown-item {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .page-header-dropdown-item:hover {
+    background-color: #333;
+}
+
+[data-theme="dark"] .page-header-dropdown-item svg {
+    color: #f5f5f5;
+}
+
 [data-theme="dark"] .page-header-menu {
     background-color: rgb(38, 38, 38);
     border-color: rgba(255, 255, 255, 0.15);
+    color: #f5f5f5;
 }
 
 .content-wrapper {
@@ -945,8 +958,21 @@ body {
     border-color: rgba(255, 255, 255, 0.1);
 }
 
+[data-theme="dark"] .create-post-close {
+    color: #999999;
+}
+
 [data-theme="dark"] .create-post-close:hover {
+    color: #f5f5f5;
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .header-icon-btn {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .action-icon-btn:hover {
+    color: #f5f5f5;
 }
 
 [data-theme="dark"] .create-post-line {
@@ -1110,6 +1136,56 @@ body {
     color: #f5f5f5;
 }
 
+[data-theme="dark"] .menu-dropdown {
+    background-color: #262626;
+}
+
+[data-theme="dark"] .menu-item {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .menu-item:hover {
+    background-color: #333;
+}
+
+[data-theme="dark"] .menu-item.has-arrow svg {
+    color: #777;
+}
+
+[data-theme="dark"] .menu-item.logout {
+    color: #ed4956;
+}
+
+[data-theme="dark"] .menu-divider {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .submenu-header {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .submenu-back:hover {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .submenu-title {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .appearance-options {
+    background-color: #262626;
+}
+
+[data-theme="dark"] .appearance-option:hover {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .appearance-option.active {
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #f5f5f5;
+    background-color: #333;
+}
+
 [data-theme="dark"] .profile-header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -1184,6 +1260,15 @@ body {
     background-color: rgba(255, 255, 255, 0.05);
 }
 
+[data-theme="dark"] .action-btn img {
+    filter: brightness(0) invert(1);
+    opacity: 0.6;
+}
+
+[data-theme="dark"] .action-btn:hover img {
+    opacity: 1;
+}
+
 [data-theme="dark"] .main-content {
     background-color: #101010;
 }
@@ -1192,6 +1277,9 @@ body {
     background-color: #101010;
 }
 
+[data-theme="dark"] .drafts-back-btn {
+    color: #f5f5f5;
+}
 
 /* Tablet */
 
