@@ -1067,7 +1067,8 @@ body {
     background-color: #fafafa;
 }
 
-.quoted-post.dark {
+.quoted-post.dark,
+[data-theme="dark"] .quoted-post {
     background-color: #1a1a1a;
     border-color: rgba(255, 255, 255, 0.1);
 }
@@ -2082,12 +2083,28 @@ body {
 }
 
 [data-theme="dark"] .post {
-    background-color: #fafafa;
-    border-bottom-color: rgba(0, 0, 0, 0.15);
+    background-color: #181818;
+    border-bottom-color: rgba(255, 255, 255, 0.15);
 }
 
 [data-theme="dark"] .post-username {
     color: #f5f5f5;
+}
+
+[data-theme="dark"] .post-text {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .post-time {
+    color: #777;
+}
+
+[data-theme="dark"] .quoted-username {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .quoted-text {
+    color: #ccc;
 }
 
 [data-theme="dark"] .post-line {
