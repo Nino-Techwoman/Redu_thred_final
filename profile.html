@@ -1,0 +1,2694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; script-src 'self' 'unsafe-inline';">
+    <title>Profile - Threads</title>
+    <link rel="stylesheet" href="profile.css">
+    <style>
+        .profile-card {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .profile-details {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 2px;
+            line-height: 1.2;
+        }
+
+        .profile-username {
+            font-size: 15px;
+            color: #000000;
+        }
+
+        .profile-avatar {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-bio {
+            font-size: 15px;
+            line-height: 1.4;
+            margin-bottom: 16px;
+            color: #000000;
+        }
+
+        .profile-stats-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .profile-followers {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .follower-avatars {
+            display: flex;
+            align-items: center;
+        }
+
+        .follower-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            margin-left: -6px;
+            object-fit: cover;
+        }
+
+        .follower-avatar:first-child {
+            margin-left: 0;
+        }
+
+        .follower-count {
+            font-size: 15px;
+            color: #999999;
+        }
+
+        .profile-icons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .profile-icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #000000;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .edit-profile-btn {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #000000;
+        }
+
+        .edit-profile-btn:hover {
+            background-color: #f5f5f5;
+        }
+
+        .profile-tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-tab {
+            flex: 1;
+            padding: 16px;
+            background: none;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #999999;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s;
+            margin-bottom: -1px;
+        }
+
+        .profile-tab:hover {
+            color: #000000;
+        }
+
+        .profile-tab.active {
+            color: #000000;
+            border-bottom-color: #000000;
+        }
+
+        /* Profile Composer */
+        .profile-composer {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            gap: 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-composer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-composer-input {
+            flex: 1;
+            font-size: 15px;
+            color: #999999;
+            cursor: pointer;
+        }
+
+        .profile-composer-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #999999;
+        }
+
+        .profile-composer-btn:hover {
+            background-color: #f5f5f5;
+            color: #000000;
+        }
+
+        /* Profile Feed */
+        .profile-feed {
+            padding: 0;
+        }
+
+        .profile-post {
+            display: flex;
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+            gap: 12px;
+        }
+
+        .profile-post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-post-content {
+            flex: 1;
+        }
+
+        .profile-post-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .profile-post-username {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .profile-post-time {
+            font-size: 14px;
+            color: #999999;
+        }
+
+        .profile-post-menu {
+            margin-left: auto;
+            position: relative;
+        }
+
+        .post-menu-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999999;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .post-menu-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .post-menu-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+            min-width: 240px;
+            padding: 8px;
+            z-index: 1000;
+        }
+
+        .post-menu-dropdown.active {
+            display: block;
+        }
+
+        .post-menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 14px 16px;
+            background: none;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            color: #000000;
+            text-align: left;
+        }
+
+        .post-menu-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .post-menu-item.delete {
+            color: #ed4956;
+        }
+
+        .post-menu-item svg {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        [data-theme="dark"] .post-menu-dropdown {
+            background-color: #262626;
+        }
+
+        .profile-post-text {
+            font-size: 15px;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .profile-post-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+
+        .profile-post-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .profile-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #000000;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-post-stats {
+            font-size: 14px;
+            color: #999999;
+            margin-top: 4px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999999;
+        }
+
+        .empty-state p {
+            font-size: 15px;
+        }
+
+        /* Media Feed */
+        .media-grid {
+            padding: 0;
+        }
+
+        /* Edit Profile Modal */
+        .edit-profile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .edit-profile-overlay.active {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .edit-profile-modal {
+            background: #fff;
+            border-radius: 16px 16px 0 0;
+            width: 100%;
+            max-width: 620px;
+            height: 100%;
+            overflow-y: auto;
+            padding: 32px;
+            position: relative;
+            scrollbar-width: none;
+        }
+
+        .edit-profile-modal::-webkit-scrollbar {
+            display: none;
+        }
+
+        .edit-profile-section {
+            padding: 16px 0;
+        }
+
+        .edit-label {
+            display: block;
+            font-size: 16px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 8px;
+        }
+
+        .edit-profile-name-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .edit-name-value {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 15px;
+            color: #000;
+        }
+
+        .edit-name-value svg {
+            color: #999;
+        }
+
+        .edit-profile-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .edit-bio-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            color: #000;
+            font-family: inherit;
+            resize: none;
+            line-height: 1.5;
+            background: transparent;
+        }
+
+        .edit-row-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .edit-row-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .edit-privacy-value {
+            font-size: 15px;
+            color: #999;
+        }
+
+        .edit-placeholder {
+            font-size: 15px;
+            color: #999;
+        }
+
+        .edit-hint {
+            font-size: 13px;
+            color: #999;
+            line-height: 1.4;
+            margin-top: 4px;
+        }
+
+        .edit-divider {
+            height: 1px;
+            background: #eee;
+        }
+
+        .toggle-switch {
+            width: 48px;
+            height: 28px;
+            background: #e0e0e0;
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #000;
+        }
+
+        .toggle-knob {
+            width: 24px;
+            height: 24px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch.active .toggle-knob {
+            transform: translateX(20px);
+        }
+
+        .edit-profile-footer {
+            padding: 16px 0 0;
+        }
+
+        .edit-done-btn {
+            width: 100%;
+            padding: 16px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .edit-done-btn:hover {
+            background: #333;
+        }
+
+        [data-theme="dark"] .edit-profile-modal {
+            background: #181818;
+        }
+
+        [data-theme="dark"] .edit-label {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .edit-name-value {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .edit-bio-input {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .edit-divider {
+            background: #333;
+        }
+
+        [data-theme="dark"] .edit-done-btn {
+            background: #f5f5f5;
+            color: #000;
+        }
+
+        [data-theme="dark"] .edit-done-btn:hover {
+            background: #ddd;
+        }
+
+        /* Interests Modal */
+        .interests-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .interests-modal-overlay.active {
+            display: flex;
+        }
+
+        .interests-modal {
+            background: #fff;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .interests-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        .interests-back-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #000000;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .interests-modal-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .interests-header-spacer {
+            width: 32px;
+        }
+
+        .interests-modal-content {
+            padding: 20px;
+        }
+
+        .interests-input {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            background: transparent;
+            color: #000000;
+            outline: none;
+        }
+
+        .interests-input::placeholder {
+            color: #999999;
+        }
+
+        .interests-input:focus {
+            border-color: #000000;
+        }
+
+        .interests-hint {
+            font-size: 14px;
+            color: #999999;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        [data-theme="dark"] .interests-modal {
+            background: #181818;
+        }
+
+        .interests-input-container {
+            position: relative;
+        }
+
+        .interests-suggestions {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .interests-suggestions.active {
+            display: block;
+        }
+
+        .interests-suggestion-item {
+            display: flex;
+            flex-direction: column;
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        .interests-suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .interests-suggestion-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .interests-suggestion-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #000000;
+        }
+
+        .interests-suggestion-posts {
+            font-size: 13px;
+            color: #999999;
+            margin-top: 2px;
+        }
+
+        [data-theme="dark"] .interests-suggestions {
+            background: #181818;
+        }
+
+        .interests-selected-list {
+            margin-top: 16px;
+        }
+
+        .interests-selected-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+
+        .interests-selected-name {
+            font-size: 15px;
+            font-weight: 500;
+            color: #000000;
+        }
+
+        .interests-remove-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999999;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .interests-remove-btn:hover {
+            color: #000000;
+        }
+
+        .interests-display {
+            font-size: 15px;
+            color: #000000;
+        }
+
+        .interests-display.placeholder {
+            color: #999999;
+        }
+
+        /* Links Modal */
+        .links-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .links-modal-overlay.active {
+            display: flex;
+        }
+
+        .links-modal {
+            background: #fff;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .links-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        .links-back-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #000000;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .links-modal-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .links-header-spacer {
+            width: 32px;
+        }
+
+        .links-modal-content {
+            padding: 20px;
+        }
+
+        .links-input-container {
+            position: relative;
+        }
+
+        .links-input {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            background: transparent;
+            color: #000000;
+            outline: none;
+        }
+
+        .links-input::placeholder {
+            color: #999999;
+        }
+
+        .links-input:focus {
+            border-color: #000000;
+        }
+
+        .links-suggestions {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .links-suggestions.active {
+            display: block;
+        }
+
+        .links-suggestion-item {
+            display: flex;
+            flex-direction: column;
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        .links-suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .links-suggestion-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .links-suggestion-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #000000;
+        }
+
+        .links-suggestion-url {
+            font-size: 13px;
+            color: #999999;
+            margin-top: 2px;
+        }
+
+        .links-hint {
+            font-size: 14px;
+            color: #999999;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        [data-theme="dark"] .links-modal {
+            background: #181818;
+        }
+
+        [data-theme="dark"] .links-suggestions {
+            background: #181818;
+        }
+
+        .links-display {
+            font-size: 14px;
+            color: #999999;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .links-selected-list {
+            margin-top: 16px;
+        }
+
+        .links-selected-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+
+        .links-selected-name {
+            font-size: 15px;
+            font-weight: 500;
+            color: #000000;
+        }
+
+        .links-remove-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999999;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .links-remove-btn:hover {
+            color: #000000;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Left Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-top">
+                <a href="index.html" class="logo-link">
+                    <svg aria-label="Threads" class="logo" fill="currentColor" height="34" role="img" viewBox="0 0 192 192" width="30" xmlns="http://www.w3.org/2000/svg"><path d="M141.537 88.9883C140.71 88.5919 139.87 88.2104 139.019 87.8451C137.537 60.5382 122.616 44.905 97.5619 44.745C97.4484 44.7443 97.3355 44.7443 97.222 44.7443C82.2364 44.7443 69.7731 51.1409 62.102 62.7807L75.881 72.2328C81.6116 63.5383 90.6052 61.6848 97.2286 61.6848C97.3051 61.6848 97.3819 61.6848 97.4576 61.6855C105.707 61.7381 111.932 64.1366 115.961 68.814C118.893 72.2193 120.854 76.925 121.825 82.8638C114.511 81.6207 106.601 81.2385 98.145 81.7233C74.3247 83.0954 59.0111 96.9879 60.0396 116.292C60.5615 126.084 65.4397 134.508 73.775 140.011C80.8224 144.663 89.899 146.938 99.3323 146.423C111.79 145.74 121.563 140.987 128.381 132.296C133.559 125.696 136.834 117.143 138.28 106.366C144.217 109.949 148.617 114.664 151.047 120.332C155.179 129.967 155.42 145.8 142.501 158.708C131.182 170.016 117.576 174.908 97.0135 175.059C74.2042 174.89 56.9538 167.575 45.7381 153.317C35.2355 139.966 29.8077 120.682 29.6052 96C29.8077 71.3178 35.2355 52.0336 45.7381 38.6827C56.9538 24.4249 74.2039 17.11 97.0132 16.9405C119.988 17.1113 137.539 24.4614 149.184 38.788C154.894 45.8136 159.199 54.6488 162.037 64.9503L178.184 60.6422C174.744 47.9622 169.331 37.0357 161.965 27.974C147.036 9.60668 125.202 0.195148 97.0695 0H96.9569C68.8816 0.19447 47.2921 9.6418 32.7883 28.0793C19.8819 44.4864 13.2244 67.3157 13.0007 95.9325L13 96L13.0007 96.0675C13.2244 124.684 19.8819 147.514 32.7883 163.921C47.2921 182.358 68.8816 191.806 96.9569 192H97.0695C122.03 191.827 139.624 185.292 154.118 170.811C173.081 151.866 172.51 128.119 166.26 113.541C161.776 103.087 153.227 94.5962 141.537 88.9883ZM98.4405 129.507C88.0005 130.095 77.1544 125.409 76.6196 115.372C76.2232 107.93 81.9158 99.626 99.0812 98.6368C101.047 98.5234 102.976 98.468 104.871 98.468C111.106 98.468 116.939 99.0737 122.242 100.233C120.264 124.935 108.662 128.946 98.4405 129.507Z"></path></svg>
+                </a>
+            </div>
+
+            <div class="sidebar-menu">
+                <button class="nav-btn" data-tab="home" title="Home">
+                    <svg aria-label="Home" role="img" viewBox="0 0 26 26" width="48" height="48"><title>Home</title><path d="M2.25 12.8855V20.7497C2.25 21.8543 3.14543 22.7497 4.25 22.7497H8.25C8.52614 22.7497 8.75 22.5259 8.75 22.2497V17.6822V17.4997C8.75 15.1525 10.6528 13.2497 13 13.2497C15.3472 13.2497 17.25 15.1525 17.25 17.4997V17.6822V22.2497C17.25 22.5259 17.4739 22.7497 17.75 22.7497H21.75C22.8546 22.7497 23.75 21.8543 23.75 20.7497V12.8855C23.75 11.3765 23.0685 9.94815 21.8954 8.99883L16.1454 4.3454C14.3112 2.86095 11.6888 2.86095 9.85455 4.3454L4.10455 8.99883C2.93153 9.94815 2.25 11.3765 2.25 12.8855Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path></svg>
+                </button>
+                <button class="nav-btn" data-tab="search" title="Search">
+                    <svg aria-label="Search" role="img" viewBox="0 0 26 26" width="48" height="48"><title>Search</title><path clip-rule="evenodd" d="M3.5 11.5C3.5 7.08172 7.08172 3.5 11.5 3.5C15.9183 3.5 19.5 7.08172 19.5 11.5C19.5 15.9183 15.9183 19.5 11.5 19.5C7.08172 19.5 3.5 15.9183 3.5 11.5ZM11.5 1C5.70101 1 1 5.70101 1 11.5C1 17.299 5.70101 22 11.5 22C13.949 22 16.2023 21.1615 17.9883 19.756L22.3661 24.1339C22.8543 24.622 23.6457 24.622 24.1339 24.1339C24.622 23.6457 24.622 22.8543 24.1339 22.3661L19.756 17.9883C21.1615 16.2023 22 13.949 22 11.5C22 5.70101 17.299 1 11.5 1Z" fill="currentColor" fill-rule="evenodd"></path></svg>
+                </button>
+                <button class="nav-btn" data-tab="create" title="Create">
+                    <svg aria-label="Create" role="img" viewBox="0 0 26 26" width="48" height="48"><title>Create</title><path d="M13 5.5v15m7.5-7.5H5.5" stroke="currentColor" stroke-linecap="round" stroke-width="2.5" fill="none"></path></svg>
+                </button>
+                <button class="nav-btn" data-tab="activity" title="Activity">
+                    <svg aria-label="Notifications" role="img" viewBox="0 0 26 26" width="48" height="48"><title>Notifications</title><path d="M4.46 10.4461C4.46 14.0007 7.49 17.5056 12.2145 20.4963C12.4766 20.6541 12.7893 20.8119 13 20.8119C13.2195 20.8119 13.5322 20.6541 13.7855 20.4963C18.51 17.5056 21.54 14.0007 21.54 10.4461C21.54 7.39787 19.4005 5.27344 16.6237 5.27344C15.0164 5.27344 13.7571 5.98394 13 7.08016C12.2559 5.99262 10.987 5.27344 9.37012 5.27344C6.6017 5.27344 4.46 7.39787 4.46 10.4461Z" fill="none" stroke="currentColor" stroke-width="2.5"></path></svg>
+                </button>
+                <button class="nav-btn active" data-tab="profile" title="Profile">
+                    <svg aria-label="Profile" role="img" viewBox="0 0 26 26" width="48" height="48"><title>Profile</title><circle cx="13" cy="7.25" r="4" fill="currentColor" stroke="currentColor" stroke-width="2.5"></circle><path d="M6.26678 23.75H19.744C21.603 23.75 22.5 23.2186 22.5 22.0673C22.5 19.3712 18.8038 15.75 13 15.75C7.19625 15.75 3.5 19.3712 3.5 22.0673C3.5 23.2186 4.39704 23.75 6.26678 23.75Z" fill="currentColor" stroke="currentColor" stroke-width="2.5"></path></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-bottom">
+                <div class="menu-btn-container">
+                    <button class="nav-btn" id="menuBtn" title="Menu">
+                        <svg aria-label="More" role="img" viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                            <title>More</title>
+                            <rect rx="1.25" x="3" y="7" width="18" height="2.5"/>
+                            <rect rx="1.25" x="3" y="15" width="18" height="2.5"/>
+                        </svg>
+                    </button>
+                    <div class="menu-dropdown" id="menuDropdown">
+                        <div class="menu-main" id="menuMain">
+                            <div class="menu-section">
+                                <button class="menu-item has-arrow" id="appearanceBtn">
+                                    Appearance
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
+                                </button>
+                                <button class="menu-item">Insights</button>
+                                <button class="menu-item">Settings</button>
+                            </div>
+                            <div class="menu-divider"></div>
+                            <div class="menu-section">
+                                <button class="menu-item has-arrow" id="menuFeedsBtn">
+                                    Feeds
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
+                                </button>
+                                <button class="menu-item">Saved</button>
+                                <button class="menu-item">Liked</button>
+                            </div>
+                            <div class="menu-divider"></div>
+                            <div class="menu-section">
+                                <button class="menu-item">Report a problem</button>
+                                <button class="menu-item logout" id="logoutBtn">Log out</button>
+                            </div>
+                        </div>
+                        <!-- Appearance Submenu -->
+                        <div class="menu-submenu" id="menuAppearanceSubmenu">
+                            <div class="submenu-header">
+                                <button class="submenu-back" id="appearanceBackBtn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="15 18 9 12 15 6"/>
+                                    </svg>
+                                </button>
+                                <span class="submenu-title">Appearance</span>
+                                <div class="submenu-spacer"></div>
+                            </div>
+                            <div class="appearance-options">
+                                <button class="appearance-option active" data-theme="light">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <circle cx="12" cy="12" r="4"/>
+                                        <line x1="12" y1="2" x2="12" y2="4"/>
+                                        <line x1="12" y1="20" x2="12" y2="22"/>
+                                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                                        <line x1="2" y1="12" x2="4" y2="12"/>
+                                        <line x1="20" y1="12" x2="22" y2="12"/>
+                                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                                    </svg>
+                                </button>
+                                <button class="appearance-option" data-theme="dark">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                                    </svg>
+                                </button>
+                                <button class="appearance-option" data-theme="auto">
+                                    Auto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Header (outside card) -->
+            <div class="page-header">
+                <span class="page-header-title">Profile</span>
+                <div class="page-header-menu-container">
+                    <button class="page-header-menu" id="pageHeaderMenuBtn">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="12" r="1.5"/>
+                            <circle cx="4" cy="12" r="1.5"/>
+                            <circle cx="20" cy="12" r="1.5"/>
+                        </svg>
+                    </button>
+                    <div class="page-header-dropdown" id="pageHeaderDropdown">
+                        <button class="page-header-dropdown-item">
+                            <span>Add as column</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M3 2C2.58579 2 2.25 2.33579 2.25 2.75V4.25H0.75C0.335786 4.25 0 4.58579 0 5C0 5.41421 0.335786 5.75 0.75 5.75H2.25V7.25C2.25 7.66421 2.58579 8 3 8C3.41421 8 3.75 7.66421 3.75 7.25V5.75H5.25C5.66421 5.75 6 5.41421 6 5C6 4.58579 5.66421 4.25 5.25 4.25H3.75V2.75C3.75 2.33579 3.41421 2 3 2Z"></path>
+                                <path clip-rule="evenodd" d="M7.25 3.75H16C17.5188 3.75 18.75 4.98122 18.75 6.5V14.5C18.75 16.0188 17.5188 17.25 16 17.25H5C3.48122 17.25 2.25 16.0188 2.25 14.5V9.5H3.75V14.5C3.75 15.1904 4.30964 15.75 5 15.75H7.25V3.75ZM8.75 15.75V5.25H12.25V15.75H8.75ZM13.75 15.75H16C16.6904 15.75 17.25 15.1904 17.25 14.5V6.5C17.25 5.80964 16.6904 5.25 16 5.25H13.75V15.75Z" fill-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-wrapper">
+                <!-- Profile Card -->
+                <div class="profile-card">
+                    <div class="profile-top">
+                        <div class="profile-details">
+                            <h1 class="profile-name" id="profileName"></h1>
+                            <span class="profile-username" id="profileUsername"></span>
+                        </div>
+                        <img src="" alt="avatar" class="profile-avatar" id="profileAvatar">
+                    </div>
+                    <p class="profile-bio" id="profileBio"></p>
+                    <div class="profile-stats-row">
+                        <div class="profile-followers">
+                            <div class="follower-avatars">
+                                <img src="images/avatar2.jpg" alt="" class="follower-avatar">
+                                <img src="images/avatar3.jpg" alt="" class="follower-avatar">
+                                <img src="images/avatar4.jpg" alt="" class="follower-avatar">
+                            </div>
+                            <span class="follower-count" id="followerCount">33 followers</span>
+                        </div>
+                        <div class="profile-icons">
+                            <button class="profile-icon-btn" title="Insights" onclick="window.location.href='insights.html'">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <rect fill="none" height="20" rx="5" stroke="currentColor" stroke-width="2" width="20" x="2" y="2"></rect>
+                                    <rect height="12" rx="1" width="2" x="11" y="6"></rect>
+                                    <rect height="9" rx="1" width="2" x="15" y="9"></rect>
+                                    <rect height="5" rx="1" width="2" x="7" y="13"></rect>
+                                </svg>
+                            </button>
+                            <button class="profile-icon-btn" title="Instagram">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2.982c2.937 0 3.285.011 4.445.064a6.087 6.087 0 0 1 2.042.379 3.408 3.408 0 0 1 1.265.823 3.408 3.408 0 0 1 .823 1.265 6.087 6.087 0 0 1 .379 2.042c.053 1.16.064 1.508.064 4.445s-.011 3.285-.064 4.445a6.087 6.087 0 0 1-.379 2.042 3.643 3.643 0 0 1-2.088 2.088 6.087 6.087 0 0 1-2.042.379c-1.16.053-1.508.064-4.445.064s-3.285-.011-4.445-.064a6.087 6.087 0 0 1-2.043-.379 3.408 3.408 0 0 1-1.264-.823 3.408 3.408 0 0 1-.823-1.265 6.087 6.087 0 0 1-.379-2.042c-.053-1.16-.064-1.508-.064-4.445s.011-3.285.064-4.445a6.087 6.087 0 0 1 .379-2.042 3.408 3.408 0 0 1 .823-1.265 3.408 3.408 0 0 1 1.265-.823 6.087 6.087 0 0 1 2.042-.379c1.16-.053 1.508-.064 4.445-.064M12 1c-2.987 0-3.362.013-4.535.066a8.074 8.074 0 0 0-2.67.511 5.392 5.392 0 0 0-1.949 1.27 5.392 5.392 0 0 0-1.269 1.948 8.074 8.074 0 0 0-.51 2.67C1.012 8.638 1 9.013 1 12s.013 3.362.066 4.535a8.074 8.074 0 0 0 .511 2.67 5.392 5.392 0 0 0 1.27 1.949 5.392 5.392 0 0 0 1.948 1.269 8.074 8.074 0 0 0 2.67.51C8.638 22.988 9.013 23 12 23s3.362-.013 4.535-.066a8.074 8.074 0 0 0 2.67-.511 5.625 5.625 0 0 0 3.218-3.218 8.074 8.074 0 0 0 .51-2.67C22.988 15.362 23 14.987 23 12s-.013-3.362-.066-4.535a8.074 8.074 0 0 0-.511-2.67 5.392 5.392 0 0 0-1.27-1.949 5.392 5.392 0 0 0-1.948-1.269 8.074 8.074 0 0 0-2.67-.51C15.362 1.012 14.987 1 12 1Zm0 5.351A5.649 5.649 0 1 0 17.649 12 5.649 5.649 0 0 0 12 6.351Zm0 9.316A3.667 3.667 0 1 1 15.667 12 3.667 3.667 0 0 1 12 15.667Zm5.872-10.859a1.32 1.32 0 1 0 1.32 1.32 1.32 1.32 0 0 0-1.32-1.32Z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="edit-profile-btn" id="editProfileBtn">Edit profile</button>
+                </div>
+
+                <!-- Profile Tabs -->
+                <div class="profile-tabs">
+                    <button class="profile-tab active" data-tab="threads">Threads</button>
+                    <button class="profile-tab" data-tab="replies">Replies</button>
+                    <button class="profile-tab" data-tab="media">Media</button>
+                    <button class="profile-tab" data-tab="reposts">Reposts</button>
+                </div>
+
+                <!-- Profile Composer -->
+                <div class="profile-composer" id="profileComposer">
+                    <img src="" alt="avatar" class="profile-composer-avatar" id="composerAvatar">
+                    <span class="profile-composer-input">What's new?</span>
+                    <button class="profile-composer-btn">Post</button>
+                </div>
+
+                <!-- Profile Feed -->
+                <div class="profile-feed" id="profileFeed">
+                </div>
+
+                <!-- Media Grid -->
+                <div class="media-grid" id="mediaGrid" style="display: none;">
+                </div>
+
+                <!-- Empty tab state -->
+                <div class="empty-state" id="emptyTabState" style="display: none;">
+                    <p id="emptyTabText"></p>
+                </div>
+            </div>
+        </main>
+
+        <!-- FAB -->
+        <button class="fab" id="fab">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-content create-post-modal" id="createPostForm">
+                <div class="create-post-header">
+                    <button class="create-post-close" id="createPostClose">
+                        <svg aria-label="Close" role="img" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                            <path d="M19.707 5.707a1 1 0 0 0-1.414-1.414L12 10.586 5.707 4.293a1 1 0 0 0-1.414 1.414L10.586 12l-6.293 6.293a1 1 0 1 0 1.414 1.414L12 13.414l6.293 6.293a1 1 0 0 0 1.414-1.414L13.414 12l6.293-6.293Z"/>
+                        </svg>
+                    </button>
+                    <h2>New thread</h2>
+                    <div class="create-post-header-icons">
+                        <button class="header-icon-btn" id="draftsBtn" title="Drafts">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <rect height="15" rx="4.5" stroke="currentColor" stroke-width="2" width="15" x="7" y="7" fill="none"></rect>
+                                <path clip-rule="evenodd" d="M15.3833 4.50007C15.0018 4.15977 14.5475 3.9045 14.05 3.75672C13.7983 3.68195 13.432 3.6357 12.7078 3.68313C11.9633 3.73189 11.0102 3.86454 9.59538 4.06338C8.18054 4.26222 7.22784 4.39741 6.4987 4.55577C5.78946 4.7098 5.45011 4.85522 5.22879 4.99646C4.51904 5.44941 3.99637 6.14302 3.7566 6.95012C3.68183 7.2018 3.63558 7.56809 3.68301 8.29232C3.73177 9.03686 3.86442 9.98992 4.06326 11.4047C4.23845 12.6513 4.36423 13.5391 4.49997 14.2313V17.5001C4.49997 17.737 4.51175 17.9713 4.53475 18.2022C4.05772 17.8249 3.64282 17.3681 3.31041 16.8473C2.66675 15.8387 2.47208 14.4535 2.08272 11.6831C1.69337 8.91269 1.49869 7.52748 1.83941 6.38057C2.21619 5.11227 3.03754 4.02231 4.15285 3.31053C5.16142 2.66688 6.54662 2.4722 9.31703 2.08284C12.0874 1.69349 13.4726 1.49881 14.6196 1.83953C15.8878 2.21631 16.9778 3.03766 17.6896 4.15297C17.7623 4.26696 17.8294 4.38577 17.8916 4.51084C17.7619 4.50369 17.6314 4.50007 17.5 4.50007H15.3833Z" fill-rule="evenodd"></path>
+                                <rect height="2" rx="1" width="9" x="10" y="12"></rect>
+                                <rect height="2" rx="1" width="6" x="10" y="15"></rect>
+                            </svg>
+                        </button>
+                        <div class="more-menu-container">
+                            <button class="header-icon-btn" id="moreMenuBtn" title="More">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M7.5 13.5C6.67157 13.5 6 12.8284 6 12C6 11.1716 6.67157 10.5 7.5 10.5C8.32843 10.5 9 11.1716 9 12C9 12.8284 8.32843 13.5 7.5 13.5Z"/>
+                                    <path d="M12 13.5C11.1716 13.5 10.5 12.8284 10.5 12C10.5 11.1716 11.1716 10.5 12 10.5C12.8284 10.5 13.5 11.1716 13.5 12C13.5 12.8284 12.8284 13.5 12 13.5Z"/>
+                                    <path d="M16.5 13.5C15.6716 13.5 15 12.8284 15 12C15 11.1716 15.6716 10.5 16.5 10.5C17.3284 10.5 18 11.1716 18 12C18 12.8284 17.3284 13.5 16.5 13.5Z"/>
+                                </svg>
+                            </button>
+                            <div class="more-menu-dropdown" id="moreMenuDropdown">
+                                <button class="more-menu-item">Add AI label</button>
+                                <button class="more-menu-item">Mark as paid partnership</button>
+                                <div class="more-menu-divider"></div>
+                                <button class="more-menu-item">
+                                    <span>Schedule...</span>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <polyline points="12 6 12 12 16 14"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="create-post-body">
+                    <div class="create-post-user">
+                        <img src="" alt="avatar" class="create-post-avatar" id="createPostAvatar">
+                        <div class="create-post-line"></div>
+                    </div>
+                    <div class="create-post-content">
+                        <div class="create-post-user-row">
+                            <span class="create-post-username" id="createPostUsername"></span>
+                        </div>
+                        <textarea class="create-post-textarea" id="createPostText" placeholder="What's new?"></textarea>
+                        <div class="create-post-actions">
+                            <label class="action-icon-btn" title="Add image">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21 15 16 10 5 21"/>
+                                </svg>
+                                <input type="file" accept="image/*" id="createPostImage" style="display: none;">
+                            </label>
+                            <button class="action-icon-btn" title="Add GIF">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                                    <text x="6" y="15" font-size="8" fill="currentColor" stroke="none" font-weight="bold">GIF</text>
+                                </svg>
+                            </button>
+                            <button class="action-icon-btn" title="Add hashtag">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="4" y1="9" x2="20" y2="9"/>
+                                    <line x1="4" y1="15" x2="20" y2="15"/>
+                                    <line x1="10" y1="3" x2="8" y2="21"/>
+                                    <line x1="16" y1="3" x2="14" y2="21"/>
+                                </svg>
+                            </button>
+                            <button class="action-icon-btn" title="Add poll">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                    <line x1="7" y1="8" x2="17" y2="8"/>
+                                    <line x1="7" y1="12" x2="14" y2="12"/>
+                                    <line x1="7" y1="16" x2="11" y2="16"/>
+                                </svg>
+                            </button>
+                            <button class="action-icon-btn" title="Add location">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="create-post-add-thread">
+                    <img src="" alt="avatar" class="create-post-avatar-small" id="createPostAvatarSmall">
+                    <span class="add-thread-text">Add to thread</span>
+                </div>
+                <div class="create-post-footer">
+                    <span class="reply-options-text">Anyone can reply</span>
+                    <button class="post-btn" id="postBtn" disabled>Post</button>
+                </div>
+            </div>
+            <!-- Drafts view (inside same modal) -->
+            <div class="drafts-view" id="draftsView" style="display: none;">
+                <div class="drafts-header">
+                    <button class="drafts-back-btn" id="draftsBackBtn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5"/>
+                            <polyline points="12 19 5 12 12 5"/>
+                        </svg>
+                    </button>
+                    <h2>Drafts</h2>
+                    <div class="drafts-header-spacer"></div>
+                </div>
+                <div class="drafts-content">
+                    <div class="drafts-empty">
+                        <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor" class="drafts-empty-icon">
+                            <rect height="15" rx="4.5" stroke="currentColor" stroke-width="1.5" width="15" x="7" y="7" fill="none"/>
+                            <path clip-rule="evenodd" d="M15.3833 4.50007C15.0018 4.15977 14.5475 3.9045 14.05 3.75672C13.7983 3.68195 13.432 3.6357 12.7078 3.68313C11.9633 3.73189 11.0102 3.86454 9.59538 4.06338C8.18054 4.26222 7.22784 4.39741 6.4987 4.55577C5.78946 4.7098 5.45011 4.85522 5.22879 4.99646C4.51904 5.44941 3.99637 6.14302 3.7566 6.95012C3.68183 7.2018 3.63558 7.56809 3.68301 8.29232C3.73177 9.03686 3.86442 9.98992 4.06326 11.4047C4.23845 12.6513 4.36423 13.5391 4.49997 14.2313V17.5001C4.49997 17.737 4.51175 17.9713 4.53475 18.2022C4.05772 17.8249 3.64282 17.3681 3.31041 16.8473C2.66675 15.8387 2.47208 14.4535 2.08272 11.6831C1.69337 8.91269 1.49869 7.52748 1.83941 6.38057C2.21619 5.11227 3.03754 4.02231 4.15285 3.31053C5.16142 2.66688 6.54662 2.4722 9.31703 2.08284C12.0874 1.69349 13.4726 1.49881 14.6196 1.83953C15.8878 2.21631 16.9778 3.03766 17.6896 4.15297C17.7623 4.26696 17.8294 4.38577 17.8916 4.51084C17.7619 4.50369 17.6314 4.50007 17.5 4.50007H15.3833Z" fill-rule="evenodd"/>
+                            <rect height="2" rx="1" width="9" x="10" y="12"/>
+                            <rect height="2" rx="1" width="6" x="10" y="15"/>
+                        </svg>
+                        <p class="drafts-empty-title">No drafts yet</p>
+                        <p class="drafts-empty-text">Your drafts will appear here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="edit-profile-overlay" id="editProfileOverlay">
+        <div class="edit-profile-modal">
+            <div class="edit-profile-section">
+                <div class="edit-profile-name-row">
+                    <div>
+                        <label class="edit-label">Name</label>
+                        <div class="edit-name-value">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg>
+                            <span id="editName"></span>
+                        </div>
+                    </div>
+                    <img src="" alt="avatar" class="edit-profile-avatar" id="editAvatar">
+                </div>
+            </div>
+            <div class="edit-divider"></div>
+
+            <div class="edit-profile-section">
+                <label class="edit-label">Bio</label>
+                <textarea class="edit-bio-input" id="editBio" rows="3"></textarea>
+            </div>
+            <div class="edit-divider"></div>
+
+            <div class="edit-profile-section">
+                <label class="edit-label">Interests</label>
+                <div class="edit-row-link" id="interestsBtn">
+                    <span class="interests-display" id="interestsDisplay">Add interests</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 4 16 12 8 20"/></svg>
+                </div>
+            </div>
+            <div class="edit-divider"></div>
+
+            <div class="edit-profile-section">
+                <div class="edit-row-link" id="linksBtn">
+                    <div>
+                        <label class="edit-label" style="margin-bottom:0">Links</label>
+                        <span class="links-display" id="linksDisplay"></span>
+                    </div>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 4 16 12 8 20"/></svg>
+                </div>
+            </div>
+            <div class="edit-divider"></div>
+
+            <div class="edit-profile-section">
+                <label class="edit-label">Podcast</label>
+                <span class="edit-placeholder">+ Link to your podcast</span>
+            </div>
+            <div class="edit-divider"></div>
+
+            <div class="edit-profile-section">
+                <div class="edit-row-link">
+                    <label class="edit-label" style="margin-bottom:0">Show Instagram badge</label>
+                    <div class="toggle-switch" id="igBadgeToggle">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="edit-divider"></div>
+
+            <div class="edit-profile-section">
+                <div class="edit-row-link">
+                    <div>
+                        <label class="edit-label" style="margin-bottom:0">Profile privacy</label>
+                        <p class="edit-hint">If you switch to private, only followers can see your threads. Your replies will be visible to followers and individual profiles you reply to.</p>
+                    </div>
+                    <div class="edit-row-right">
+                        <span class="edit-privacy-value">Public</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 4 16 12 8 20"/></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="edit-profile-footer">
+                <button class="edit-done-btn" id="editDoneBtn">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Links Modal -->
+    <div class="links-modal-overlay" id="linksModalOverlay">
+        <div class="links-modal">
+            <div class="links-modal-header">
+                <button class="links-back-btn" id="linksBackBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5"/>
+                        <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                </button>
+                <span class="links-modal-title">Edit</span>
+                <div class="links-header-spacer"></div>
+            </div>
+            <div class="links-modal-content">
+                <div class="links-input-container">
+                    <input type="text" class="links-input" placeholder="Add a link" id="linksInput" autocomplete="off">
+                    <div class="links-suggestions" id="linksSuggestions"></div>
+                </div>
+                <div class="links-selected-list" id="linksSelectedList"></div>
+                <p class="links-hint">Your links are public.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interests Modal -->
+    <div class="interests-modal-overlay" id="interestsModalOverlay">
+        <div class="interests-modal">
+            <div class="interests-modal-header">
+                <button class="interests-back-btn" id="interestsBackBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5"/>
+                        <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                </button>
+                <span class="interests-modal-title">Edit</span>
+                <div class="interests-header-spacer"></div>
+            </div>
+            <div class="interests-modal-content">
+                <div class="interests-input-container">
+                    <input type="text" class="interests-input" placeholder="Add a topic" id="interestsInput" autocomplete="off">
+                    <div class="interests-suggestions" id="interestsSuggestions"></div>
+                </div>
+                <div class="interests-selected-list" id="interestsSelectedList"></div>
+                <p class="interests-hint">Your communities and interests are public.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="security.js"></script>
+    <script>
+        // load saved theme
+        let raw = localStorage.getItem('threads_theme');
+        let savedTheme = 'auto';
+        if (raw) {
+            savedTheme = JSON.parse(raw);
+        }
+        if (savedTheme == 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else if (savedTheme == 'light') {
+            document.documentElement.removeAttribute('data-theme');
+        } else {
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        }
+
+        let currentUser = null;
+
+        // get user posts from localstorage
+        function getUserPosts() {
+            // try to get data, ignore errors
+            try {
+                let data = localStorage.getItem('threads_user_posts');
+                if (!data) {
+                    return [];
+                }
+                let posts = JSON.parse(data);
+                if (!posts) {
+                    posts = [];
+                }
+                return posts;
+            } catch(e) {
+                return [];
+            }
+        }
+
+        // sample posts for profile
+        function getSamplePosts() {
+            return [
+                { text: 'U glow differently when your confidence is fueled by belief in yourself instead of validation from others.', time: '01/02/2026', image: 'images/post1.jpg' },
+                { text: 'Morning climb session was absolutely insane today. New personal best on the 7b route', time: '30/01/2026', image: 'images/post2.jpg' },
+                { text: 'Reminder: you don\'t need to explain yourself to anyone. Your journey is yours.', time: '28/01/2026', image: 'images/post3.jpg' },
+                { text: 'Golden hour at the crag hits different. The rock, the light, the silence. Pure therapy.', time: '25/01/2026', image: 'images/post4.jpg' },
+                { text: 'Just finished reading "The Rock Warrior\'s Way" and it completely changed how I think about fear on the wall. Highly recommend for any climbers out there.', time: '22/01/2026', image: 'images/post1.jpg' },
+                { text: 'Rest day means meal prep day. Fueling the body right is half the battle.', time: '19/01/2026', image: 'images/post2.jpg' },
+                { text: 'Sometimes the hardest part isn\'t the climb. It\'s showing up when you don\'t feel like it.', time: '16/01/2026', image: 'images/post3.jpg' },
+                { text: 'New climbing shoes arrived and I\'m unreasonably excited about this. The grip on these is next level.', time: '12/01/2026', image: 'images/post4.jpg' },
+                { text: 'Spent the weekend bouldering with friends. Nothing beats good company and good problems to solve.', time: '08/01/2026', image: 'images/post1.jpg' },
+                { text: 'Your only competition is who you were yesterday. Keep pushing.', time: '03/01/2026', image: 'images/post2.jpg' },
+                { text: 'Sunset from the top of the route today. Earned every inch of that view.', time: '28/12/2025', image: 'images/post3.jpg' },
+                { text: 'Recovery days are just as important as send days. Listen to your body.', time: '22/12/2025', image: 'images/post4.jpg' },
+                { text: 'Started training finger strength on the hangboard. The gains are slow but the progress is real.', time: '15/12/2025', image: 'images/post1.jpg' },
+                { text: 'Life update: signed up for my first outdoor climbing competition next month. Nervous and excited!', time: '10/12/2025', image: 'images/post2.jpg' },
+                { text: 'The way the morning fog rolls through the valley before a climb... nature really is the best artist.', time: '06/12/2025', image: 'images/post3.jpg' },
+                { text: 'Grateful for the climbing community. You push me to be better every single day.', time: '01/12/2025', image: 'images/post4.jpg' }
+            ];
+        }
+
+        // render posts
+        function renderPosts() {
+            let feed = document.getElementById('profileFeed');
+            if (!feed || !currentUser) return;
+
+            let userPosts = getUserPosts();
+            let rawSamples = getSamplePosts();
+            let samplePosts = [];
+            for (let i = 0; i < rawSamples.length; i++) {
+                let p = rawSamples[i];
+                let imageVal = null;
+                if (p.image) {
+                    imageVal = p.image;
+                }
+                samplePosts.push({
+                    username: currentUser.username,
+                    avatar: currentUser.avatar,
+                    text: p.text,
+                    time: p.time,
+                    image: imageVal,
+                    likes: Math.floor(Math.random() * 120) + 1,
+                    comments: Math.floor(Math.random() * 30)
+                });
+            }
+            let posts = [];
+            for (let i = 0; i < userPosts.length; i++) {
+                posts.push(userPosts[i]);
+            }
+            for (let i = 0; i < samplePosts.length; i++) {
+                posts.push(samplePosts[i]);
+            }
+            feed.innerHTML = '';
+
+            if (posts.length == 0) {
+                let emptyDiv = document.createElement('div');
+                emptyDiv.className = 'empty-state';
+                let emptyP = document.createElement('p');
+                emptyP.textContent = 'No threads yet';
+                emptyDiv.appendChild(emptyP);
+                feed.appendChild(emptyDiv);
+                return;
+            }
+
+            for (let i = 0; i < posts.length; i++) {
+                let post = posts[i];
+                let div = document.createElement('div');
+                div.className = 'profile-post';
+
+                // avatar
+                let avatarImg = document.createElement('img');
+                avatarImg.className = 'profile-post-avatar';
+                avatarImg.alt = sanitize(post.username || currentUser.username);
+                let avatarSrc = post.avatar || currentUser.avatar;
+                if (typeof avatarSrc == 'string' && avatarSrc.length > 0) {
+                    avatarImg.src = avatarSrc;
+                } else {
+                    avatarImg.src = '';
+                }
+                div.appendChild(avatarImg);
+
+                // content
+                let contentDiv = document.createElement('div');
+                contentDiv.className = 'profile-post-content';
+
+                // header row
+                let headerDiv = document.createElement('div');
+                headerDiv.className = 'profile-post-header';
+
+                let usernameSpan = document.createElement('span');
+                usernameSpan.className = 'profile-post-username';
+                usernameSpan.textContent = post.username || currentUser.username;
+                headerDiv.appendChild(usernameSpan);
+
+                let timeSpan = document.createElement('span');
+                timeSpan.className = 'profile-post-time';
+                if (post.time) {
+                    timeSpan.textContent = post.time;
+                } else {
+                    timeSpan.textContent = '';
+                }
+                headerDiv.appendChild(timeSpan);
+
+                let menuContainer = document.createElement('div');
+                menuContainer.className = 'profile-post-menu';
+
+                let menuBtn = document.createElement('button');
+                menuBtn.className = 'post-menu-btn';
+                menuBtn.innerHTML = '<svg aria-label="More" role="img" viewBox="0 0 24 24" style="--x-fill: currentColor; --x-height: 20px; --x-width: 20px;"><title>More</title><circle cx="12" cy="12" r="1.5"></circle><circle cx="6" cy="12" r="1.5"></circle><circle cx="18" cy="12" r="1.5"></circle></svg>';
+                menuContainer.appendChild(menuBtn);
+
+                let menuDropdown = document.createElement('div');
+                menuDropdown.className = 'post-menu-dropdown';
+                menuDropdown.innerHTML = '<button class="post-menu-item"><span>Insights</span><svg aria-label="" role="img" viewBox="0 0 24 24" style="--x-fill: currentColor; --x-height: 20px; --x-width: 20px;"><title></title><rect fill="none" height="20" rx="5" stroke="currentColor" stroke-width="2" width="20" x="2" y="2"></rect><rect height="12" rx="1" width="2" x="11" y="6" fill="currentColor"></rect><rect height="9" rx="1" width="2" x="15" y="9" fill="currentColor"></rect><rect height="5" rx="1" width="2" x="7" y="13" fill="currentColor"></rect></svg></button><button class="post-menu-item"><span>Save</span><svg aria-label="" role="img" viewBox="0 0 24 24" style="--x-fill: currentColor; --x-height: 20px; --x-width: 20px;"><title></title><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" fill="none" stroke="currentColor" stroke-width="2"></path></svg></button><button class="post-menu-item"><span>Pin to profile</span><svg aria-label="" role="img" viewBox="0 0 20 20" style="--x-fill: currentColor; --x-height: 20px; --x-width: 20px;"><title></title><path d="M11.5789 11.8456L14.565 8.09342L18.3334 8.62727C18.5236 8.65422 18.6387 8.42365 18.5029 8.28783L11.6895 1.47438C11.5536 1.33856 11.3231 1.45367 11.35 1.64386L11.8839 5.4123L8.13171 8.39844M11.5789 11.8456C12.3679 12.8543 13.4711 14.8343 11.8872 17.1319C11.4954 17.7003 10.6866 17.6916 10.1984 17.2035L6.48613 13.4912M11.5789 11.8456V11.8456C10.6897 10.4631 9.51421 9.28756 8.13171 8.39844V8.39844M8.13171 8.39844C7.40288 7.95584 6.24522 7.39628 4.93842 7.45125C4.27222 7.47928 3.56725 7.66702 2.86059 8.1114C2.27618 8.4789 2.28566 9.29071 2.77382 9.77886L6.48613 13.4912M6.48613 13.4912L2.36827 17.609" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></button><button class="post-menu-item"><span>Hide like and share co...</span><svg aria-label="" role="img" viewBox="0 0 20 20" style="--x-fill: currentColor; --x-height: 20px; --x-width: 20px;"><title></title><path d="M2.14555 5.86847C2.25874 5.47003 2.0275 5.05526 1.62905 4.94207C1.2306 4.82888 0.815836 5.06012 0.702645 5.45857C0.536571 6.04318 0.449219 6.66962 0.449219 7.3272C0.449219 9.37797 1.32346 11.3552 2.78088 13.1862C4.23798 15.0167 6.3081 16.7411 8.78837 18.3088L8.80249 18.3175C8.95243 18.4077 9.13262 18.5076 9.31738 18.5872C9.48405 18.6589 9.73381 18.7498 9.99941 18.7498C10.2664 18.7498 10.5162 18.6611 10.688 18.5872C10.8756 18.5064 11.0561 18.4048 11.2057 18.3118L11.2057 18.3118L11.2104 18.3088C11.853 17.9026 12.4672 17.4865 13.0497 17.0614C13.3843 16.8172 13.4576 16.348 13.2134 16.0134C12.9692 15.6788 12.5 15.6056 12.1654 15.8498C11.6125 16.2533 11.027 16.6502 10.4114 17.0393C10.3004 17.1082 10.1899 17.1685 10.095 17.2093C10.0554 17.2264 10.0245 17.2374 10.0021 17.2442C9.98008 17.2373 9.94956 17.2262 9.91033 17.2093C9.8138 17.1678 9.7003 17.1068 9.58259 17.0363C7.1956 15.5267 5.27334 13.9089 3.95448 12.252C2.63461 10.5938 1.94922 8.93659 1.94922 7.3272C1.94922 6.80283 2.01881 6.31464 2.14555 5.86847Z" fill="currentColor" fill-rule="evenodd"></path><path d="M13.7373 1.24951C12.2124 1.24951 10.9274 1.81108 10.0015 2.71991C9.10085 1.83343 7.8445 1.27362 6.35846 1.25027C5.9443 1.24377 5.60328 1.57424 5.59677 1.9884C5.59027 2.40256 5.92074 2.74358 6.3349 2.75009C7.71763 2.77181 8.76569 3.40626 9.38048 4.3045C9.51976 4.50801 9.75018 4.63004 9.99679 4.63089C10.2434 4.63175 10.4747 4.51132 10.6154 4.30879C11.2594 3.38168 12.3276 2.74951 13.7373 2.74951C16.1572 2.74951 18.0496 4.57883 18.0496 7.32726C18.0496 8.78818 17.4853 10.2877 16.3931 11.7936C16.1499 12.1289 16.2245 12.5978 16.5598 12.841C16.8951 13.0842 17.3641 13.0096 17.6073 12.6743C18.8291 10.9898 19.5496 9.18843 19.5496 7.32726C19.5496 3.79869 17.0331 1.24951 13.7373 1.24951Z" fill="currentColor" fill-rule="evenodd"></path><path d="M1.5 1.5L18.5 18" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path></svg></button><button class="post-menu-item"><span>Reply options</span><svg aria-label="" role="img" viewBox="0 0 24 24" style="--x-fill: currentColor; --x-height: 16px; --x-width: 16px; transform: rotate(180deg);"><title></title><polyline points="16.502 3 7.498 12 16.502 21" fill="none" stroke="currentColor" stroke-width="2"></polyline></svg></button><button class="post-menu-item delete"><span>Delete</span><svg aria-label="" role="img" viewBox="0 0 20 20" style="--x-fill: currentColor; --x-height: 20px; --x-width: 20px;"><title></title><path d="M6.75 3.5V2.5C6.75 1.67157 7.42157 1 8.25 1H11.75C12.5784 1 13.25 1.67157 13.25 2.5V3.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path><path d="M3.75 4L4.54449 15.5202C4.61689 16.57 4.6531 17.0949 4.88062 17.4928C5.08095 17.8431 5.38256 18.1246 5.74584 18.3004C6.15846 18.5 6.68461 18.5 7.73691 18.5H12.2631C13.3154 18.5 13.8415 18.5 14.2542 18.3004C14.6174 18.1246 14.9191 17.8431 15.1194 17.4928C15.3469 17.0949 15.3831 16.57 15.4555 15.5202L16.25 4M3.75 4H16.25M3.75 4H1.75M16.25 4H18.25" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path></svg></button><button class="post-menu-item"><span>Copy link</span><svg aria-label="" role="img" viewBox="2 2 16 16" style="--x-fill: transparent; --x-height: 20px; --x-width: 20px;"><title></title><path d="M8.39992 5.44993L9.50669 4.34316C11.2046 2.64524 13.9575 2.64524 15.6554 4.34316V4.34316V4.34316C17.3533 6.04108 17.3533 8.79396 15.6554 10.4919L14.5486 11.5987" stroke="currentColor" stroke-linecap="round" stroke-width="1.65"></path><path d="M5.44773 8.40114L4.34096 9.50791C2.64304 11.2058 2.64304 13.9587 4.34096 15.6566V15.6566V15.6566C6.03889 17.3546 8.79176 17.3546 10.4897 15.6566L11.5965 14.5499" stroke="currentColor" stroke-linecap="round" stroke-width="1.65"></path><path d="M12.7051 7.29565L7.2942 12.7065" stroke="currentColor" stroke-linecap="round" stroke-width="1.65"></path></svg></button>';
+                menuContainer.appendChild(menuDropdown);
+
+                menuBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    let allDropdowns = document.querySelectorAll('.post-menu-dropdown.active');
+                    for (let d = 0; d < allDropdowns.length; d++) {
+                        if (allDropdowns[d] !== menuDropdown) {
+                            allDropdowns[d].classList.remove('active');
+                        }
+                    }
+                    menuDropdown.classList.toggle('active');
+                });
+
+                headerDiv.appendChild(menuContainer);
+
+                contentDiv.appendChild(headerDiv);
+
+                // post text
+                let textP = document.createElement('p');
+                textP.className = 'profile-post-text';
+                if (post.text) {
+                    textP.textContent = post.text;
+                } else {
+                    textP.textContent = '';
+                }
+                contentDiv.appendChild(textP);
+
+                // post image
+                if (post.image && typeof post.image == 'string' && post.image.length > 0) {
+                    let postImg = document.createElement('img');
+                    postImg.className = 'profile-post-image';
+                    postImg.src = post.image;
+                    postImg.alt = '';
+                    postImg.loading = 'lazy';
+                    contentDiv.appendChild(postImg);
+                }
+
+                // action buttons
+                let actionsDiv = document.createElement('div');
+                actionsDiv.className = 'profile-post-actions';
+                actionsDiv.innerHTML = '<button class="profile-action-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button><button class="profile-action-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></button><button class="profile-action-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button><button class="profile-action-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>';
+                contentDiv.appendChild(actionsDiv);
+
+                // engagement stats
+                let statsDiv = document.createElement('div');
+                statsDiv.className = 'profile-post-stats';
+                let likes = post.likes;
+                if (!likes) {
+                    likes = 0;
+                }
+                let comments = post.comments;
+                if (!comments) {
+                    comments = 0;
+                }
+                let statsText = [];
+                if (likes > 0) {
+                    let likeWord = '';
+                    if (likes != 1) {
+                        likeWord = 's';
+                    }
+                    statsText.push(likes + ' like' + likeWord);
+                }
+                if (comments > 0) {
+                    let replyWord = '';
+                    if (comments != 1) {
+                        replyWord = 'ies';
+                    } else {
+                        replyWord = 'y';
+                    }
+                    statsText.push(comments + ' repl' + replyWord);
+                }
+                let statsString = '';
+                for (let s = 0; s < statsText.length; s++) {
+                    if (s > 0) {
+                        statsString = statsString + ' - ';
+                    }
+                    statsString = statsString + statsText[s];
+                }
+                statsDiv.textContent = statsString;
+                contentDiv.appendChild(statsDiv);
+
+                div.appendChild(contentDiv);
+                feed.appendChild(div);
+            }
+        }
+
+        // render media feed (posts with images only, same layout as threads)
+        function renderMedia() {
+            let grid = document.getElementById('mediaGrid');
+            if (!grid || !currentUser) return;
+
+            let userPosts = getUserPosts();
+            let rawSamples = getSamplePosts();
+            let samplePosts = [];
+            for (let i = 0; i < rawSamples.length; i++) {
+                let p = rawSamples[i];
+                let imageVal = null;
+                if (p.image) {
+                    imageVal = p.image;
+                }
+                samplePosts.push({
+                    username: currentUser.username,
+                    avatar: currentUser.avatar,
+                    text: p.text,
+                    time: p.time,
+                    image: imageVal,
+                    likes: Math.floor(Math.random() * 120) + 1,
+                    comments: Math.floor(Math.random() * 30)
+                });
+            }
+            let allPosts = [];
+            for (let i = 0; i < userPosts.length; i++) {
+                allPosts.push(userPosts[i]);
+            }
+            for (let i = 0; i < samplePosts.length; i++) {
+                allPosts.push(samplePosts[i]);
+            }
+            grid.innerHTML = '';
+
+            let mediaPosts = [];
+            for (let i = 0; i < allPosts.length; i++) {
+                if (allPosts[i].image) {
+                    mediaPosts.push(allPosts[i]);
+                }
+            }
+
+            if (mediaPosts.length == 0) {
+                grid.style.display = 'none';
+                let emptyState = document.getElementById('emptyTabState');
+                let emptyText = document.getElementById('emptyTabText');
+                if (emptyState && emptyText) {
+                    emptyText.textContent = 'No media yet';
+                    emptyState.style.display = '';
+                }
+                return;
+            }
+
+            for (let i = 0; i < mediaPosts.length; i++) {
+                let post = mediaPosts[i];
+                let div = document.createElement('div');
+                div.className = 'profile-post';
+
+                let avatarImg = document.createElement('img');
+                avatarImg.className = 'profile-post-avatar';
+                avatarImg.alt = post.username || currentUser.username;
+                let avatarSrc = post.avatar || currentUser.avatar;
+                if (typeof avatarSrc == 'string' && avatarSrc.length > 0) {
+                    avatarImg.src = avatarSrc;
+                } else {
+                    avatarImg.src = '';
+                }
+                div.appendChild(avatarImg);
+
+                let contentDiv = document.createElement('div');
+                contentDiv.className = 'profile-post-content';
+
+                let headerDiv = document.createElement('div');
+                headerDiv.className = 'profile-post-header';
+
+                let usernameSpan = document.createElement('span');
+                usernameSpan.className = 'profile-post-username';
+                usernameSpan.textContent = post.username || currentUser.username;
+                headerDiv.appendChild(usernameSpan);
+
+                let timeSpan = document.createElement('span');
+                timeSpan.className = 'profile-post-time';
+                if (post.time) {
+                    timeSpan.textContent = post.time;
+                } else {
+                    timeSpan.textContent = '';
+                }
+                headerDiv.appendChild(timeSpan);
+
+                let menuContainer = document.createElement('div');
+                menuContainer.className = 'profile-post-menu';
+
+                let menuBtn = document.createElement('button');
+                menuBtn.className = 'post-menu-btn';
+                menuBtn.innerHTML = '<svg aria-label="More" role="img" viewBox="0 0 24 24" style="--x-fill: currentColor; --x-height: 20px; --x-width: 20px;"><title>More</title><circle cx="12" cy="12" r="1.5"></circle><circle cx="6" cy="12" r="1.5"></circle><circle cx="18" cy="12" r="1.5"></circle></svg>';
+                menuContainer.appendChild(menuBtn);
+
+                let menuDropdown = document.createElement('div');
+                menuDropdown.className = 'post-menu-dropdown';
+                menuDropdown.innerHTML = '<button class="post-menu-item"><span>Insights</span><svg aria-label="" role="img" viewBox="0 0 24 24" style="--x-fill: currentColor; --x-height: 20px; --x-width: 20px;"><title></title><rect fill="none" height="20" rx="5" stroke="currentColor" stroke-width="2" width="20" x="2" y="2"></rect><rect height="12" rx="1" width="2" x="11" y="6" fill="currentColor"></rect><rect height="9" rx="1" width="2" x="15" y="9" fill="currentColor"></rect><rect height="5" rx="1" width="2" x="7" y="13" fill="currentColor"></rect></svg></button><button class="post-menu-item"><span>Save</span><svg aria-label="" role="img" viewBox="0 0 24 24" style="--x-fill: currentColor; --x-height: 20px; --x-width: 20px;"><title></title><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" fill="none" stroke="currentColor" stroke-width="2"></path></svg></button><button class="post-menu-item"><span>Pin to profile</span><svg aria-label="" role="img" viewBox="0 0 20 20" style="--x-fill: currentColor; --x-height: 20px; --x-width: 20px;"><title></title><path d="M11.5789 11.8456L14.565 8.09342L18.3334 8.62727C18.5236 8.65422 18.6387 8.42365 18.5029 8.28783L11.6895 1.47438C11.5536 1.33856 11.3231 1.45367 11.35 1.64386L11.8839 5.4123L8.13171 8.39844M11.5789 11.8456C12.3679 12.8543 13.4711 14.8343 11.8872 17.1319C11.4954 17.7003 10.6866 17.6916 10.1984 17.2035L6.48613 13.4912M11.5789 11.8456V11.8456C10.6897 10.4631 9.51421 9.28756 8.13171 8.39844V8.39844M8.13171 8.39844C7.40288 7.95584 6.24522 7.39628 4.93842 7.45125C4.27222 7.47928 3.56725 7.66702 2.86059 8.1114C2.27618 8.4789 2.28566 9.29071 2.77382 9.77886L6.48613 13.4912M6.48613 13.4912L2.36827 17.609" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></button><button class="post-menu-item"><span>Hide like and share co...</span><svg aria-label="" role="img" viewBox="0 0 20 20" style="--x-fill: currentColor; --x-height: 20px; --x-width: 20px;"><title></title><path d="M2.14555 5.86847C2.25874 5.47003 2.0275 5.05526 1.62905 4.94207C1.2306 4.82888 0.815836 5.06012 0.702645 5.45857C0.536571 6.04318 0.449219 6.66962 0.449219 7.3272C0.449219 9.37797 1.32346 11.3552 2.78088 13.1862C4.23798 15.0167 6.3081 16.7411 8.78837 18.3088L8.80249 18.3175C8.95243 18.4077 9.13262 18.5076 9.31738 18.5872C9.48405 18.6589 9.73381 18.7498 9.99941 18.7498C10.2664 18.7498 10.5162 18.6611 10.688 18.5872C10.8756 18.5064 11.0561 18.4048 11.2057 18.3118L11.2057 18.3118L11.2104 18.3088C11.853 17.9026 12.4672 17.4865 13.0497 17.0614C13.3843 16.8172 13.4576 16.348 13.2134 16.0134C12.9692 15.6788 12.5 15.6056 12.1654 15.8498C11.6125 16.2533 11.027 16.6502 10.4114 17.0393C10.3004 17.1082 10.1899 17.1685 10.095 17.2093C10.0554 17.2264 10.0245 17.2374 10.0021 17.2442C9.98008 17.2373 9.94956 17.2262 9.91033 17.2093C9.8138 17.1678 9.7003 17.1068 9.58259 17.0363C7.1956 15.5267 5.27334 13.9089 3.95448 12.252C2.63461 10.5938 1.94922 8.93659 1.94922 7.3272C1.94922 6.80283 2.01881 6.31464 2.14555 5.86847Z" fill="currentColor" fill-rule="evenodd"></path><path d="M13.7373 1.24951C12.2124 1.24951 10.9274 1.81108 10.0015 2.71991C9.10085 1.83343 7.8445 1.27362 6.35846 1.25027C5.9443 1.24377 5.60328 1.57424 5.59677 1.9884C5.59027 2.40256 5.92074 2.74358 6.3349 2.75009C7.71763 2.77181 8.76569 3.40626 9.38048 4.3045C9.51976 4.50801 9.75018 4.63004 9.99679 4.63089C10.2434 4.63175 10.4747 4.51132 10.6154 4.30879C11.2594 3.38168 12.3276 2.74951 13.7373 2.74951C16.1572 2.74951 18.0496 4.57883 18.0496 7.32726C18.0496 8.78818 17.4853 10.2877 16.3931 11.7936C16.1499 12.1289 16.2245 12.5978 16.5598 12.841C16.8951 13.0842 17.3641 13.0096 17.6073 12.6743C18.8291 10.9898 19.5496 9.18843 19.5496 7.32726C19.5496 3.79869 17.0331 1.24951 13.7373 1.24951Z" fill="currentColor" fill-rule="evenodd"></path><path d="M1.5 1.5L18.5 18" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path></svg></button><button class="post-menu-item"><span>Reply options</span><svg aria-label="" role="img" viewBox="0 0 24 24" style="--x-fill: currentColor; --x-height: 16px; --x-width: 16px; transform: rotate(180deg);"><title></title><polyline points="16.502 3 7.498 12 16.502 21" fill="none" stroke="currentColor" stroke-width="2"></polyline></svg></button><button class="post-menu-item delete"><span>Delete</span><svg aria-label="" role="img" viewBox="0 0 20 20" style="--x-fill: currentColor; --x-height: 20px; --x-width: 20px;"><title></title><path d="M6.75 3.5V2.5C6.75 1.67157 7.42157 1 8.25 1H11.75C12.5784 1 13.25 1.67157 13.25 2.5V3.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path><path d="M3.75 4L4.54449 15.5202C4.61689 16.57 4.6531 17.0949 4.88062 17.4928C5.08095 17.8431 5.38256 18.1246 5.74584 18.3004C6.15846 18.5 6.68461 18.5 7.73691 18.5H12.2631C13.3154 18.5 13.8415 18.5 14.2542 18.3004C14.6174 18.1246 14.9191 17.8431 15.1194 17.4928C15.3469 17.0949 15.3831 16.57 15.4555 15.5202L16.25 4M3.75 4H16.25M3.75 4H1.75M16.25 4H18.25" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path></svg></button><button class="post-menu-item"><span>Copy link</span><svg aria-label="" role="img" viewBox="2 2 16 16" style="--x-fill: transparent; --x-height: 20px; --x-width: 20px;"><title></title><path d="M8.39992 5.44993L9.50669 4.34316C11.2046 2.64524 13.9575 2.64524 15.6554 4.34316V4.34316V4.34316C17.3533 6.04108 17.3533 8.79396 15.6554 10.4919L14.5486 11.5987" stroke="currentColor" stroke-linecap="round" stroke-width="1.65"></path><path d="M5.44773 8.40114L4.34096 9.50791C2.64304 11.2058 2.64304 13.9587 4.34096 15.6566V15.6566V15.6566C6.03889 17.3546 8.79176 17.3546 10.4897 15.6566L11.5965 14.5499" stroke="currentColor" stroke-linecap="round" stroke-width="1.65"></path><path d="M12.7051 7.29565L7.2942 12.7065" stroke="currentColor" stroke-linecap="round" stroke-width="1.65"></path></svg></button>';
+                menuContainer.appendChild(menuDropdown);
+
+                menuBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    let allDropdowns = document.querySelectorAll('.post-menu-dropdown.active');
+                    for (let d = 0; d < allDropdowns.length; d++) {
+                        if (allDropdowns[d] !== menuDropdown) {
+                            allDropdowns[d].classList.remove('active');
+                        }
+                    }
+                    menuDropdown.classList.toggle('active');
+                });
+
+                headerDiv.appendChild(menuContainer);
+
+                contentDiv.appendChild(headerDiv);
+
+                if (post.image && typeof post.image == 'string' && post.image.length > 0) {
+                    let postImg = document.createElement('img');
+                    postImg.className = 'profile-post-image';
+                    postImg.src = post.image;
+                    postImg.alt = '';
+                    postImg.loading = 'lazy';
+                    contentDiv.appendChild(postImg);
+                }
+
+                let actionsDiv = document.createElement('div');
+                actionsDiv.className = 'profile-post-actions';
+                actionsDiv.innerHTML = '<button class="profile-action-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button><button class="profile-action-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></button><button class="profile-action-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button><button class="profile-action-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>';
+                contentDiv.appendChild(actionsDiv);
+
+                let statsDiv = document.createElement('div');
+                statsDiv.className = 'profile-post-stats';
+                let likes = post.likes;
+                if (!likes) {
+                    likes = 0;
+                }
+                let comments = post.comments;
+                if (!comments) {
+                    comments = 0;
+                }
+                let statsText = [];
+                if (likes > 0) {
+                    let likeWord = '';
+                    if (likes != 1) {
+                        likeWord = 's';
+                    }
+                    statsText.push(likes + ' like' + likeWord);
+                }
+                if (comments > 0) {
+                    let replyWord = '';
+                    if (comments != 1) {
+                        replyWord = 'ies';
+                    } else {
+                        replyWord = 'y';
+                    }
+                    statsText.push(comments + ' repl' + replyWord);
+                }
+                let statsString = '';
+                for (let s = 0; s < statsText.length; s++) {
+                    if (s > 0) {
+                        statsString = statsString + ' - ';
+                    }
+                    statsString = statsString + statsText[s];
+                }
+                statsDiv.textContent = statsString;
+                contentDiv.appendChild(statsDiv);
+
+                div.appendChild(contentDiv);
+                grid.appendChild(div);
+            }
+        }
+
+        // switch profile tab view
+        let activeTab = 'threads';
+        function switchTab(tab) {
+            activeTab = tab;
+            let feed = document.getElementById('profileFeed');
+            let composer = document.getElementById('profileComposer');
+            let grid = document.getElementById('mediaGrid');
+            let emptyState = document.getElementById('emptyTabState');
+            let emptyText = document.getElementById('emptyTabText');
+
+            // hide all
+            feed.style.display = 'none';
+            grid.style.display = 'none';
+            if (composer) composer.style.display = 'none';
+            if (emptyState) emptyState.style.display = 'none';
+
+            if (tab == 'threads') {
+                feed.style.display = '';
+                if (composer) composer.style.display = '';
+                renderPosts();
+            } else if (tab == 'media') {
+                grid.style.display = '';
+                renderMedia();
+            } else if (tab == 'replies') {
+                if (emptyState && emptyText) {
+                    emptyText.textContent = 'No replies yet';
+                    emptyState.style.display = '';
+                }
+            } else if (tab == 'reposts') {
+                if (emptyState && emptyText) {
+                    emptyText.textContent = 'No reposts yet';
+                    emptyState.style.display = '';
+                }
+            }
+        }
+
+        // load user data
+        function init() {
+            let isLoggedIn = localStorage.getItem('threads_is_logged_in') == 'true';
+            let user = null;
+            // try to get data, ignore errors
+            try {
+                user = JSON.parse(localStorage.getItem('threads_user'));
+            } catch(e) {}
+
+            if (!isLoggedIn || !user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            currentUser = user;
+
+            // set profile info
+            let profileDisplayName = user.name;
+            if (!profileDisplayName) {
+                profileDisplayName = user.username;
+            }
+            document.getElementById('profileName').textContent = profileDisplayName;
+            document.getElementById('profileUsername').textContent = user.username;
+            document.getElementById('profileAvatar').src = user.avatar;
+            document.getElementById('composerAvatar').src = user.avatar;
+            let savedBio = localStorage.getItem('threads_profile_bio');
+            if (savedBio) {
+                document.getElementById('profileBio').textContent = savedBio;
+            } else {
+                document.getElementById('profileBio').textContent = "U glow differently ,when your confidence is fueled by belief in yourself instead of validation from others. Sport : Queen of climbing";
+            }
+
+            // render posts
+            renderPosts();
+        }
+
+        // navigation
+        let navBtns = document.querySelectorAll('.nav-btn[data-tab]');
+        for (let i = 0; i < navBtns.length; i++) {
+            let btn = navBtns[i];
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                let tab = this.getAttribute('data-tab');
+                if (tab == 'home') {
+                    window.location.href = 'home.html';
+                } else if (tab == 'search') {
+                    window.location.href = 'home.html#search';
+                } else if (tab == 'create') {
+                    window.location.href = 'home.html#create';
+                } else if (tab == 'activity') {
+                    window.location.href = 'activity.html';
+                } else if (tab == 'profile') {
+                    window.scrollTo(0, 0);
+                }
+            });
+        }
+
+        // profile tabs
+        let profileTabs = document.querySelectorAll('.profile-tab');
+        for (let i = 0; i < profileTabs.length; i++) {
+            let tab = profileTabs[i];
+            tab.addEventListener('click', function() {
+                let allTabs = document.querySelectorAll('.profile-tab');
+                for (let j = 0; j < allTabs.length; j++) {
+                    allTabs[j].classList.remove('active');
+                }
+                this.classList.add('active');
+                switchTab(this.getAttribute('data-tab'));
+            });
+        }
+
+        // composer - open create post modal
+        let profileComposer = document.getElementById('profileComposer');
+        if (profileComposer) {
+            profileComposer.onclick = function() {
+                openModal();
+            };
+            profileComposer.style.cursor = 'pointer';
+        }
+
+        // Create Post Modal
+        let modalOverlay = document.getElementById('modalOverlay');
+        let createPostClose = document.getElementById('createPostClose');
+        let createPostText = document.getElementById('createPostText');
+        let postBtn = document.getElementById('postBtn');
+        let createPostAvatar = document.getElementById('createPostAvatar');
+        let createPostAvatarSmall = document.getElementById('createPostAvatarSmall');
+        let createPostUsername = document.getElementById('createPostUsername');
+
+        function openModal() {
+            if (modalOverlay && currentUser) {
+                if (createPostAvatar) {
+                    if (currentUser.avatar) {
+                        createPostAvatar.src = currentUser.avatar;
+                    } else {
+                        createPostAvatar.src = '';
+                    }
+                }
+                if (createPostAvatarSmall) {
+                    if (currentUser.avatar) {
+                        createPostAvatarSmall.src = currentUser.avatar;
+                    } else {
+                        createPostAvatarSmall.src = '';
+                    }
+                }
+                if (createPostUsername) {
+                    if (currentUser.username) {
+                        createPostUsername.textContent = currentUser.username;
+                    } else {
+                        createPostUsername.textContent = '';
+                    }
+                }
+                modalOverlay.classList.add('active');
+            }
+        }
+
+        function closeModal() {
+            if (modalOverlay) {
+                modalOverlay.classList.remove('active');
+                modalOverlay.classList.remove('from-fab');
+                if (createPostText) createPostText.value = '';
+                if (postBtn) postBtn.disabled = true;
+            }
+            let fab = document.getElementById('fab');
+            if (fab) fab.style.display = '';
+        }
+
+        if (createPostClose) {
+            createPostClose.onclick = closeModal;
+        }
+
+        if (modalOverlay) {
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target == modalOverlay) closeModal();
+            });
+        }
+
+        if (createPostText) {
+            createPostText.addEventListener('input', function() {
+                if (postBtn) postBtn.disabled = this.value.trim().length == 0;
+            });
+        }
+
+        if (postBtn) {
+            postBtn.onclick = function() {
+                if (!createPostText || createPostText.value.trim().length == 0) return;
+                let posts = getUserPosts();
+                posts.unshift({
+                    username: currentUser.username,
+                    avatar: currentUser.avatar,
+                    text: createPostText.value.trim(),
+                    time: 'now',
+                    likes: 0,
+                    comments: 0
+                });
+                localStorage.setItem('threads_user_posts', JSON.stringify(posts));
+                closeModal();
+                renderPosts();
+            };
+        }
+
+        // Drafts view toggle (inside same modal)
+        let draftsBtn = document.getElementById('draftsBtn');
+        let draftsView = document.getElementById('draftsView');
+        let draftsBackBtn = document.getElementById('draftsBackBtn');
+        let createPostForm = document.getElementById('createPostForm');
+        if (draftsBtn && draftsView && createPostForm) {
+            draftsBtn.onclick = function(e) {
+                e.stopPropagation();
+                createPostForm.style.display = 'none';
+                draftsView.style.display = 'flex';
+            };
+            if (draftsBackBtn) {
+                draftsBackBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    draftsView.style.display = 'none';
+                    createPostForm.style.display = '';
+                };
+            }
+        }
+
+        // More menu dropdown
+        let moreMenuBtn2 = document.getElementById('moreMenuBtn');
+        let moreMenuDropdown2 = document.getElementById('moreMenuDropdown');
+        if (moreMenuBtn2 && moreMenuDropdown2) {
+            moreMenuBtn2.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (moreMenuDropdown2.classList.contains('active')) {
+                    moreMenuDropdown2.classList.remove('active');
+                } else {
+                    moreMenuDropdown2.classList.add('active');
+                }
+            });
+            document.addEventListener('click', function(e) {
+                if (!moreMenuDropdown2.contains(e.target) && !moreMenuBtn2.contains(e.target)) {
+                    moreMenuDropdown2.classList.remove('active');
+                }
+            });
+        }
+
+        // FAB - open create post modal
+        let fab = document.getElementById('fab');
+        if (fab) {
+            fab.onclick = function() {
+                if (modalOverlay) modalOverlay.classList.add('from-fab');
+                fab.style.display = 'none';
+                openModal();
+            };
+        }
+
+        // menu dropdown
+        let menuBtn = document.getElementById('menuBtn');
+        let menuDropdown = document.getElementById('menuDropdown');
+        let menuMain = document.getElementById('menuMain');
+        let menuAppearanceSubmenu = document.getElementById('menuAppearanceSubmenu');
+        let appearanceBtn = document.getElementById('appearanceBtn');
+        let appearanceBackBtn = document.getElementById('appearanceBackBtn');
+        let logoutBtn = document.getElementById('logoutBtn');
+
+        if (menuBtn && menuDropdown) {
+            menuBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (menuMain) menuMain.style.display = 'block';
+                if (menuAppearanceSubmenu) menuAppearanceSubmenu.classList.remove('active');
+                if (menuDropdown.classList.contains('active')) {
+                    menuDropdown.classList.remove('active');
+                } else {
+                    menuDropdown.classList.add('active');
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!menuDropdown.contains(e.target) && !menuBtn.contains(e.target)) {
+                    menuDropdown.classList.remove('active');
+                    if (menuMain) menuMain.style.display = 'block';
+                    if (menuAppearanceSubmenu) menuAppearanceSubmenu.classList.remove('active');
+                }
+            });
+        }
+
+        if (appearanceBtn) {
+            appearanceBtn.onclick = function(e) {
+                e.stopPropagation();
+                if (menuMain) menuMain.style.display = 'none';
+                if (menuAppearanceSubmenu) menuAppearanceSubmenu.classList.add('active');
+            };
+        }
+
+        if (appearanceBackBtn) {
+            appearanceBackBtn.onclick = function(e) {
+                e.stopPropagation();
+                if (menuAppearanceSubmenu) menuAppearanceSubmenu.classList.remove('active');
+                if (menuMain) menuMain.style.display = 'block';
+            };
+        }
+
+        // appearance options
+        let appearanceOptions = document.querySelectorAll('.appearance-option');
+        for (let i = 0; i < appearanceOptions.length; i++) {
+            let btn = appearanceOptions[i];
+            btn.onclick = function(e) {
+                e.stopPropagation();
+                let theme = this.getAttribute('data-theme');
+                let allOptions = document.querySelectorAll('.appearance-option');
+                for (let j = 0; j < allOptions.length; j++) {
+                    allOptions[j].classList.remove('active');
+                }
+                this.classList.add('active');
+                if (theme == 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('threads_theme', JSON.stringify('dark'));
+                } else if (theme == 'light') {
+                    document.documentElement.removeAttribute('data-theme');
+                    localStorage.setItem('threads_theme', JSON.stringify('light'));
+                } else {
+                    localStorage.setItem('threads_theme', JSON.stringify('auto'));
+                    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    } else {
+                        document.documentElement.removeAttribute('data-theme');
+                    }
+                }
+            };
+        }
+
+        // logout
+        if (logoutBtn) {
+            logoutBtn.onclick = function() {
+                localStorage.removeItem('threads_is_logged_in');
+                localStorage.removeItem('threads_user');
+                window.location.href = 'login.html';
+            };
+        }
+
+        // Edit Profile Modal
+        let editProfileBtn = document.getElementById('editProfileBtn');
+        let editProfileOverlay = document.getElementById('editProfileOverlay');
+        let editDoneBtn = document.getElementById('editDoneBtn');
+        let editBio = document.getElementById('editBio');
+        let editName = document.getElementById('editName');
+        let editAvatar = document.getElementById('editAvatar');
+        let igBadgeToggle = document.getElementById('igBadgeToggle');
+
+        // open edit profile
+        if (editProfileBtn) {
+            editProfileBtn.onclick = function() {
+                if (!currentUser) return;
+                let displayName = currentUser.name;
+                if (!displayName) {
+                    displayName = currentUser.username;
+                }
+                editName.textContent = displayName + ' (@' + currentUser.username + ')';
+                if (currentUser.avatar) {
+                    editAvatar.src = currentUser.avatar;
+                } else {
+                    editAvatar.src = '';
+                }
+                let savedBio = localStorage.getItem('threads_profile_bio');
+                if (savedBio) {
+                    editBio.value = savedBio;
+                } else {
+                    editBio.value = "U glow differently ,when your confidence is fueled by belief in yourself instead of validation from others. Sport : Queen of climbing";
+                }
+                let badgeState = localStorage.getItem('threads_ig_badge');
+                if (badgeState == 'true') {
+                    igBadgeToggle.classList.add('active');
+                } else {
+                    igBadgeToggle.classList.remove('active');
+                }
+                editProfileOverlay.classList.add('active');
+            };
+        }
+
+        // toggle instagram badge
+        if (igBadgeToggle) {
+            igBadgeToggle.onclick = function() {
+                if (this.classList.contains('active')) {
+                    this.classList.remove('active');
+                } else {
+                    this.classList.add('active');
+                }
+            };
+        }
+
+        // close / save edit profile
+        if (editDoneBtn) {
+            editDoneBtn.onclick = function() {
+                let newBio = editBio.value.trim();
+                if (newBio) {
+                    localStorage.setItem('threads_profile_bio', newBio);
+                    document.getElementById('profileBio').textContent = newBio;
+                }
+                let badgeValue = 'false';
+                if (igBadgeToggle.classList.contains('active')) {
+                    badgeValue = 'true';
+                }
+                localStorage.setItem('threads_ig_badge', badgeValue);
+                editProfileOverlay.classList.remove('active');
+            };
+        }
+
+        // close on overlay click
+        if (editProfileOverlay) {
+            editProfileOverlay.addEventListener('click', function(e) {
+                if (e.target == editProfileOverlay) {
+                    editProfileOverlay.classList.remove('active');
+                }
+            });
+        }
+
+        // Page header menu dropdown
+        let pageHeaderMenuBtn = document.getElementById('pageHeaderMenuBtn');
+        let pageHeaderDropdown = document.getElementById('pageHeaderDropdown');
+        if (pageHeaderMenuBtn && pageHeaderDropdown) {
+            pageHeaderMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                pageHeaderDropdown.classList.toggle('active');
+            });
+            document.addEventListener('click', function(e) {
+                if (!pageHeaderDropdown.contains(e.target) && !pageHeaderMenuBtn.contains(e.target)) {
+                    pageHeaderDropdown.classList.remove('active');
+                }
+            });
+        }
+
+        // Links modal
+        let linksBtn = document.getElementById('linksBtn');
+        let linksModalOverlay = document.getElementById('linksModalOverlay');
+        let linksBackBtn = document.getElementById('linksBackBtn');
+        let linksInput = document.getElementById('linksInput');
+        let linksSuggestions = document.getElementById('linksSuggestions');
+        let linksSelectedList = document.getElementById('linksSelectedList');
+        let linksDisplay = document.getElementById('linksDisplay');
+        let selectedLinks = [];
+
+        // Load saved links
+        try {
+            let saved = localStorage.getItem('threads_links');
+            if (saved) {
+                selectedLinks = JSON.parse(saved) || [];
+            }
+        } catch(e) {}
+
+        function updateLinksDisplay() {
+            if (!linksDisplay) return;
+            if (selectedLinks.length == 0) {
+                linksDisplay.textContent = '';
+            } else {
+                linksDisplay.textContent = selectedLinks.join(', ');
+            }
+            // Save to localStorage
+            localStorage.setItem('threads_links', JSON.stringify(selectedLinks));
+        }
+
+        function renderSelectedLinks() {
+            if (!linksSelectedList) return;
+            let html = '';
+            for (let i = 0; i < selectedLinks.length; i++) {
+                html += '<div class="links-selected-item">';
+                html += '<span class="links-selected-name">' + selectedLinks[i] + '</span>';
+                html += '<button class="links-remove-btn" data-index="' + i + '">';
+                html += '<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8.25" stroke="currentColor" stroke-width="1.5"></circle><path d="M13.5985 9.82813H6.39855" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path></svg>';
+                html += '</button>';
+                html += '</div>';
+            }
+            linksSelectedList.innerHTML = html;
+
+            // Add remove handlers
+            let removeBtns = linksSelectedList.querySelectorAll('.links-remove-btn');
+            for (let i = 0; i < removeBtns.length; i++) {
+                removeBtns[i].addEventListener('click', function() {
+                    let index = parseInt(this.getAttribute('data-index'));
+                    selectedLinks.splice(index, 1);
+                    renderSelectedLinks();
+                    updateLinksDisplay();
+                });
+            }
+        }
+
+        // Initial display update
+        updateLinksDisplay();
+
+        // Sample links data
+        let linksData = [
+            { name: 'Instagram', url: 'instagram.com' },
+            { name: 'Twitter', url: 'twitter.com' },
+            { name: 'YouTube', url: 'youtube.com' },
+            { name: 'TikTok', url: 'tiktok.com' },
+            { name: 'LinkedIn', url: 'linkedin.com' },
+            { name: 'Facebook', url: 'facebook.com' },
+            { name: 'Pinterest', url: 'pinterest.com' },
+            { name: 'Snapchat', url: 'snapchat.com' },
+            { name: 'Spotify', url: 'spotify.com' },
+            { name: 'SoundCloud', url: 'soundcloud.com' },
+            { name: 'Twitch', url: 'twitch.tv' },
+            { name: 'Discord', url: 'discord.com' },
+            { name: 'GitHub', url: 'github.com' },
+            { name: 'Dribbble', url: 'dribbble.com' },
+            { name: 'Behance', url: 'behance.net' },
+            { name: 'Medium', url: 'medium.com' },
+            { name: 'Substack', url: 'substack.com' },
+            { name: 'Patreon', url: 'patreon.com' },
+            { name: 'Ko-fi', url: 'ko-fi.com' },
+            { name: 'Linktree', url: 'linktr.ee' }
+        ];
+
+        if (linksBtn && linksModalOverlay) {
+            linksBtn.onclick = function() {
+                renderSelectedLinks();
+                linksModalOverlay.classList.add('active');
+            };
+        }
+
+        if (linksBackBtn && linksModalOverlay) {
+            linksBackBtn.onclick = function() {
+                linksModalOverlay.classList.remove('active');
+            };
+        }
+
+        if (linksModalOverlay) {
+            linksModalOverlay.addEventListener('click', function(e) {
+                if (e.target == linksModalOverlay) {
+                    linksModalOverlay.classList.remove('active');
+                }
+            });
+        }
+
+        // Links autocomplete
+        if (linksInput && linksSuggestions) {
+            linksInput.addEventListener('input', function() {
+                let query = this.value.trim().toLowerCase();
+                if (query.length == 0) {
+                    linksSuggestions.classList.remove('active');
+                    linksSuggestions.innerHTML = '';
+                    return;
+                }
+
+                let matches = [];
+                for (let i = 0; i < linksData.length; i++) {
+                    // Don't show already selected links
+                    if (selectedLinks.indexOf(linksData[i].url) == -1 && (linksData[i].name.toLowerCase().includes(query) || linksData[i].url.toLowerCase().includes(query))) {
+                        matches.push(linksData[i]);
+                    }
+                }
+
+                if (matches.length == 0) {
+                    linksSuggestions.classList.remove('active');
+                    linksSuggestions.innerHTML = '';
+                    return;
+                }
+
+                let html = '';
+                for (let i = 0; i < matches.length; i++) {
+                    html += '<div class="links-suggestion-item" data-url="' + matches[i].url + '">';
+                    html += '<span class="links-suggestion-name">' + matches[i].name + '</span>';
+                    html += '<span class="links-suggestion-url">' + matches[i].url + '</span>';
+                    html += '</div>';
+                }
+                linksSuggestions.innerHTML = html;
+                linksSuggestions.classList.add('active');
+
+                // Add click handlers to suggestions
+                let items = linksSuggestions.querySelectorAll('.links-suggestion-item');
+                for (let i = 0; i < items.length; i++) {
+                    items[i].addEventListener('click', function() {
+                        let url = this.getAttribute('data-url');
+                        if (selectedLinks.indexOf(url) == -1) {
+                            selectedLinks.push(url);
+                            renderSelectedLinks();
+                            updateLinksDisplay();
+                        }
+                        linksInput.value = '';
+                        linksSuggestions.classList.remove('active');
+                        linksSuggestions.innerHTML = '';
+                    });
+                }
+            });
+
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!linksInput.contains(e.target) && !linksSuggestions.contains(e.target)) {
+                    linksSuggestions.classList.remove('active');
+                }
+            });
+        }
+
+        // Interests modal
+        let interestsBtn = document.getElementById('interestsBtn');
+        let interestsModalOverlay = document.getElementById('interestsModalOverlay');
+        let interestsBackBtn = document.getElementById('interestsBackBtn');
+        let interestsInput = document.getElementById('interestsInput');
+        let interestsSuggestions = document.getElementById('interestsSuggestions');
+
+        // Sample topics data
+        let topicsData = [
+            // Dance
+            { name: 'dance', posts: 445 },
+            { name: 'Dance Threads', posts: 120 },
+            { name: 'dancer', posts: 380 },
+            { name: 'dancechallenge', posts: 256 },
+            { name: 'dancers', posts: 312 },
+            { name: 'dancehall', posts: 189 },
+            { name: 'dancemusic', posts: 234 },
+            { name: 'dancersofthreads', posts: 98 },
+            { name: 'ballet', posts: 234 },
+            { name: 'hiphop', posts: 567 },
+            { name: 'salsa', posts: 189 },
+            { name: 'contemporary', posts: 145 },
+            // Singing & Music
+            { name: 'sing', posts: 320 },
+            { name: 'singer', posts: 890 },
+            { name: 'singing', posts: 567 },
+            { name: 'vocalist', posts: 234 },
+            { name: 'karaoke', posts: 178 },
+            { name: 'music', posts: 890 },
+            { name: 'musician', posts: 456 },
+            { name: 'guitar', posts: 678 },
+            { name: 'piano', posts: 456 },
+            { name: 'drums', posts: 234 },
+            { name: 'violin', posts: 189 },
+            // Painting & Art
+            { name: 'paint', posts: 456 },
+            { name: 'painting', posts: 1200 },
+            { name: 'painter', posts: 567 },
+            { name: 'watercolor', posts: 345 },
+            { name: 'oilpainting', posts: 234 },
+            { name: 'acrylic', posts: 189 },
+            { name: 'art', posts: 2300 },
+            { name: 'artist', posts: 1800 },
+            { name: 'artwork', posts: 1500 },
+            { name: 'drawing', posts: 1100 },
+            { name: 'sketch', posts: 890 },
+            { name: 'illustration', posts: 780 },
+            { name: 'digitalart', posts: 670 },
+            // Photography
+            { name: 'photography', posts: 3400 },
+            { name: 'photographer', posts: 2100 },
+            { name: 'photo', posts: 1800 },
+            { name: 'portrait', posts: 890 },
+            { name: 'landscape', posts: 670 },
+            // Sports & Fitness
+            { name: 'climbing', posts: 567 },
+            { name: 'climber', posts: 234 },
+            { name: 'climbinglife', posts: 189 },
+            { name: 'bouldering', posts: 234 },
+            { name: 'fitness', posts: 1200 },
+            { name: 'fitnessmotivation', posts: 890 },
+            { name: 'gym', posts: 1100 },
+            { name: 'workout', posts: 980 },
+            { name: 'yoga', posts: 1500 },
+            { name: 'running', posts: 890 },
+            { name: 'cycling', posts: 670 },
+            { name: 'swimming', posts: 456 },
+            { name: 'soccer', posts: 890 },
+            { name: 'basketball', posts: 780 },
+            { name: 'tennis', posts: 456 },
+            { name: 'golf', posts: 345 },
+            { name: 'hiking', posts: 670 },
+            { name: 'surfing', posts: 456 },
+            { name: 'skiing', posts: 345 },
+            { name: 'snowboarding', posts: 289 },
+            // Crafts & DIY
+            { name: 'crafts', posts: 567 },
+            { name: 'diy', posts: 890 },
+            { name: 'handmade', posts: 670 },
+            { name: 'knitting', posts: 345 },
+            { name: 'crochet', posts: 289 },
+            { name: 'sewing', posts: 234 },
+            { name: 'embroidery', posts: 189 },
+            { name: 'pottery', posts: 234 },
+            { name: 'woodworking', posts: 189 },
+            { name: 'jewelry', posts: 345 },
+            // Gaming
+            { name: 'gaming', posts: 2100 },
+            { name: 'gamer', posts: 1800 },
+            { name: 'videogames', posts: 1500 },
+            { name: 'esports', posts: 670 },
+            { name: 'streaming', posts: 890 },
+            { name: 'twitch', posts: 567 },
+            // Reading & Writing
+            { name: 'reading', posts: 1200 },
+            { name: 'books', posts: 1500 },
+            { name: 'bookworm', posts: 670 },
+            { name: 'writing', posts: 890 },
+            { name: 'writer', posts: 780 },
+            { name: 'poetry', posts: 456 },
+            { name: 'author', posts: 345 },
+            // Cooking & Food
+            { name: 'cooking', posts: 1800 },
+            { name: 'chef', posts: 670 },
+            { name: 'baking', posts: 890 },
+            { name: 'recipes', posts: 780 },
+            { name: 'food', posts: 5600 },
+            { name: 'foodie', posts: 3400 },
+            { name: 'vegan', posts: 890 },
+            { name: 'vegetarian', posts: 670 },
+            // Travel
+            { name: 'travel', posts: 4500 },
+            { name: 'traveler', posts: 2300 },
+            { name: 'adventure', posts: 1800 },
+            { name: 'explore', posts: 1500 },
+            { name: 'wanderlust', posts: 1200 },
+            { name: 'backpacking', posts: 670 },
+            // Fashion & Beauty
+            { name: 'fashion', posts: 4200 },
+            { name: 'style', posts: 3100 },
+            { name: 'ootd', posts: 1800 },
+            { name: 'makeup', posts: 2100 },
+            { name: 'beauty', posts: 1900 },
+            { name: 'skincare', posts: 1500 },
+            { name: 'nails', posts: 890 },
+            { name: 'hair', posts: 1100 },
+            // Nature & Outdoors
+            { name: 'nature', posts: 2300 },
+            { name: 'outdoors', posts: 1200 },
+            { name: 'camping', posts: 670 },
+            { name: 'gardening', posts: 890 },
+            { name: 'plants', posts: 1100 },
+            { name: 'flowers', posts: 780 },
+            // Pets & Animals
+            { name: 'pets', posts: 1800 },
+            { name: 'dogs', posts: 2300 },
+            { name: 'cats', posts: 2100 },
+            { name: 'animals', posts: 1500 },
+            // Tech
+            { name: 'tech', posts: 1200 },
+            { name: 'coding', posts: 890 },
+            { name: 'programming', posts: 780 },
+            { name: 'developer', posts: 670 },
+            // Movies & Entertainment
+            { name: 'movies', posts: 1800 },
+            { name: 'films', posts: 1200 },
+            { name: 'cinema', posts: 670 },
+            { name: 'netflix', posts: 890 },
+            { name: 'anime', posts: 1500 },
+            { name: 'kpop', posts: 1800 },
+            // Meditation & Wellness
+            { name: 'meditation', posts: 670 },
+            { name: 'mindfulness', posts: 456 },
+            { name: 'wellness', posts: 890 },
+            { name: 'selfcare', posts: 1100 },
+            { name: 'mentalhealth', posts: 780 }
+        ];
+
+        if (interestsBtn && interestsModalOverlay) {
+            interestsBtn.onclick = function() {
+                renderSelectedInterests();
+                interestsModalOverlay.classList.add('active');
+            };
+        }
+
+        if (interestsBackBtn && interestsModalOverlay) {
+            interestsBackBtn.onclick = function() {
+                interestsModalOverlay.classList.remove('active');
+            };
+        }
+
+        if (interestsModalOverlay) {
+            interestsModalOverlay.addEventListener('click', function(e) {
+                if (e.target == interestsModalOverlay) {
+                    interestsModalOverlay.classList.remove('active');
+                }
+            });
+        }
+
+        // Interests autocomplete
+        let interestsSelectedList = document.getElementById('interestsSelectedList');
+        let interestsDisplay = document.getElementById('interestsDisplay');
+        let selectedInterests = [];
+
+        // Load saved interests
+        try {
+            let saved = localStorage.getItem('threads_interests');
+            if (saved) {
+                selectedInterests = JSON.parse(saved) || [];
+            }
+        } catch(e) {}
+
+        function updateInterestsDisplay() {
+            if (!interestsDisplay) return;
+            if (selectedInterests.length == 0) {
+                interestsDisplay.textContent = 'Add interests';
+                interestsDisplay.classList.add('placeholder');
+            } else {
+                interestsDisplay.textContent = selectedInterests.join(', ');
+                interestsDisplay.classList.remove('placeholder');
+            }
+            // Save to localStorage
+            localStorage.setItem('threads_interests', JSON.stringify(selectedInterests));
+        }
+
+        function renderSelectedInterests() {
+            if (!interestsSelectedList) return;
+            let html = '';
+            for (let i = 0; i < selectedInterests.length; i++) {
+                html += '<div class="interests-selected-item">';
+                html += '<span class="interests-selected-name">' + selectedInterests[i] + '</span>';
+                html += '<button class="interests-remove-btn" data-index="' + i + '">';
+                html += '<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8.25" stroke="currentColor" stroke-width="1.5"></circle><path d="M13.5985 9.82813H6.39855" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path></svg>';
+                html += '</button>';
+                html += '</div>';
+            }
+            interestsSelectedList.innerHTML = html;
+
+            // Add remove handlers
+            let removeBtns = interestsSelectedList.querySelectorAll('.interests-remove-btn');
+            for (let i = 0; i < removeBtns.length; i++) {
+                removeBtns[i].addEventListener('click', function() {
+                    let index = parseInt(this.getAttribute('data-index'));
+                    selectedInterests.splice(index, 1);
+                    renderSelectedInterests();
+                    updateInterestsDisplay();
+                });
+            }
+        }
+
+        // Initial display update
+        updateInterestsDisplay();
+
+        if (interestsInput && interestsSuggestions) {
+            interestsInput.addEventListener('input', function() {
+                let query = this.value.trim().toLowerCase();
+                if (query.length == 0) {
+                    interestsSuggestions.classList.remove('active');
+                    interestsSuggestions.innerHTML = '';
+                    return;
+                }
+
+                let matches = [];
+                for (let i = 0; i < topicsData.length; i++) {
+                    // Don't show already selected topics
+                    if (selectedInterests.indexOf(topicsData[i].name) == -1 && topicsData[i].name.toLowerCase().includes(query)) {
+                        matches.push(topicsData[i]);
+                    }
+                }
+
+                if (matches.length == 0) {
+                    interestsSuggestions.classList.remove('active');
+                    interestsSuggestions.innerHTML = '';
+                    return;
+                }
+
+                let html = '';
+                for (let i = 0; i < matches.length; i++) {
+                    html += '<div class="interests-suggestion-item" data-name="' + matches[i].name + '">';
+                    html += '<span class="interests-suggestion-name">' + matches[i].name + '</span>';
+                    html += '<span class="interests-suggestion-posts">' + matches[i].posts + ' recent posts</span>';
+                    html += '</div>';
+                }
+                interestsSuggestions.innerHTML = html;
+                interestsSuggestions.classList.add('active');
+
+                // Add click handlers to suggestions
+                let items = interestsSuggestions.querySelectorAll('.interests-suggestion-item');
+                for (let i = 0; i < items.length; i++) {
+                    items[i].addEventListener('click', function() {
+                        let name = this.getAttribute('data-name');
+                        if (selectedInterests.indexOf(name) == -1) {
+                            selectedInterests.push(name);
+                            renderSelectedInterests();
+                            updateInterestsDisplay();
+                        }
+                        interestsInput.value = '';
+                        interestsSuggestions.classList.remove('active');
+                        interestsSuggestions.innerHTML = '';
+                    });
+                }
+            });
+
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!interestsInput.contains(e.target) && !interestsSuggestions.contains(e.target)) {
+                    interestsSuggestions.classList.remove('active');
+                }
+            });
+        }
+
+        // Close post menu dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.profile-post-menu')) {
+                let allDropdowns = document.querySelectorAll('.post-menu-dropdown.active');
+                for (let i = 0; i < allDropdowns.length; i++) {
+                    allDropdowns[i].classList.remove('active');
+                }
+            }
+        });
+
+        init();
+        initSessionTimeout();
+    </script>
+</body>
+</html>

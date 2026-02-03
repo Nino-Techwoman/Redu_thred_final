@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insights - Threads</title>
+    <link rel="stylesheet" href="profile.css">
+    <style>
+        .insights-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 20px;
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .insights-header-title {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .insights-header-title span:first-child {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .insights-header-title .insights-header-date {
+            font-size: 12px;
+            font-weight: 400;
+            color: rgb(153, 153, 153);
+            line-height: 16.8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+        }
+
+        .insights-header-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .insights-dropdown-circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: rgb(255, 255, 255);
+            border: 0.5px solid rgba(0, 0, 0, 0.15);
+            box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px 0px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .insights-dropdown-circle:hover {
+            transform: scale(1.05);
+        }
+
+        .insights-dropdown-circle svg {
+            color: #000000;
+        }
+
+        [data-theme="dark"] .insights-dropdown-circle {
+            background-color: rgb(38, 38, 38);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .date-range-container {
+            position: relative;
+        }
+
+        .date-range-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 12px;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            padding: 8px;
+            z-index: 2000;
+        }
+
+        .date-range-dropdown.active {
+            display: block;
+        }
+
+        .date-range-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 16px;
+            background: none;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #000000;
+            text-align: left;
+        }
+
+        .date-range-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .date-range-check {
+            display: none;
+            color: #000000;
+        }
+
+        .date-range-item.active .date-range-check {
+            display: block;
+        }
+
+        [data-theme="dark"] .date-range-dropdown {
+            background-color: #262626;
+        }
+
+        .insights-menu-container {
+            position: relative;
+        }
+
+        .insights-menu {
+            background-color: rgb(255, 255, 255);
+            border: 0.5px solid rgba(0, 0, 0, 0.15);
+            border-radius: 50%;
+            cursor: pointer;
+            color: #000000;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: width 0.15s ease, height 0.15s ease;
+        }
+
+        .insights-menu:hover {
+            width: 28px;
+            height: 28px;
+        }
+
+        [data-theme="dark"] .insights-menu {
+            background-color: rgb(38, 38, 38);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .insights-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            padding: 8px;
+            z-index: 2000;
+        }
+
+        .insights-dropdown.active {
+            display: block;
+        }
+
+        .insights-dropdown-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 14px 16px;
+            background: none;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #000000;
+            text-align: left;
+        }
+
+        .insights-dropdown-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .insights-dropdown {
+            background-color: #262626;
+        }
+
+        .insights-content {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .insights-banner {
+            background-color: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .insights-banner-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .insights-banner-text {
+            font-size: 15px;
+            color: #999999;
+        }
+
+        .insights-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .insights-empty-icon {
+            color: #999999;
+            margin-bottom: 20px;
+        }
+
+        .insights-empty-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .insights-empty-text {
+            font-size: 15px;
+            color: #999999;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Left Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-top">
+                <a href="index.html" class="logo-link">
+                    <svg aria-label="Threads" class="logo" fill="currentColor" height="34" role="img" viewBox="0 0 192 192" width="30" xmlns="http://www.w3.org/2000/svg"><path d="M141.537 88.9883C140.71 88.5919 139.87 88.2104 139.019 87.8451C137.537 60.5382 122.616 44.905 97.5619 44.745C97.4484 44.7443 97.3355 44.7443 97.222 44.7443C82.2364 44.7443 69.7731 51.1409 62.102 62.7807L75.881 72.2328C81.6116 63.5383 90.6052 61.6848 97.2286 61.6848C97.3051 61.6848 97.3819 61.6848 97.4576 61.6855C105.707 61.7381 111.932 64.1366 115.961 68.814C118.893 72.2193 120.854 76.925 121.825 82.8638C114.511 81.6207 106.601 81.2385 98.145 81.7233C74.3247 83.0954 59.0111 96.9879 60.0396 116.292C60.5615 126.084 65.4397 134.508 73.775 140.011C80.8224 144.663 89.899 146.938 99.3323 146.423C111.79 145.74 121.563 140.987 128.381 132.296C133.559 125.696 136.834 117.143 138.28 106.366C144.217 109.949 148.617 114.664 151.047 120.332C155.179 129.967 155.42 145.8 142.501 158.708C131.182 170.016 117.576 174.908 97.0135 175.059C74.2042 174.89 56.9538 167.575 45.7381 153.317C35.2355 139.966 29.8077 120.682 29.6052 96C29.8077 71.3178 35.2355 52.0336 45.7381 38.6827C56.9538 24.4249 74.2039 17.11 97.0132 16.9405C119.988 17.1113 137.539 24.4614 149.184 38.788C154.894 45.8136 159.199 54.6488 162.037 64.9503L178.184 60.6422C174.744 47.9622 169.331 37.0357 161.965 27.974C147.036 9.60668 125.202 0.195148 97.0695 0H96.9569C68.8816 0.19447 47.2921 9.6418 32.7883 28.0793C19.8819 44.4864 13.2244 67.3157 13.0007 95.9325L13 96L13.0007 96.0675C13.2244 124.684 19.8819 147.514 32.7883 163.921C47.2921 182.358 68.8816 191.806 96.9569 192H97.0695C122.03 191.827 139.624 185.292 154.118 170.811C173.081 151.866 172.51 128.119 166.26 113.541C161.776 103.087 153.227 94.5962 141.537 88.9883ZM98.4405 129.507C88.0005 130.095 77.1544 125.409 76.6196 115.372C76.2232 107.93 81.9158 99.626 99.0812 98.6368C101.047 98.5234 102.976 98.468 104.871 98.468C111.106 98.468 116.939 99.0737 122.242 100.233C120.264 124.935 108.662 128.946 98.4405 129.507Z"></path></svg>
+                </a>
+            </div>
+
+            <div class="sidebar-menu">
+                <button class="nav-btn" data-tab="home" title="Home">
+                    <svg aria-label="Home" role="img" viewBox="0 0 26 26" width="48" height="48"><title>Home</title><path d="M2.25 12.8855V20.7497C2.25 21.8543 3.14543 22.7497 4.25 22.7497H8.25C8.52614 22.7497 8.75 22.5259 8.75 22.2497V17.6822V17.4997C8.75 15.1525 10.6528 13.2497 13 13.2497C15.3472 13.2497 17.25 15.1525 17.25 17.4997V17.6822V22.2497C17.25 22.5259 17.4739 22.7497 17.75 22.7497H21.75C22.8546 22.7497 23.75 21.8543 23.75 20.7497V12.8855C23.75 11.3765 23.0685 9.94815 21.8954 8.99883L16.1454 4.3454C14.3112 2.86095 11.6888 2.86095 9.85455 4.3454L4.10455 8.99883C2.93153 9.94815 2.25 11.3765 2.25 12.8855Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path></svg>
+                </button>
+                <button class="nav-btn" data-tab="search" title="Search">
+                    <svg aria-label="Search" role="img" viewBox="0 0 26 26" width="48" height="48"><title>Search</title><path clip-rule="evenodd" d="M3.5 11.5C3.5 7.08172 7.08172 3.5 11.5 3.5C15.9183 3.5 19.5 7.08172 19.5 11.5C19.5 15.9183 15.9183 19.5 11.5 19.5C7.08172 19.5 3.5 15.9183 3.5 11.5ZM11.5 1C5.70101 1 1 5.70101 1 11.5C1 17.299 5.70101 22 11.5 22C13.949 22 16.2023 21.1615 17.9883 19.756L22.3661 24.1339C22.8543 24.622 23.6457 24.622 24.1339 24.1339C24.622 23.6457 24.622 22.8543 24.1339 22.3661L19.756 17.9883C21.1615 16.2023 22 13.949 22 11.5C22 5.70101 17.299 1 11.5 1Z" fill="currentColor" fill-rule="evenodd"></path></svg>
+                </button>
+                <button class="nav-btn" data-tab="create" title="Create">
+                    <svg aria-label="Create" role="img" viewBox="0 0 26 26" width="48" height="48"><title>Create</title><path d="M13 5.5v15m7.5-7.5H5.5" stroke="currentColor" stroke-linecap="round" stroke-width="2.5" fill="none"></path></svg>
+                </button>
+                <button class="nav-btn" data-tab="activity" title="Activity">
+                    <svg aria-label="Notifications" role="img" viewBox="0 0 26 26" width="48" height="48"><title>Notifications</title><path d="M4.46 10.4461C4.46 14.0007 7.49 17.5056 12.2145 20.4963C12.4766 20.6541 12.7893 20.8119 13 20.8119C13.2195 20.8119 13.5322 20.6541 13.7855 20.4963C18.51 17.5056 21.54 14.0007 21.54 10.4461C21.54 7.39787 19.4005 5.27344 16.6237 5.27344C15.0164 5.27344 13.7571 5.98394 13 7.08016C12.2559 5.99262 10.987 5.27344 9.37012 5.27344C6.6017 5.27344 4.46 7.39787 4.46 10.4461Z" fill="none" stroke="currentColor" stroke-width="2.5"></path></svg>
+                </button>
+                <button class="nav-btn" data-tab="profile" title="Profile">
+                    <svg aria-label="Profile" role="img" viewBox="0 0 26 26" width="48" height="48"><title>Profile</title><circle cx="13" cy="7.25" r="4" fill="currentColor" stroke="currentColor" stroke-width="2.5"></circle><path d="M6.26678 23.75H19.744C21.603 23.75 22.5 23.2186 22.5 22.0673C22.5 19.3712 18.8038 15.75 13 15.75C7.19625 15.75 3.5 19.3712 3.5 22.0673C3.5 23.2186 4.39704 23.75 6.26678 23.75Z" fill="currentColor" stroke="currentColor" stroke-width="2.5"></path></svg>
+                </button>
+            </div>
+
+            <div class="sidebar-bottom">
+                <div class="menu-btn-container">
+                    <button class="nav-btn" id="menuBtn" title="Menu">
+                        <svg aria-label="More" role="img" viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                            <title>More</title>
+                            <rect rx="1.25" x="3" y="7" width="18" height="2.5"/>
+                            <rect rx="1.25" x="3" y="15" width="18" height="2.5"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Insights Header -->
+            <div class="insights-header">
+                <div class="insights-header-dropdown">
+                    <div class="insights-header-title">
+                        <span>Insights</span>
+                        <span class="insights-header-date">4 Jan - 2 Feb</span>
+                    </div>
+                    <div class="date-range-container">
+                        <div class="insights-dropdown-circle" id="dateRangeBtn">
+                            <svg aria-label="Date range" role="img" viewBox="0 0 13 12" width="12" height="12">
+                                <path d="m2.5 4.2 4 4 4-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+                            </svg>
+                        </div>
+                        <div class="date-range-dropdown" id="dateRangeDropdown">
+                            <button class="date-range-item" data-days="7">
+                                <span>Last 7 days</span>
+                                <svg class="date-range-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="21.648 5.352 9.002 17.998 2.358 11.358"></polyline>
+                                </svg>
+                            </button>
+                            <button class="date-range-item" data-days="14">
+                                <span>Last 14 days</span>
+                                <svg class="date-range-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="21.648 5.352 9.002 17.998 2.358 11.358"></polyline>
+                                </svg>
+                            </button>
+                            <button class="date-range-item active" data-days="30">
+                                <span>Last 30 days</span>
+                                <svg class="date-range-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="21.648 5.352 9.002 17.998 2.358 11.358"></polyline>
+                                </svg>
+                            </button>
+                            <button class="date-range-item" data-days="90">
+                                <span>Last 90 days</span>
+                                <svg class="date-range-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="21.648 5.352 9.002 17.998 2.358 11.358"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="insights-menu-container">
+                    <button class="insights-menu" id="insightsMenuBtn">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="12" r="1.5"/>
+                            <circle cx="4" cy="12" r="1.5"/>
+                            <circle cx="20" cy="12" r="1.5"/>
+                        </svg>
+                    </button>
+                    <div class="insights-dropdown" id="insightsDropdown">
+                        <button class="insights-dropdown-item">
+                            <span>Add as column</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M3 2C2.58579 2 2.25 2.33579 2.25 2.75V4.25H0.75C0.335786 4.25 0 4.58579 0 5C0 5.41421 0.335786 5.75 0.75 5.75H2.25V7.25C2.25 7.66421 2.58579 8 3 8C3.41421 8 3.75 7.66421 3.75 7.25V5.75H5.25C5.66421 5.75 6 5.41421 6 5C6 4.58579 5.66421 4.25 5.25 4.25H3.75V2.75C3.75 2.33579 3.41421 2 3 2Z"></path>
+                                <path clip-rule="evenodd" d="M7.25 3.75H16C17.5188 3.75 18.75 4.98122 18.75 6.5V14.5C18.75 16.0188 17.5188 17.25 16 17.25H5C3.48122 17.25 2.25 16.0188 2.25 14.5V9.5H3.75V14.5C3.75 15.1904 4.30964 15.75 5 15.75H7.25V3.75ZM8.75 15.75V5.25H12.25V15.75H8.75ZM13.75 15.75H16C16.6904 15.75 17.25 15.1904 17.25 14.5V6.5C17.25 5.80964 16.6904 5.25 16 5.25H13.75V15.75Z" fill-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insights-content">
+                <!-- Weekly Recap Banner -->
+                <div class="insights-banner">
+                    <div class="insights-banner-title">Your weekly recap is ready!</div>
+                    <div class="insights-banner-text">See how things went last week.</div>
+                </div>
+
+                <!-- Empty State -->
+                <div class="insights-empty">
+                    <svg class="insights-empty-icon" viewBox="0 0 24 24" fill="currentColor" width="66" height="66">
+                        <rect fill="none" height="20" rx="5" stroke="currentColor" stroke-width="2" width="20" x="2" y="2"></rect>
+                        <rect height="12" rx="1" width="2" x="11" y="6"></rect>
+                        <rect height="9" rx="1" width="2" x="15" y="9"></rect>
+                        <rect height="5" rx="1" width="2" x="7" y="13"></rect>
+                    </svg>
+                    <div class="insights-empty-title">Insights await</div>
+                    <div class="insights-empty-text">Check back in once you've reached 100 followers to see your insights.</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- FAB -->
+        <button class="fab" id="fab">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-content create-post-modal" id="createPostForm">
+                <div class="create-post-header">
+                    <button class="create-post-close" id="createPostClose">
+                        <svg aria-label="Close" role="img" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                            <path d="M19.707 5.707a1 1 0 0 0-1.414-1.414L12 10.586 5.707 4.293a1 1 0 0 0-1.414 1.414L10.586 12l-6.293 6.293a1 1 0 1 0 1.414 1.414L12 13.414l6.293 6.293a1 1 0 0 0 1.414-1.414L13.414 12l6.293-6.293Z"/>
+                        </svg>
+                    </button>
+                    <h2>New thread</h2>
+                    <div class="create-post-header-icons">
+                        <button class="header-icon-btn" id="draftsBtn" title="Drafts">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <rect height="15" rx="4.5" stroke="currentColor" stroke-width="2" width="15" x="7" y="7" fill="none"></rect>
+                                <path clip-rule="evenodd" d="M15.3833 4.50007C15.0018 4.15977 14.5475 3.9045 14.05 3.75672C13.7983 3.68195 13.432 3.6357 12.7078 3.68313C11.9633 3.73189 11.0102 3.86454 9.59538 4.06338C8.18054 4.26222 7.22784 4.39741 6.4987 4.55577C5.78946 4.7098 5.45011 4.85522 5.22879 4.99646C4.51904 5.44941 3.99637 6.14302 3.7566 6.95012C3.68183 7.2018 3.63558 7.56809 3.68301 8.29232C3.73177 9.03686 3.86442 9.98992 4.06326 11.4047C4.23845 12.6513 4.36423 13.5391 4.49997 14.2313V17.5001C4.49997 17.737 4.51175 17.9713 4.53475 18.2022C4.05772 17.8249 3.64282 17.3681 3.31041 16.8473C2.66675 15.8387 2.47208 14.4535 2.08272 11.6831C1.69337 8.91269 1.49869 7.52748 1.83941 6.38057C2.21619 5.11227 3.03754 4.02231 4.15285 3.31053C5.16142 2.66688 6.54662 2.4722 9.31703 2.08284C12.0874 1.69349 13.4726 1.49881 14.6196 1.83953C15.8878 2.21631 16.9778 3.03766 17.6896 4.15297C17.7623 4.26696 17.8294 4.38577 17.8916 4.51084C17.7619 4.50369 17.6314 4.50007 17.5 4.50007H15.3833Z" fill-rule="evenodd"></path>
+                                <rect height="2" rx="1" width="9" x="10" y="12"></rect>
+                                <rect height="2" rx="1" width="6" x="10" y="15"></rect>
+                            </svg>
+                        </button>
+                        <div class="more-menu-container">
+                            <button class="header-icon-btn" id="moreMenuBtn" title="More">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M7.5 13.5C6.67157 13.5 6 12.8284 6 12C6 11.1716 6.67157 10.5 7.5 10.5C8.32843 10.5 9 11.1716 9 12C9 12.8284 8.32843 13.5 7.5 13.5Z"/>
+                                    <path d="M12 13.5C11.1716 13.5 10.5 12.8284 10.5 12C10.5 11.1716 11.1716 10.5 12 10.5C12.8284 10.5 13.5 11.1716 13.5 12C13.5 12.8284 12.8284 13.5 12 13.5Z"/>
+                                    <path d="M16.5 13.5C15.6716 13.5 15 12.8284 15 12C15 11.1716 15.6716 10.5 16.5 10.5C17.3284 10.5 18 11.1716 18 12C18 12.8284 17.3284 13.5 16.5 13.5Z"/>
+                                </svg>
+                            </button>
+                            <div class="more-menu-dropdown" id="moreMenuDropdown">
+                                <button class="more-menu-item">Add AI label</button>
+                                <button class="more-menu-item">Mark as paid partnership</button>
+                                <div class="more-menu-divider"></div>
+                                <button class="more-menu-item">
+                                    <span>Schedule...</span>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <polyline points="12 6 12 12 16 14"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="create-post-body">
+                    <div class="create-post-user">
+                        <img src="" alt="avatar" class="create-post-avatar" id="createPostAvatar">
+                        <div class="create-post-line"></div>
+                    </div>
+                    <div class="create-post-content">
+                        <div class="create-post-user-row">
+                            <span class="create-post-username" id="createPostUsername"></span>
+                        </div>
+                        <textarea class="create-post-textarea" id="createPostText" placeholder="What's new?"></textarea>
+                        <div class="create-post-actions">
+                            <label class="action-icon-btn" title="Add image">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21 15 16 10 5 21"/>
+                                </svg>
+                                <input type="file" accept="image/*" id="createPostImage" style="display: none;">
+                            </label>
+                            <button class="action-icon-btn" title="Add GIF">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                                    <text x="6" y="15" font-size="8" fill="currentColor" stroke="none" font-weight="bold">GIF</text>
+                                </svg>
+                            </button>
+                            <button class="action-icon-btn" title="Add hashtag">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="4" y1="9" x2="20" y2="9"/>
+                                    <line x1="4" y1="15" x2="20" y2="15"/>
+                                    <line x1="10" y1="3" x2="8" y2="21"/>
+                                    <line x1="16" y1="3" x2="14" y2="21"/>
+                                </svg>
+                            </button>
+                            <button class="action-icon-btn" title="Add poll">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                    <line x1="7" y1="8" x2="17" y2="8"/>
+                                    <line x1="7" y1="12" x2="14" y2="12"/>
+                                    <line x1="7" y1="16" x2="11" y2="16"/>
+                                </svg>
+                            </button>
+                            <button class="action-icon-btn" title="Add location">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="create-post-add-thread">
+                    <img src="" alt="avatar" class="create-post-avatar-small" id="createPostAvatarSmall">
+                    <span class="add-thread-text">Add to thread</span>
+                </div>
+                <div class="create-post-footer">
+                    <span class="reply-options-text">Anyone can reply</span>
+                    <button class="post-btn" id="postBtn" disabled>Post</button>
+                </div>
+            </div>
+            <!-- Drafts view (inside same modal) -->
+            <div class="drafts-view" id="draftsView" style="display: none;">
+                <div class="drafts-header">
+                    <button class="drafts-back-btn" id="draftsBackBtn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5"/>
+                            <polyline points="12 19 5 12 12 5"/>
+                        </svg>
+                    </button>
+                    <h2>Drafts</h2>
+                    <div class="drafts-header-spacer"></div>
+                </div>
+                <div class="drafts-content">
+                    <div class="drafts-empty">
+                        <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor" class="drafts-empty-icon">
+                            <rect height="15" rx="4.5" stroke="currentColor" stroke-width="1.5" width="15" x="7" y="7" fill="none"/>
+                            <path clip-rule="evenodd" d="M15.3833 4.50007C15.0018 4.15977 14.5475 3.9045 14.05 3.75672C13.7983 3.68195 13.432 3.6357 12.7078 3.68313C11.9633 3.73189 11.0102 3.86454 9.59538 4.06338C8.18054 4.26222 7.22784 4.39741 6.4987 4.55577C5.78946 4.7098 5.45011 4.85522 5.22879 4.99646C4.51904 5.44941 3.99637 6.14302 3.7566 6.95012C3.68183 7.2018 3.63558 7.56809 3.68301 8.29232C3.73177 9.03686 3.86442 9.98992 4.06326 11.4047C4.23845 12.6513 4.36423 13.5391 4.49997 14.2313V17.5001C4.49997 17.737 4.51175 17.9713 4.53475 18.2022C4.05772 17.8249 3.64282 17.3681 3.31041 16.8473C2.66675 15.8387 2.47208 14.4535 2.08272 11.6831C1.69337 8.91269 1.49869 7.52748 1.83941 6.38057C2.21619 5.11227 3.03754 4.02231 4.15285 3.31053C5.16142 2.66688 6.54662 2.4722 9.31703 2.08284C12.0874 1.69349 13.4726 1.49881 14.6196 1.83953C15.8878 2.21631 16.9778 3.03766 17.6896 4.15297C17.7623 4.26696 17.8294 4.38577 17.8916 4.51084C17.7619 4.50369 17.6314 4.50007 17.5 4.50007H15.3833Z" fill-rule="evenodd"/>
+                            <rect height="2" rx="1" width="9" x="10" y="12"/>
+                            <rect height="2" rx="1" width="6" x="10" y="15"/>
+                        </svg>
+                        <p class="drafts-empty-title">No drafts yet</p>
+                        <p class="drafts-empty-text">Your drafts will appear here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // load saved theme
+        let raw = localStorage.getItem('threads_theme');
+        let savedTheme = 'auto';
+        if (raw) {
+            savedTheme = JSON.parse(raw);
+        }
+        if (savedTheme == 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else if (savedTheme == 'light') {
+            document.documentElement.removeAttribute('data-theme');
+        } else {
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        }
+
+        // Check login
+        let isLoggedIn = localStorage.getItem('threads_is_logged_in') == 'true';
+        if (!isLoggedIn) {
+            window.location.href = 'login.html';
+        }
+
+        // Get current user
+        let currentUser = null;
+        try {
+            currentUser = JSON.parse(localStorage.getItem('threads_user'));
+        } catch(e) {}
+
+        // Modal elements
+        let modalOverlay = document.getElementById('modalOverlay');
+        let createPostClose = document.getElementById('createPostClose');
+        let createPostText = document.getElementById('createPostText');
+        let postBtn = document.getElementById('postBtn');
+        let createPostAvatar = document.getElementById('createPostAvatar');
+        let createPostAvatarSmall = document.getElementById('createPostAvatarSmall');
+        let createPostUsername = document.getElementById('createPostUsername');
+        let fab = document.getElementById('fab');
+
+        function openModal() {
+            if (modalOverlay && currentUser) {
+                if (createPostAvatar && currentUser.avatar) {
+                    createPostAvatar.src = currentUser.avatar;
+                }
+                if (createPostAvatarSmall && currentUser.avatar) {
+                    createPostAvatarSmall.src = currentUser.avatar;
+                }
+                if (createPostUsername && currentUser.username) {
+                    createPostUsername.textContent = currentUser.username;
+                }
+                modalOverlay.classList.add('active');
+            }
+        }
+
+        function closeModal() {
+            if (modalOverlay) {
+                modalOverlay.classList.remove('active');
+                modalOverlay.classList.remove('from-fab');
+                if (createPostText) createPostText.value = '';
+                if (postBtn) postBtn.disabled = true;
+            }
+            if (fab) fab.style.display = '';
+        }
+
+        if (createPostClose) {
+            createPostClose.onclick = closeModal;
+        }
+
+        if (modalOverlay) {
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target == modalOverlay) closeModal();
+            });
+        }
+
+        if (createPostText) {
+            createPostText.addEventListener('input', function() {
+                if (postBtn) postBtn.disabled = this.value.trim().length == 0;
+            });
+        }
+
+        if (postBtn) {
+            postBtn.onclick = function() {
+                if (!createPostText || createPostText.value.trim().length == 0) return;
+                let posts = [];
+                try {
+                    let data = localStorage.getItem('threads_user_posts');
+                    if (data) posts = JSON.parse(data) || [];
+                } catch(e) {}
+                posts.unshift({
+                    username: currentUser.username,
+                    avatar: currentUser.avatar,
+                    text: createPostText.value.trim(),
+                    time: 'now',
+                    likes: 0,
+                    comments: 0
+                });
+                localStorage.setItem('threads_user_posts', JSON.stringify(posts));
+                closeModal();
+            };
+        }
+
+        // FAB click
+        if (fab) {
+            fab.onclick = function() {
+                if (modalOverlay) modalOverlay.classList.add('from-fab');
+                fab.style.display = 'none';
+                openModal();
+            };
+        }
+
+        // Drafts view toggle
+        let draftsBtn = document.getElementById('draftsBtn');
+        let draftsView = document.getElementById('draftsView');
+        let draftsBackBtn = document.getElementById('draftsBackBtn');
+        let createPostForm = document.getElementById('createPostForm');
+        if (draftsBtn && draftsView && createPostForm) {
+            draftsBtn.onclick = function(e) {
+                e.stopPropagation();
+                createPostForm.style.display = 'none';
+                draftsView.style.display = 'flex';
+            };
+            if (draftsBackBtn) {
+                draftsBackBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    draftsView.style.display = 'none';
+                    createPostForm.style.display = '';
+                };
+            }
+        }
+
+        // More menu dropdown
+        let moreMenuBtn = document.getElementById('moreMenuBtn');
+        let moreMenuDropdown = document.getElementById('moreMenuDropdown');
+        if (moreMenuBtn && moreMenuDropdown) {
+            moreMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                moreMenuDropdown.classList.toggle('active');
+            });
+            document.addEventListener('click', function(e) {
+                if (!moreMenuDropdown.contains(e.target) && !moreMenuBtn.contains(e.target)) {
+                    moreMenuDropdown.classList.remove('active');
+                }
+            });
+        }
+
+        // Date range dropdown
+        let dateRangeBtn = document.getElementById('dateRangeBtn');
+        let dateRangeDropdown = document.getElementById('dateRangeDropdown');
+        let dateRangeItems = document.querySelectorAll('.date-range-item');
+        let insightsHeaderDate = document.querySelector('.insights-header-date');
+
+        if (dateRangeBtn && dateRangeDropdown) {
+            dateRangeBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dateRangeDropdown.classList.toggle('active');
+            });
+            document.addEventListener('click', function(e) {
+                if (!dateRangeDropdown.contains(e.target) && !dateRangeBtn.contains(e.target)) {
+                    dateRangeDropdown.classList.remove('active');
+                }
+            });
+        }
+
+        // Date range selection
+        for (let i = 0; i < dateRangeItems.length; i++) {
+            dateRangeItems[i].addEventListener('click', function() {
+                // Remove active from all
+                for (let j = 0; j < dateRangeItems.length; j++) {
+                    dateRangeItems[j].classList.remove('active');
+                }
+                // Set active on clicked
+                this.classList.add('active');
+                // Update header date text
+                let days = this.getAttribute('data-days');
+                let endDate = new Date();
+                let startDate = new Date();
+                startDate.setDate(endDate.getDate() - parseInt(days));
+                let options = { day: 'numeric', month: 'short' };
+                let startStr = startDate.toLocaleDateString('en-GB', options);
+                let endStr = endDate.toLocaleDateString('en-GB', options);
+                if (insightsHeaderDate) {
+                    insightsHeaderDate.textContent = startStr + ' - ' + endStr;
+                }
+                dateRangeDropdown.classList.remove('active');
+            });
+        }
+
+        // Insights menu dropdown
+        let insightsMenuBtn = document.getElementById('insightsMenuBtn');
+        let insightsDropdown = document.getElementById('insightsDropdown');
+        if (insightsMenuBtn && insightsDropdown) {
+            insightsMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                insightsDropdown.classList.toggle('active');
+            });
+            document.addEventListener('click', function(e) {
+                if (!insightsDropdown.contains(e.target) && !insightsMenuBtn.contains(e.target)) {
+                    insightsDropdown.classList.remove('active');
+                }
+            });
+        }
+
+        // Navigation
+        let navBtns = document.querySelectorAll('.nav-btn[data-tab]');
+        for (let i = 0; i < navBtns.length; i++) {
+            let btn = navBtns[i];
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                let tab = this.getAttribute('data-tab');
+                if (tab == 'home') {
+                    window.location.href = 'home.html';
+                } else if (tab == 'search') {
+                    window.location.href = 'home.html#search';
+                } else if (tab == 'create') {
+                    window.location.href = 'home.html#create';
+                } else if (tab == 'activity') {
+                    window.location.href = 'activity.html';
+                } else if (tab == 'profile') {
+                    window.location.href = 'profile.html';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
