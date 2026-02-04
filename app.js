@@ -1007,11 +1007,172 @@ function setupEventListeners() {
             };
         }
         let reportBtn = document.getElementById("reportBtn");
-        if (reportBtn != null) {
+        let reportModalOverlay = document.getElementById("reportModalOverlay");
+        let reportModalClose = document.getElementById("reportModalClose");
+        let reportSubmitBtn = document.getElementById("reportSubmitBtn");
+        let reportTextarea = document.getElementById("reportTextarea");
+
+        if (reportBtn != null && reportModalOverlay != null) {
             reportBtn.onclick = function() {
-                alert("Report a problem - coming soon!");
                 dropdownMenu.classList.remove("active");
+                reportModalOverlay.classList.add("active");
             };
+        }
+        if (reportModalClose != null && reportModalOverlay != null) {
+            reportModalClose.onclick = function() {
+                reportModalOverlay.classList.remove("active");
+                if (reportTextarea) reportTextarea.value = "";
+                if (reportSubmitBtn) reportSubmitBtn.classList.remove("active");
+                clearReportAttachments();
+            };
+        }
+        if (reportSubmitBtn != null && reportModalOverlay != null) {
+            reportSubmitBtn.onclick = function() {
+                if (reportTextarea && reportTextarea.value.trim()) {
+                    // Show loading spinner
+                    reportSubmitBtn.classList.add("loading");
+
+                    // Save to localStorage
+                    saveReport(reportTextarea.value.trim(), reportAttachments);
+
+                    // Simulate delay then close and show toast
+                    setTimeout(function() {
+                        reportSubmitBtn.classList.remove("loading");
+                        reportModalOverlay.classList.remove("active");
+                        reportTextarea.value = "";
+                        reportSubmitBtn.classList.remove("active");
+                        clearReportAttachments();
+
+                        // Show toast
+                        showToast("Thank you for reporting this problem.");
+                    }, 1500);
+                }
+            };
+        }
+
+        function showToast(message) {
+            let toast = document.getElementById("toast");
+            let toastMessage = document.getElementById("toastMessage");
+            if (toast && toastMessage) {
+                toastMessage.textContent = message;
+                toast.classList.add("active");
+                setTimeout(function() {
+                    toast.classList.remove("active");
+                }, 3000);
+            }
+        }
+
+        function saveReport(text, attachments) {
+            let reports = JSON.parse(localStorage.getItem("threads_reports") || "[]");
+            let report = {
+                id: Date.now(),
+                text: text,
+                attachments: [],
+                date: new Date().toISOString()
+            };
+
+            // Convert attachments to base64
+            let promises = [];
+            for (let i = 0; i < attachments.length; i++) {
+                promises.push(fileToBase64(attachments[i]));
+            }
+
+            if (promises.length > 0) {
+                Promise.all(promises).then(function(base64Images) {
+                    report.attachments = base64Images;
+                    reports.push(report);
+                    localStorage.setItem("threads_reports", JSON.stringify(reports));
+                });
+            } else {
+                reports.push(report);
+                localStorage.setItem("threads_reports", JSON.stringify(reports));
+            }
+        }
+
+        function fileToBase64(file) {
+            return new Promise(function(resolve) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    resolve(e.target.result);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        if (reportTextarea != null && reportSubmitBtn != null) {
+            reportTextarea.oninput = function() {
+                if (reportTextarea.value.trim()) {
+                    reportSubmitBtn.classList.add("active");
+                } else {
+                    reportSubmitBtn.classList.remove("active");
+                }
+            };
+        }
+        if (reportModalOverlay != null) {
+            reportModalOverlay.onclick = function(e) {
+                if (e.target === reportModalOverlay) {
+                    reportModalOverlay.classList.remove("active");
+                    if (reportTextarea) reportTextarea.value = "";
+                    if (reportSubmitBtn) reportSubmitBtn.classList.remove("active");
+                    clearReportAttachments();
+                }
+            };
+        }
+
+        // Attach button functionality
+        let reportAttachBtn = document.getElementById("reportAttachBtn");
+        let reportFileInput = document.getElementById("reportFileInput");
+        let reportAttachments = [];
+
+        if (reportAttachBtn && reportFileInput) {
+            reportAttachBtn.onclick = function() {
+                reportFileInput.click();
+            };
+
+            reportFileInput.onchange = function(e) {
+                let files = e.target.files;
+                for (let i = 0; i < files.length; i++) {
+                    let file = files[i];
+                    if (file.type.startsWith("image/")) {
+                        reportAttachments.push(file);
+                        showAttachmentPreview(file);
+                    }
+                }
+                reportFileInput.value = "";
+            };
+        }
+
+        function showAttachmentPreview(file) {
+            let footer = document.querySelector(".report-modal-footer");
+            let container = document.querySelector(".report-attachments");
+            if (!container) {
+                container = document.createElement("div");
+                container.className = "report-attachments";
+                footer.parentNode.insertBefore(container, footer);
+            }
+
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let preview = document.createElement("div");
+                preview.className = "report-attachment-preview";
+                preview.innerHTML = '<img src="' + e.target.result + '"><button class="report-attachment-remove">×</button>';
+                preview.querySelector(".report-attachment-remove").onclick = function() {
+                    let index = reportAttachments.indexOf(file);
+                    if (index > -1) reportAttachments.splice(index, 1);
+                    preview.remove();
+                    if (reportAttachments.length === 0) {
+                        let cont = document.querySelector(".report-attachments");
+                        if (cont) cont.remove();
+                    }
+                };
+                container.appendChild(preview);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearReportAttachments() {
+            reportAttachments = [];
+            let container = document.querySelector(".report-attachments");
+            if (container) container.remove();
         }
     }
 
@@ -1136,6 +1297,32 @@ function setupEventListeners() {
             }
         }
 
+        // Create profile tag with input
+        function createProfileTag() {
+            if (!filterTags) return;
+            if (filterTags.querySelector('[data-filter="profile"]')) {
+                // Focus existing input
+                let existingInput = filterTags.querySelector('[data-filter="profile"] .filter-tag-input');
+                if (existingInput) existingInput.focus();
+                return;
+            }
+            let tag = document.createElement("div");
+            tag.className = "filter-tag";
+            tag.setAttribute("data-filter", "profile");
+            tag.innerHTML = '<span class="filter-tag-label">From</span><input type="text" class="filter-tag-input" placeholder="Profile"><button class="filter-tag-close"></button>';
+            tag.querySelector(".filter-tag-close").onclick = function(ev) {
+                ev.stopPropagation();
+                tag.remove();
+            };
+            tag.onclick = function(ev) {
+                if (ev.target.classList.contains("filter-tag-close")) return;
+                tag.querySelector(".filter-tag-input").focus();
+            };
+            filterTags.appendChild(tag);
+            // Focus the input immediately
+            tag.querySelector(".filter-tag-input").focus();
+        }
+
         if (calendarPrev) {
             calendarPrev.onclick = function(e) {
                 e.stopPropagation();
@@ -1166,6 +1353,10 @@ function setupEventListeners() {
                 filterDropdown.classList.remove("active");
                 if (fType == "after" || fType == "before") {
                     createDateTagEmpty(fType);
+                    return;
+                }
+                if (fType == "profile") {
+                    createProfileTag();
                     return;
                 }
                 if (filterTags.querySelector('[data-filter="' + fType + '"]')) return;
