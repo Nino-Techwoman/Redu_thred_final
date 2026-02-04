@@ -1190,6 +1190,23 @@ body {
     opacity: 1;
 }
 
+.action-btn .heart-icon {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+}
+
+.action-btn.liked .heart-icon {
+    fill: #ff3040 !important;
+    stroke: #ff3040 !important;
+}
+
+.action-btn.liked .heart-icon path {
+    fill: #ff3040 !important;
+    stroke: #ff3040 !important;
+}
 
 /* FAB Button */
 
@@ -2402,6 +2419,18 @@ body {
 
 [data-theme="dark"] .action-btn:hover img {
     opacity: 1;
+}
+
+[data-theme="dark"] .action-btn .heart-icon {
+    fill: none;
+    stroke: #999;
+}
+
+[data-theme="dark"] .action-btn.liked .heart-icon,
+[data-theme="dark"] .action-btn.liked .heart-icon path {
+    fill: #ff3040 !important;
+    stroke: #ff3040 !important;
+    filter: none !important;
 }
 
 [data-theme="dark"] .fab {

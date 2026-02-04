@@ -303,11 +303,9 @@ function createPostHTML(post) {
         }
     }
     let likeClass = "action-btn like-btn";
-    let likeIcon = "icons/heart.svg";
     let likeCount = post.likes;
     if (post.liked == true) {
         likeClass = "action-btn like-btn liked";
-        likeIcon = "icons/heart-filled.svg";
         likeCount = post.likes + 1;
     }
     let safeUsername = sanitize(post.username);
@@ -342,7 +340,7 @@ function createPostHTML(post) {
     html = html + imageHTML;
     html = html + '<div class="post-actions">';
     html = html + '<button class="' + likeClass + '" data-id="' + post.id + '">';
-    html = html + '<img src="' + likeIcon + '" width="20" height="20">';
+    html = html + '<svg class="heart-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
     html = html + '<span class="action-count likes-count">' + likeCount + '</span>';
     html = html + '</button>';
     html = html + '<button class="action-btn comment-btn">';
@@ -473,12 +471,10 @@ function handleLikeClick(event) {
         post.liked = false;
         removeFromLiked(postId);
         button.classList.remove("liked");
-        button.querySelector("img").src = "icons/heart.svg";
     } else {
         post.liked = true;
         addToLiked(postId);
         button.classList.add("liked");
-        button.querySelector("img").src = "icons/heart-filled.svg";
     }
     let countElement = button.querySelector(".likes-count");
     if (post.liked == true) {

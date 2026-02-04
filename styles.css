@@ -654,6 +654,26 @@ body {
     min-width: 16px;
 }
 
+.action-btn .heart-icon {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.action-btn .heart-icon path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+}
+
+.action-btn.liked .heart-icon,
+.action-btn.liked .heart-icon path {
+    fill: #ff3040 !important;
+    stroke: #ff3040 !important;
+}
+
 .action-btn.liked img {
     filter: invert(27%) sepia(94%) saturate(5618%) hue-rotate(347deg) brightness(91%) contrast(107%);
 }

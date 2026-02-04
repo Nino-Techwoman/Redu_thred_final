@@ -46,7 +46,7 @@ function getRandomAvatar() {
 // get sample posts
 function getSamplePosts() {
     let posts = [
-        { id: 1, username: "keny.vee", name: "Kenny V", avatar: "images/avatar1.jpg", verified: true, text: "", quote: { username: "keny.vee", avatar: "images/avatar1.jpg", text: "A bad manager can turn you into a great entrepreneur.", highlight: "great entrepreneur", dark: false }, time: "23h", likes: 469, replies: 10, reposts: 45, shares: 50, liked: false },
+        { id: 1, username: "keny.vee", name: "Kenny V", avatar: "images/avatar2.jpg", verified: true, text: "", quote: { username: "keny.vee", avatar: "images/avatar2.jpg", text: "A bad manager can turn you into a great entrepreneur.", highlight: "great entrepreneur", dark: false }, time: "23h", likes: 469, replies: 10, reposts: 45, shares: 50, liked: false },
         { id: 2, username: "bobbydelrio", name: "Bobby Del Rio", avatar: "images/avatar2.jpg", verified: false, text: "Green for envy.", quote: { username: "bobbydelrio", avatar: "images/avatar2.jpg", text: "Social media is viciously competitive now.", highlight: "viciously competitive", dark: false }, time: "6h", likes: 62, replies: 0, reposts: 2, shares: 38, liked: false },
         { id: 3, username: "a.g.e.co", name: "AGE Co", avatar: "images/avatar3.jpg", verified: false, text: "Artist to artist what's your thoughts ?", quote: { username: "druwmelo", avatar: "images/avatar4.jpg", text: "Being an artist is a long game nobody respects.", highlight: "artist is a long game", dark: false }, time: "1h", likes: 0, replies: 0, reposts: 0, shares: 0, liked: false },
         { id: 4, username: "sarah.designs", name: "Sarah Mitchell", avatar: "images/avatar5.jpg", verified: true, text: "Just launched my new portfolio website! What do you think? Link in bio.", quote: null, time: "2h", likes: 234, replies: 45, reposts: 12, shares: 89, liked: false },
@@ -369,7 +369,7 @@ function createPostElement(post) {
     html = html + imageHtml;
     html = html + '<div class="post-actions">';
     html = html + '<button class="action-btn like-btn' + likedClass + '" data-id="' + post.id + '">';
-    html = html + '<img src="icons/heart.svg" alt="Like">';
+    html = html + '<svg class="heart-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
     html = html + likesHtml;
     html = html + '</button>';
     html = html + '<button class="action-btn comment-btn" data-id="' + post.id + '">';
@@ -429,8 +429,10 @@ function createPostElement(post) {
 // toggle like
 function toggleLike(postId) {
     console.log("toggling like for: " + postId);
+    let post = null;
     for (let i = 0; i < feedPosts.length; i++) {
         if (feedPosts[i].id == postId) {
+            post = feedPosts[i];
             if (feedPosts[i].liked == true) {
                 feedPosts[i].liked = false;
                 feedPosts[i].likes = feedPosts[i].likes - 1;
@@ -441,8 +443,31 @@ function toggleLike(postId) {
             break;
         }
     }
+
+    // update the button directly without re-rendering
+    let btn = document.querySelector('.like-btn[data-id="' + postId + '"]');
+    if (btn != null && post != null) {
+        if (post.liked) {
+            btn.classList.add('liked');
+        } else {
+            btn.classList.remove('liked');
+        }
+        // update count
+        let span = btn.querySelector('span');
+        if (post.likes > 0) {
+            if (span == null) {
+                span = document.createElement('span');
+                btn.appendChild(span);
+            }
+            span.textContent = post.likes;
+        } else {
+            if (span != null) {
+                span.remove();
+            }
+        }
+    }
+
     saveToStorage('threads_posts', feedPosts);
-    renderFeed();
 }
 
 // pending post waiting for view click
