@@ -1319,6 +1319,8 @@ function setupEventListeners() {
         // Create profile tag with input
         function createProfileTag() {
             if (!filterTags) return;
+            // Close calendar when profile tag is used
+            if (calendarPicker) calendarPicker.classList.remove("active");
             if (filterTags.querySelector('[data-filter="profile"]')) {
                 // Focus existing input
                 let existingInput = filterTags.querySelector('[data-filter="profile"] .filter-tag-input');
@@ -1335,6 +1337,8 @@ function setupEventListeners() {
             };
             tag.onclick = function(ev) {
                 if (ev.target.classList.contains("filter-tag-close")) return;
+                // Close calendar when clicking profile tag
+                if (calendarPicker) calendarPicker.classList.remove("active");
                 tag.querySelector(".filter-tag-input").focus();
             };
             filterTags.appendChild(tag);
