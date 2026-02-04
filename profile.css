@@ -1388,3 +1388,228 @@ body {
         height: 80px;
     }
 }
+
+
+/* Dark Mode Styles */
+
+body {
+    background-color: #101010;
+    color: #f5f5f5;
+}
+
+[data-theme="light"] body {
+    background-color: #f5f5f5;
+    color: #000;
+}
+
+.sidebar {
+    background-color: #101010;
+}
+
+[data-theme="light"] .sidebar {
+    background-color: #f5f5f5;
+}
+
+.logo {
+    color: #f5f5f5;
+}
+
+[data-theme="light"] .logo {
+    color: #000;
+}
+
+.logo-link:hover {
+    background-color: #1a1a1a;
+}
+
+[data-theme="light"] .logo-link:hover {
+    background-color: #f0f0f0;
+}
+
+.nav-btn {
+    color: #777;
+}
+
+.nav-btn:hover {
+    background-color: #1a1a1a;
+    color: #f5f5f5;
+}
+
+[data-theme="light"] .nav-btn {
+    color: #999;
+}
+
+[data-theme="light"] .nav-btn:hover {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+.main-content {
+    background-color: #101010;
+}
+
+[data-theme="light"] .main-content {
+    background-color: #f5f5f5;
+}
+
+.profile-header {
+    background-color: #101010;
+    border-color: #262626;
+}
+
+[data-theme="light"] .profile-header {
+    background-color: #f5f5f5;
+    border-color: #e0e0e0;
+}
+
+.profile-name {
+    color: #f5f5f5;
+}
+
+[data-theme="light"] .profile-name {
+    color: #000;
+}
+
+.profile-username {
+    color: #777;
+}
+
+[data-theme="light"] .profile-username {
+    color: #666;
+}
+
+.profile-bio {
+    color: #f5f5f5;
+}
+
+[data-theme="light"] .profile-bio {
+    color: #000;
+}
+
+.profile-stats {
+    color: #777;
+}
+
+[data-theme="light"] .profile-stats {
+    color: #666;
+}
+
+.profile-tabs {
+    border-color: #262626;
+}
+
+[data-theme="light"] .profile-tabs {
+    border-color: #e0e0e0;
+}
+
+.profile-tab {
+    color: #777;
+}
+
+.profile-tab.active {
+    color: #f5f5f5;
+    border-color: #f5f5f5;
+}
+
+[data-theme="light"] .profile-tab {
+    color: #999;
+}
+
+[data-theme="light"] .profile-tab.active {
+    color: #000;
+    border-color: #000;
+}
+
+.dropdown-menu {
+    background-color: #262626;
+    border-color: #363636;
+}
+
+[data-theme="light"] .dropdown-menu {
+    background-color: #fff;
+    border-color: #e0e0e0;
+}
+
+.dropdown-item {
+    color: #f5f5f5;
+}
+
+.dropdown-item:hover {
+    background-color: #363636;
+}
+
+[data-theme="light"] .dropdown-item {
+    color: #000;
+}
+
+[data-theme="light"] .dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+.theme-toggle {
+    background-color: #363636;
+}
+
+[data-theme="light"] .theme-toggle {
+    background-color: #e0e0e0;
+}
+
+.theme-btn {
+    color: #777;
+}
+
+.theme-btn.active {
+    background-color: #262626;
+    color: #f5f5f5;
+}
+
+[data-theme="light"] .theme-btn {
+    color: #666;
+}
+
+[data-theme="light"] .theme-btn.active {
+    background-color: #fff;
+    color: #000;
+}
+
+.submenu-header {
+    color: #f5f5f5;
+    border-color: #363636;
+}
+
+[data-theme="light"] .submenu-header {
+    color: #000;
+    border-color: #e0e0e0;
+}
+
+.post {
+    border-color: #262626;
+}
+
+[data-theme="light"] .post {
+    border-color: #e0e0e0;
+}
+
+.post-text {
+    color: #f5f5f5;
+}
+
+[data-theme="light"] .post-text {
+    color: #000;
+}
+
+.username {
+    color: #f5f5f5;
+}
+
+[data-theme="light"] .username {
+    color: #000;
+}
+
+.action-btn {
+    color: #777;
+}
+
+[data-theme="light"] .action-btn {
+    color: #666;
+}

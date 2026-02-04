@@ -11,13 +11,18 @@
 
 body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f5f5f5;
-    color: #000000;
+    background-color: #101010;
+    color: #f5f5f5;
     font-size: 15px;
     line-height: 21px;
     -webkit-font-smoothing: antialiased;
     -webkit-user-select: none;
     user-select: none;
+}
+
+[data-theme="light"] body {
+    background-color: #f5f5f5;
+    color: #000000;
 }
 
 
@@ -44,9 +49,13 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 12px 0;
-    background-color: #f5f5f5;
+    background-color: #101010;
     overflow: visible;
     z-index: 999;
+}
+
+[data-theme="light"] .sidebar {
+    background-color: #f5f5f5;
 }
 
 .sidebar-top {
@@ -64,10 +73,18 @@ body {
 }
 
 .logo-link:hover {
-    background-color: #f0f0f0;
+    background-color: #1a1a1a;
 }
 
 .logo {
+    color: #f5f5f5;
+}
+
+[data-theme="light"] .logo-link:hover {
+    background-color: #f0f0f0;
+}
+
+[data-theme="light"] .logo {
     color: #000;
 }
 
@@ -87,13 +104,22 @@ body {
     border-radius: 12px;
     background-color: transparent;
     cursor: pointer;
-    color: #999;
+    color: #777;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .nav-btn:hover {
+    background-color: #1a1a1a;
+    color: #f5f5f5;
+}
+
+[data-theme="light"] .nav-btn {
+    color: #999;
+}
+
+[data-theme="light"] .nav-btn:hover {
     background-color: #f0f0f0;
     color: #000;
 }
@@ -3204,4 +3230,249 @@ body {
     .nav-btn {
         padding: 14px 16px;
     }
+}
+
+
+/* Dark Mode (default) and Light Mode overrides */
+
+/* Main content */
+.main-content {
+    background-color: #101010;
+}
+
+[data-theme="light"] .main-content {
+    background-color: #f5f5f5;
+}
+
+/* Header */
+.header {
+    background-color: #101010;
+    border-color: #262626;
+}
+
+[data-theme="light"] .header {
+    background-color: #f5f5f5;
+    border-color: #e0e0e0;
+}
+
+/* Feed */
+.feed {
+    background-color: #101010;
+}
+
+[data-theme="light"] .feed {
+    background-color: #f5f5f5;
+}
+
+/* Posts */
+.post {
+    background-color: #101010;
+    border-color: #262626;
+}
+
+[data-theme="light"] .post {
+    background-color: #fff;
+    border-color: #e0e0e0;
+}
+
+/* Post text */
+.post-text {
+    color: #f5f5f5;
+}
+
+[data-theme="light"] .post-text {
+    color: #000;
+}
+
+/* Username */
+.username {
+    color: #f5f5f5;
+}
+
+[data-theme="light"] .username {
+    color: #000;
+}
+
+/* Post time */
+.post-time {
+    color: #777;
+}
+
+[data-theme="light"] .post-time {
+    color: #999;
+}
+
+/* Action buttons */
+.action-btn {
+    color: #777;
+}
+
+.action-btn:hover {
+    background-color: #1a1a1a;
+}
+
+[data-theme="light"] .action-btn {
+    color: #666;
+}
+
+[data-theme="light"] .action-btn:hover {
+    background-color: #f0f0f0;
+}
+
+/* Post menu */
+.post-menu-dropdown {
+    background-color: #262626;
+    border-color: #363636;
+}
+
+[data-theme="light"] .post-menu-dropdown {
+    background-color: #fff;
+    border-color: #e0e0e0;
+}
+
+.post-menu-item {
+    color: #f5f5f5;
+}
+
+.post-menu-item:hover {
+    background-color: #363636;
+}
+
+[data-theme="light"] .post-menu-item {
+    color: #000;
+}
+
+[data-theme="light"] .post-menu-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    background-color: #262626;
+    border-color: #363636;
+}
+
+[data-theme="light"] .dropdown-menu {
+    background-color: #fff;
+    border-color: #e0e0e0;
+}
+
+.dropdown-item {
+    color: #f5f5f5;
+}
+
+.dropdown-item:hover {
+    background-color: #363636;
+}
+
+[data-theme="light"] .dropdown-item {
+    color: #000;
+}
+
+[data-theme="light"] .dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* Theme toggle */
+.theme-toggle {
+    background-color: #363636;
+}
+
+[data-theme="light"] .theme-toggle {
+    background-color: #e0e0e0;
+}
+
+.theme-btn {
+    color: #777;
+}
+
+.theme-btn.active {
+    background-color: #262626;
+    color: #f5f5f5;
+}
+
+[data-theme="light"] .theme-btn {
+    color: #666;
+}
+
+[data-theme="light"] .theme-btn.active {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Modal */
+.modal-overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal {
+    background-color: #262626;
+    color: #f5f5f5;
+}
+
+[data-theme="light"] .modal {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Composer */
+.composer {
+    background-color: #101010;
+    border-color: #262626;
+}
+
+[data-theme="light"] .composer {
+    background-color: #fff;
+    border-color: #e0e0e0;
+}
+
+.composer-input {
+    background-color: transparent;
+    color: #f5f5f5;
+}
+
+[data-theme="light"] .composer-input {
+    color: #000;
+}
+
+/* Right sidebar */
+.right-sidebar {
+    background-color: #101010;
+}
+
+[data-theme="light"] .right-sidebar {
+    background-color: #f5f5f5;
+}
+
+/* Quoted post */
+.quoted-post {
+    background-color: #1a1a1a;
+    border-color: #363636;
+}
+
+[data-theme="light"] .quoted-post {
+    background-color: #f5f5f5;
+    border-color: #e0e0e0;
+}
+
+/* Submenu header */
+.submenu-header {
+    color: #f5f5f5;
+    border-color: #363636;
+}
+
+[data-theme="light"] .submenu-header {
+    color: #000;
+    border-color: #e0e0e0;
+}
+
+/* Icons filter for dark/light mode */
+.nav-btn svg,
+.logo svg {
+    color: #f5f5f5;
+}
+
+[data-theme="light"] .nav-btn svg,
+[data-theme="light"] .logo svg {
+    color: #000;
 }
