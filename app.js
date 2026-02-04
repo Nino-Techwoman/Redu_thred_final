@@ -50,6 +50,19 @@ let isLoggedIn = false;
 let currentTab = "home";
 let isLoading = false;
 
+// show toast notification
+function showToast(message) {
+    let toast = document.getElementById("toast");
+    let toastMessage = document.getElementById("toastMessage");
+    if (toast && toastMessage) {
+        toastMessage.textContent = message;
+        toast.classList.add("active");
+        setTimeout(function() {
+            toast.classList.remove("active");
+        }, 3000);
+    }
+}
+
 // get elements
 let feed = document.getElementById("feed");
 let modal = document.getElementById("modalOverlay");
@@ -432,7 +445,7 @@ function addPostButtonListeners() {
             if (dropdown != null) {
                 dropdown.classList.remove("active");
             }
-            alert("Link copied!");
+            showToast("Copied");
         };
     }
 }
@@ -949,8 +962,16 @@ function setupEventListeners() {
             if (dropdownMenu.classList.contains("active")) {
                 dropdownMenu.classList.remove("active");
             } else {
+                // Always show main menu when opening
+                let menuMain = document.getElementById("menuMain");
+                let menuAppearance = document.getElementById("menuAppearance");
+                if (menuMain) menuMain.style.display = "block";
+                if (menuAppearance) menuAppearance.style.display = "none";
                 dropdownMenu.classList.add("active");
             }
+        };
+        dropdownMenu.onclick = function(event) {
+            event.stopPropagation();
         };
         document.onclick = function(event) {
             if (dropdownMenu.contains(event.target) == false && event.target != menuBtn) {
@@ -1180,9 +1201,7 @@ function setupEventListeners() {
     let filterBtn = document.getElementById("filterBtn");
     let filterDropdown = document.getElementById("filterDropdown");
     let filterTags = document.getElementById("filterTags");
-    console.log("Filter elements found:", filterBtn, filterDropdown, filterTags);
     if (filterBtn != null && filterDropdown != null) {
-        console.log("Setting up filter functionality...");
         filterBtn.addEventListener("click", function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -1342,14 +1361,12 @@ function setupEventListeners() {
 
         // Filter items click
         let filterItems = filterDropdown.querySelectorAll(".filter-item");
-        console.log("Found filter items:", filterItems.length);
         for (let i = 0; i < filterItems.length; i++) {
             filterItems[i].onclick = function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 let fType = this.getAttribute("data-filter");
                 let fLabel = this.querySelector("span").textContent.replace("...", "");
-                console.log("Filter item clicked:", fType, fLabel);
                 filterDropdown.classList.remove("active");
                 if (fType == "after" || fType == "before") {
                     createDateTagEmpty(fType);
