@@ -1056,6 +1056,10 @@ body {
     display: flex;
 }
 
+[data-theme="dark"] .modal-overlay {
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
 .modal {
     background-color: #101010;
     border: 1px solid #333;
@@ -1335,7 +1339,18 @@ body {
     filter: invert(1);
 }
 
+.filter-btn svg {
+    width: 20px;
+    height: 20px;
+    color: #fff;
+    opacity: 0.5;
+}
+
 .filter-btn:hover .filter-icon {
+    opacity: 1;
+}
+
+.filter-btn:hover svg {
     opacity: 1;
 }
 
@@ -1389,7 +1404,14 @@ body {
     outline: none;
 }
 
-.filter-item img,
+.filter-item img {
+    opacity: 1;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1);
+}
+
 .filter-item svg {
     opacity: 1;
     flex-shrink: 0;
@@ -1413,7 +1435,10 @@ body {
     color: #000;
 }
 
-[data-theme="light"] .filter-item img,
+[data-theme="light"] .filter-item img {
+    filter: none;
+}
+
 [data-theme="light"] .filter-item svg {
     color: #000;
 }
@@ -1753,6 +1778,10 @@ body {
 
 [data-theme="light"] .filter-icon {
     filter: invert(0);
+}
+
+[data-theme="light"] .filter-btn svg {
+    color: #000;
 }
 
 [data-theme="light"] .filter-btn:hover .filter-icon {
@@ -2249,8 +2278,8 @@ body {
     justify-content: center;
 }
 
-.report-modal-close img {
-    filter: invert(1);
+.report-modal-close svg {
+    fill: #fff;
 }
 
 .report-modal-close:hover {
@@ -2272,7 +2301,7 @@ body {
 
 .report-modal-content {
     width: 450px;
-    background-color: #262626;
+    background-color: #181818;
     border-radius: 16px;
     border: 1px solid #363636;
     padding: 16px;
@@ -2314,8 +2343,16 @@ body {
     justify-content: center;
 }
 
+.report-attach-btn svg path {
+    fill: #737373;
+}
+
 .report-attach-btn:hover {
     color: #999;
+}
+
+.report-attach-btn:hover svg path {
+    fill: #999;
 }
 
 .report-submit-btn {
@@ -2334,6 +2371,11 @@ body {
     color: #888;
 }
 
+/* Dark mode */
+[data-theme="dark"] .report-modal-overlay {
+    background-color: #0a0a0a;
+}
+
 /* Light mode */
 [data-theme="light"] .report-modal-overlay {
     background-color: rgba(255, 255, 255, 0.9);
@@ -2343,8 +2385,8 @@ body {
     background-color: #efefef;
 }
 
-[data-theme="light"] .report-modal-close img {
-    filter: invert(0);
+[data-theme="light"] .report-modal-close svg {
+    fill: #000;
 }
 
 [data-theme="light"] .report-modal-title {

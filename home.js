@@ -9,10 +9,12 @@ if (raw) {
 if (savedTheme == 'light') {
     document.documentElement.setAttribute('data-theme', 'light');
 } else if (savedTheme == 'dark') {
-    document.documentElement.removeAttribute('data-theme');
+    document.documentElement.setAttribute('data-theme', 'dark');
 } else {
     if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
     }
 }
 
@@ -443,6 +445,9 @@ function toggleLike(postId) {
     renderFeed();
 }
 
+// pending post waiting for view click
+let pendingNewPost = null;
+
 // create post
 function createPost(text, image) {
     if (currentUser == null) {
@@ -487,16 +492,10 @@ function createPost(text, image) {
         userPosts.unshift(newPost);
         saveToStorage('threads_user_posts', userPosts);
 
-        // add to feed
-        feedPosts.unshift(newPost);
-        renderFeed();
-        window.scrollTo(0, 0);
+        // store pending post - dont show until view is clicked
+        pendingNewPost = newPost;
 
         showPostToast('posted');
-
-        setTimeout(function() {
-            hidePostToast();
-        }, 3000);
     }, 1500);
 }
 
@@ -750,16 +749,9 @@ function init() {
         composerAvatar.src = currentUser.avatar;
     }
 
-    // load posts
+    // load posts - only other users posts, not my own
     let samplePosts = getSamplePosts();
-    let userPosts = loadFromStorage('threads_user_posts');
-    if (userPosts == null) {
-        userPosts = [];
-    }
     feedPosts = [];
-    for (let i = 0; i < userPosts.length; i++) {
-        feedPosts.push(userPosts[i]);
-    }
     for (let i = 0; i < samplePosts.length; i++) {
         feedPosts.push(samplePosts[i]);
     }
@@ -869,6 +861,76 @@ function init() {
             document.getElementById('createPostPreviewImg').src = '';
             document.getElementById('createPostImage').value = '';
         };
+    }
+
+    // view button - show thread view
+    let toastViewBtn = document.getElementById('toastViewBtn');
+    let threadOverlay = document.getElementById('threadOverlay');
+    let threadBackBtn = document.getElementById('threadBackBtn');
+    let threadContent = document.getElementById('threadContent');
+    let sideActionContainer = document.querySelector('.side-action-container');
+
+    if (toastViewBtn != null) {
+        toastViewBtn.onclick = function() {
+            if (pendingNewPost != null && threadOverlay != null && threadContent != null) {
+                // build thread post html
+                let post = pendingNewPost;
+                let html = '<div class="thread-post">';
+                html += '<div class="thread-post-header">';
+                html += '<img src="' + post.avatar + '" class="thread-post-avatar" alt="">';
+                html += '<span class="thread-post-username">' + post.username + '</span>';
+                html += '<span class="thread-post-time">' + post.time + '</span>';
+                html += '<button class="thread-post-more"><img src="icons/more.svg" width="20" height="20" alt=""></button>';
+                html += '</div>';
+                html += '<p class="thread-post-text">' + post.text + '</p>';
+                html += '<div class="thread-post-actions">';
+                html += '<button class="action-btn"><img src="icons/heart.svg" width="20" height="20" alt="Like"></button>';
+                html += '<button class="action-btn"><img src="icons/comment.svg" width="20" height="20" alt="Comment"></button>';
+                html += '<button class="action-btn"><img src="icons/repost.svg" width="20" height="20" alt="Repost"></button>';
+                html += '<button class="action-btn"><img src="icons/share.svg" width="20" height="20" alt="Share"></button>';
+                html += '</div>';
+                html += '</div>';
+                threadContent.innerHTML = html;
+                threadOverlay.classList.add('active');
+                // hide side action button
+                if (sideActionContainer != null) {
+                    sideActionContainer.style.display = 'none';
+                }
+            }
+            hidePostToast();
+        };
+    }
+
+    // thread back button
+    if (threadBackBtn != null && threadOverlay != null) {
+        threadBackBtn.onclick = function() {
+            threadOverlay.classList.remove('active');
+            // show side action button again
+            if (sideActionContainer != null) {
+                sideActionContainer.style.display = '';
+            }
+            // clear pending post - dont add to feed, only saved to user posts
+            pendingNewPost = null;
+        };
+    }
+
+    // thread more button dropdown
+    let threadMoreBtn = document.getElementById('threadMoreBtn');
+    let threadMoreDropdown = document.getElementById('threadMoreDropdown');
+    if (threadMoreBtn != null && threadMoreDropdown != null) {
+        threadMoreBtn.onclick = function(e) {
+            e.stopPropagation();
+            if (threadMoreDropdown.classList.contains('active')) {
+                threadMoreDropdown.classList.remove('active');
+            } else {
+                threadMoreDropdown.classList.add('active');
+            }
+        };
+        document.addEventListener('click', function(e) {
+            if (!threadMoreDropdown.contains(e.target) && !threadMoreBtn.contains(e.target)) {
+                threadMoreDropdown.classList.remove('active');
+            }
+        });
     }
 
     // textarea input
@@ -1264,36 +1326,12 @@ function init() {
         });
     }
 
-    // logo click - refresh feed when on for you tab
+    // logo click - go to index.html
     let logoLink = document.querySelector('.logo-link');
     if (logoLink != null) {
         logoLink.onclick = function(e) {
             e.preventDefault();
-            // if search modal is open, close it and go home
-            let searchOverlay = document.getElementById('searchModalOverlay');
-            if (searchOverlay != null && searchOverlay.classList.contains('active')) {
-                searchOverlay.classList.remove('active');
-                window.location.href = 'home.html';
-                return;
-            }
-            let activeTab = document.querySelector('.feed-tab.active');
-            let activeFeed = 'foryou';
-            if (activeTab) {
-                activeFeed = activeTab.dataset.feed;
-            }
-            if (activeFeed == 'foryou') {
-                window.scrollTo(0, 0);
-                let updateBar = document.getElementById('feedUpdateBar');
-                if (updateBar != null) {
-                    updateBar.classList.add('active');
-                    setTimeout(function() {
-                        let newPosts = getRandomPosts();
-                        feedPosts = newPosts;
-                        renderFeed();
-                        updateBar.classList.remove('active');
-                    }, 1200);
-                }
-            }
+            window.location.href = 'index.html';
         };
     }
 
@@ -1400,8 +1438,58 @@ function init() {
         document.addEventListener('click', function(e) {
             if (menuDropdown.contains(e.target) == false && menuBtn.contains(e.target) == false) {
                 menuDropdown.classList.remove('active');
+                // also reset submenus when closing
+                let menuMain = document.getElementById('menuMain');
+                let menuAppearanceSubmenu = document.getElementById('menuAppearanceSubmenu');
+                let menuFeedsSubmenu = document.getElementById('menuFeedsSubmenu');
+                if (menuMain != null) menuMain.style.display = '';
+                if (menuAppearanceSubmenu != null) menuAppearanceSubmenu.classList.remove('active');
+                if (menuFeedsSubmenu != null) menuFeedsSubmenu.classList.remove('active');
             }
         });
+
+        // appearance button - show submenu
+        let appearanceBtn = document.getElementById('appearanceBtn');
+        let menuMain = document.getElementById('menuMain');
+        let menuAppearanceSubmenu = document.getElementById('menuAppearanceSubmenu');
+        let appearanceBackBtn = document.getElementById('appearanceBackBtn');
+
+        if (appearanceBtn != null && menuMain != null && menuAppearanceSubmenu != null) {
+            appearanceBtn.onclick = function(e) {
+                e.stopPropagation();
+                menuMain.style.display = 'none';
+                menuAppearanceSubmenu.classList.add('active');
+            };
+        }
+
+        if (appearanceBackBtn != null && menuMain != null && menuAppearanceSubmenu != null) {
+            appearanceBackBtn.onclick = function(e) {
+                e.stopPropagation();
+                menuAppearanceSubmenu.classList.remove('active');
+                menuMain.style.display = '';
+            };
+        }
+
+        // feeds button - show feeds submenu
+        let menuFeedsBtn = document.getElementById('menuFeedsBtn');
+        let menuFeedsSubmenu = document.getElementById('menuFeedsSubmenu');
+        let menuFeedsBackBtn = document.getElementById('menuFeedsBackBtn');
+
+        if (menuFeedsBtn != null && menuMain != null && menuFeedsSubmenu != null) {
+            menuFeedsBtn.onclick = function(e) {
+                e.stopPropagation();
+                menuMain.style.display = 'none';
+                menuFeedsSubmenu.classList.add('active');
+            };
+        }
+
+        if (menuFeedsBackBtn != null && menuMain != null && menuFeedsSubmenu != null) {
+            menuFeedsBackBtn.onclick = function(e) {
+                e.stopPropagation();
+                menuFeedsSubmenu.classList.remove('active');
+                menuMain.style.display = '';
+            };
+        }
 
         // appearance options
         let appearanceOptions = document.querySelectorAll('.appearance-option');
@@ -1417,14 +1505,14 @@ function init() {
                     document.documentElement.setAttribute('data-theme', 'light');
                     localStorage.setItem('threads_theme', JSON.stringify('light'));
                 } else if (theme == 'dark') {
-                    document.documentElement.removeAttribute('data-theme');
+                    document.documentElement.setAttribute('data-theme', 'dark');
                     localStorage.setItem('threads_theme', JSON.stringify('dark'));
                 } else {
                     localStorage.setItem('threads_theme', JSON.stringify('auto'));
                     if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
                         document.documentElement.setAttribute('data-theme', 'light');
                     } else {
-                        document.documentElement.removeAttribute('data-theme');
+                        document.documentElement.setAttribute('data-theme', 'dark');
                     }
                 }
             };

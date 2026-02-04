@@ -211,8 +211,9 @@ body {
     background-color: #f5f5f5;
 }
 
-.menu-item.has-arrow svg {
-    color: #999999;
+.menu-item.has-arrow img {
+    filter: invert(0);
+    opacity: 0.6;
 }
 
 .menu-item.logout {
@@ -258,14 +259,15 @@ body {
     user-select: none;
 }
 
-.submenu-back svg {
+.submenu-back img {
     display: block;
     flex-shrink: 0;
-    transition: color 0.15s ease;
+    filter: invert(0);
+    opacity: 0.6;
 }
 
-.submenu-back:hover {
-    color: #000;
+.submenu-back:hover img {
+    opacity: 1;
 }
 
 .submenu-title {
@@ -335,8 +337,8 @@ body {
     background-color: #fff;
 }
 
-.appearance-option svg {
-    color: inherit;
+.appearance-option img {
+    filter: invert(0);
 }
 
 [data-theme="dark"] .appearance-options {
@@ -355,6 +357,10 @@ body {
     border-color: #444;
     color: #fff;
     background-color: #262626;
+}
+
+[data-theme="dark"] .appearance-option img {
+    filter: invert(1);
 }
 
 
@@ -1471,6 +1477,209 @@ body {
 }
 
 
+/* Thread View Overlay */
+
+.thread-overlay {
+    position: fixed;
+    top: 0;
+    left: 76px;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    z-index: 100;
+    display: none;
+}
+
+.thread-overlay.active {
+    display: block;
+}
+
+.thread-view {
+    max-width: 700px;
+    margin: 0 auto;
+    height: 100%;
+}
+
+.thread-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.thread-back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.thread-back-btn img {
+    filter: brightness(0) invert(1);
+}
+
+.thread-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.thread-more-wrapper {
+    position: relative;
+}
+
+.thread-more-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.thread-more-btn img {
+    filter: brightness(0) invert(1);
+}
+
+.thread-more-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #262626;
+    border-radius: 16px;
+    padding: 8px 0;
+    min-width: 200px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    display: none;
+    z-index: 10;
+}
+
+.thread-more-dropdown.active {
+    display: block;
+}
+
+.thread-more-dropdown .feed-more-item svg {
+    color: #f5f5f5;
+}
+
+[data-theme="light"] .thread-more-dropdown {
+    background-color: #fff;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .thread-more-dropdown .feed-more-item svg {
+    color: #000;
+}
+
+.thread-content {
+    padding: 20px;
+}
+
+.thread-content .thread-post {
+    background-color: #262626;
+    border-radius: 16px;
+    padding: 16px;
+}
+
+.thread-post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.thread-post-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.thread-post-username {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.thread-post-time {
+    color: #777;
+    font-size: 14px;
+    margin-left: 8px;
+}
+
+.thread-post-more {
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #777;
+}
+
+.thread-post-more img {
+    filter: brightness(0) invert(1);
+    opacity: 0.6;
+}
+
+.thread-post-text {
+    color: #fff;
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.thread-post-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.thread-post-actions .action-btn {
+    color: #777;
+}
+
+.thread-post-actions .action-btn img {
+    filter: brightness(0) invert(1);
+    opacity: 0.6;
+}
+
+[data-theme="light"] .thread-overlay {
+    background-color: #fff;
+}
+
+[data-theme="light"] .thread-header {
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .thread-back-btn img,
+[data-theme="light"] .thread-more-btn img {
+    filter: none;
+}
+
+[data-theme="light"] .thread-title {
+    color: #000;
+}
+
+[data-theme="light"] .thread-content .thread-post {
+    background-color: #f5f5f5;
+}
+
+[data-theme="light"] .thread-post-username {
+    color: #000;
+}
+
+[data-theme="light"] .thread-post-text {
+    color: #000;
+}
+
+[data-theme="light"] .thread-post-actions .action-btn img {
+    filter: none;
+}
+
+
 /* Modal */
 
 .modal-overlay {
@@ -2019,20 +2228,22 @@ body {
     color: #ed4956;
 }
 
-[data-theme="dark"] .menu-item.has-arrow svg {
-    color: #777;
+[data-theme="dark"] .menu-item.has-arrow img {
+    filter: invert(1);
+    opacity: 0.6;
 }
 
 [data-theme="dark"] .submenu-header {
     border-color: rgba(255, 255, 255, 0.15);
 }
 
-[data-theme="dark"] .submenu-back {
-    color: #777;
+[data-theme="dark"] .submenu-back img {
+    filter: invert(1);
+    opacity: 0.6;
 }
 
-[data-theme="dark"] .submenu-back:hover {
-    color: #f5f5f5;
+[data-theme="dark"] .submenu-back:hover img {
+    opacity: 1;
 }
 
 [data-theme="dark"] .submenu-title,
@@ -2041,7 +2252,7 @@ body {
 }
 
 [data-theme="dark"] .logo {
-    color: #f5f5f5;
+    filter: brightness(0) invert(1);
 }
 
 [data-theme="dark"] .nav-btn {
@@ -2117,6 +2328,10 @@ body {
 [data-theme="dark"] .feed-container {
     background-color: #181818;
     border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .feed-update-bar {
+    background-color: #181818;
 }
 
 [data-theme="dark"] .composer {
@@ -2196,6 +2411,35 @@ body {
 
 [data-theme="dark"] .fab svg {
     color: #f5f5f5;
+}
+
+[data-theme="dark"] .markup-toast {
+    background-color: #fff;
+}
+
+[data-theme="dark"] .markup-toast span {
+    color: #000;
+}
+
+[data-theme="dark"] .toast-content {
+    background-color: #fff;
+}
+
+[data-theme="dark"] .toast-content span {
+    color: #000;
+}
+
+[data-theme="dark"] .toast-check {
+    color: #000;
+}
+
+[data-theme="dark"] .toast-view-btn {
+    color: #000;
+}
+
+[data-theme="dark"] .toast-spinner {
+    border-color: rgba(0, 0, 0, 0.3);
+    border-top-color: #000;
 }
 
 [data-theme="dark"] .side-action-btn {
@@ -2280,6 +2524,14 @@ body {
 
 [data-theme="dark"] .add-topic-btn:hover {
     color: #f5f5f5;
+}
+
+[data-theme="dark"] .add-thread-text {
+    color: #777;
+}
+
+[data-theme="dark"] .add-thread-text.active {
+    color: #999;
 }
 
 [data-theme="dark"] .create-post-textarea {
@@ -3013,7 +3265,15 @@ body {
 }
 
 [data-theme="dark"] .more-menu-item:hover {
-    background-color: #f5f5f5;
+    background-color: #333;
+}
+
+[data-theme="dark"] .more-menu-item svg {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .more-menu-divider {
+    background-color: rgba(255, 255, 255, 0.15);
 }
 
 [data-theme="dark"] .drafts-back-btn {
