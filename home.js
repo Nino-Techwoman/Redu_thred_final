@@ -6,13 +6,13 @@ let savedTheme = 'auto';
 if (raw) {
     savedTheme = JSON.parse(raw);
 }
-if (savedTheme == 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-} else if (savedTheme == 'light') {
+if (savedTheme == 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+} else if (savedTheme == 'dark') {
     document.documentElement.removeAttribute('data-theme');
 } else {
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.documentElement.setAttribute('data-theme', 'dark');
+    if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'light');
     }
 }
 
@@ -1413,16 +1413,16 @@ function init() {
                     appearanceOptions[j].classList.remove('active');
                 }
                 this.classList.add('active');
-                if (theme == 'dark') {
-                    document.documentElement.setAttribute('data-theme', 'dark');
-                    localStorage.setItem('threads_theme', JSON.stringify('dark'));
-                } else if (theme == 'light') {
-                    document.documentElement.removeAttribute('data-theme');
+                if (theme == 'light') {
+                    document.documentElement.setAttribute('data-theme', 'light');
                     localStorage.setItem('threads_theme', JSON.stringify('light'));
+                } else if (theme == 'dark') {
+                    document.documentElement.removeAttribute('data-theme');
+                    localStorage.setItem('threads_theme', JSON.stringify('dark'));
                 } else {
                     localStorage.setItem('threads_theme', JSON.stringify('auto'));
-                    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                        document.documentElement.setAttribute('data-theme', 'dark');
+                    if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        document.documentElement.setAttribute('data-theme', 'light');
                     } else {
                         document.documentElement.removeAttribute('data-theme');
                     }

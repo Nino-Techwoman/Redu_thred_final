@@ -6,13 +6,13 @@ let savedTheme = 'auto';
 if (raw) {
     savedTheme = JSON.parse(raw);
 }
-if (savedTheme == 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-} else if (savedTheme == 'light') {
+if (savedTheme == 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+} else if (savedTheme == 'dark') {
     document.documentElement.removeAttribute('data-theme');
 } else {
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.documentElement.setAttribute('data-theme', 'dark');
+    if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'light');
     }
 }
 

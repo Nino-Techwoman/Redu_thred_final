@@ -981,25 +981,6 @@ function setupEventListeners() {
                 menuMain.style.display = "block";
             };
         }
-        let filterBtn = document.getElementById("filterBtn");
-        let filterDropdown = document.getElementById("filterDropdown");
-        let filterTags = document.getElementById("filterTags");
-        if (filterBtn != null && filterDropdown != null) {
-            filterBtn.addEventListener("click", function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if (filterDropdown.classList.contains("active")) {
-                    filterDropdown.classList.remove("active");
-                } else {
-                    filterDropdown.classList.add("active");
-                }
-            });
-            document.addEventListener("click", function(e) {
-                if (filterDropdown.contains(e.target) == false && filterBtn.contains(e.target) == false) {
-                    filterDropdown.classList.remove("active");
-                }
-            });
-        }
         let themeButtons = document.querySelectorAll(".theme-btn");
         for (let i = 0; i < themeButtons.length; i++) {
             themeButtons[i].onclick = function(event) {
@@ -1033,6 +1014,181 @@ function setupEventListeners() {
             };
         }
     }
+
+    // Filter functionality - moved outside menuBtn block
+    let filterBtn = document.getElementById("filterBtn");
+    let filterDropdown = document.getElementById("filterDropdown");
+    let filterTags = document.getElementById("filterTags");
+    console.log("Filter elements found:", filterBtn, filterDropdown, filterTags);
+    if (filterBtn != null && filterDropdown != null) {
+        console.log("Setting up filter functionality...");
+        filterBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            // Close calendar when opening dropdown
+            let calPicker = document.getElementById("calendarPicker");
+            if (calPicker) calPicker.classList.remove("active");
+
+            if (filterDropdown.classList.contains("active")) {
+                filterDropdown.classList.remove("active");
+            } else {
+                filterDropdown.classList.add("active");
+            }
+        });
+        document.addEventListener("click", function(e) {
+            if (filterDropdown.contains(e.target) == false && filterBtn.contains(e.target) == false) {
+                filterDropdown.classList.remove("active");
+            }
+        });
+
+        // Calendar and filter tags
+        let calendarPicker = document.getElementById("calendarPicker");
+        let calendarGrid = document.getElementById("calendarGrid");
+        let calendarMonthYear = document.getElementById("calendarMonthYear");
+        let calendarPrev = document.getElementById("calendarPrev");
+        let calendarNext = document.getElementById("calendarNext");
+        let calMonth = new Date().getMonth();
+        let calYear = new Date().getFullYear();
+        let calFilterType = null;
+        let monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        function buildCalendar() {
+            if (!calendarGrid || !calendarMonthYear) return;
+            calendarMonthYear.textContent = monthNames[calMonth] + " " + calYear;
+            calendarGrid.innerHTML = "";
+            let firstDay = new Date(calYear, calMonth, 1).getDay();
+            let daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+            let today = new Date();
+            for (let i = 0; i < firstDay; i++) {
+                let empty = document.createElement("div");
+                empty.className = "calendar-day empty";
+                calendarGrid.appendChild(empty);
+            }
+            for (let d = 1; d <= daysInMonth; d++) {
+                let dayBtn = document.createElement("button");
+                dayBtn.className = "calendar-day";
+                dayBtn.textContent = d;
+                dayBtn.dataset.day = d;
+                if (d == today.getDate() && calMonth == today.getMonth() && calYear == today.getFullYear()) {
+                    dayBtn.classList.add("today");
+                }
+                dayBtn.onclick = function() {
+                    let picked = new Date(calYear, calMonth, parseInt(this.dataset.day));
+                    let formatted = picked.getDate() + " " + monthNames[picked.getMonth()].substring(0, 3) + " " + picked.getFullYear();
+                    updateDateTag(calFilterType, formatted);
+                    if (calendarPicker) calendarPicker.classList.remove("active");
+                };
+                calendarGrid.appendChild(dayBtn);
+            }
+        }
+
+        function openCalendar(type, clickedTag) {
+            if (!calendarPicker) return;
+
+            // Close dropdown when opening calendar
+            filterDropdown.classList.remove("active");
+
+            calFilterType = type;
+            calMonth = new Date().getMonth();
+            calYear = new Date().getFullYear();
+            buildCalendar();
+
+            // Position calendar near the clicked tag
+            if (clickedTag) {
+                let tagRect = clickedTag.getBoundingClientRect();
+                let containerRect = document.querySelector('.search-container').getBoundingClientRect();
+                let leftPos = tagRect.left - containerRect.left;
+                calendarPicker.style.left = leftPos + 'px';
+            }
+
+            calendarPicker.classList.add("active");
+        }
+
+        // Create date tag with today's date
+        function createDateTagEmpty(type) {
+            if (!type || !filterTags) return;
+            if (filterTags.querySelector('[data-filter="' + type + '"]')) return;
+            let label = type == "after" ? "After" : "Before";
+            let today = new Date();
+            let todayFormatted = today.getDate() + " " + monthNames[today.getMonth()].substring(0, 3) + " " + today.getFullYear();
+            let tag = document.createElement("div");
+            tag.className = "filter-tag";
+            tag.setAttribute("data-filter", type);
+            tag.innerHTML = '<span class="filter-tag-label">' + label + '</span><span class="filter-tag-value">' + todayFormatted + '</span><button class="filter-tag-close"></button>';
+            tag.querySelector(".filter-tag-close").onclick = function(ev) {
+                ev.stopPropagation();
+                tag.remove();
+            };
+            tag.onclick = function(ev) {
+                if (ev.target.classList.contains("filter-tag-close")) return;
+                let filterType = tag.getAttribute("data-filter");
+                openCalendar(filterType, tag);
+            };
+            filterTags.appendChild(tag);
+        }
+
+        // Update existing date tag with date
+        function updateDateTag(type, dateStr) {
+            if (!type || !filterTags) return;
+            let existing = filterTags.querySelector('[data-filter="' + type + '"]');
+            if (existing) {
+                existing.querySelector(".filter-tag-value").textContent = dateStr;
+            }
+        }
+
+        if (calendarPrev) {
+            calendarPrev.onclick = function(e) {
+                e.stopPropagation();
+                calMonth--;
+                if (calMonth < 0) { calMonth = 11; calYear--; }
+                buildCalendar();
+            };
+        }
+        if (calendarNext) {
+            calendarNext.onclick = function(e) {
+                e.stopPropagation();
+                calMonth++;
+                if (calMonth > 11) { calMonth = 0; calYear++; }
+                buildCalendar();
+            };
+        }
+
+        // Filter items click
+        let filterItems = filterDropdown.querySelectorAll(".filter-item");
+        console.log("Found filter items:", filterItems.length);
+        for (let i = 0; i < filterItems.length; i++) {
+            filterItems[i].onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                let fType = this.getAttribute("data-filter");
+                let fLabel = this.querySelector("span").textContent.replace("...", "");
+                console.log("Filter item clicked:", fType, fLabel);
+                filterDropdown.classList.remove("active");
+                if (fType == "after" || fType == "before") {
+                    createDateTagEmpty(fType);
+                    return;
+                }
+                if (filterTags.querySelector('[data-filter="' + fType + '"]')) return;
+                let tag = document.createElement("div");
+                tag.className = "filter-tag";
+                tag.setAttribute("data-filter", fType);
+                tag.innerHTML = '<span class="filter-tag-label">' + fLabel + '</span><button class="filter-tag-close"></button>';
+                tag.querySelector(".filter-tag-close").onclick = function(ev) {
+                    ev.stopPropagation();
+                    tag.remove();
+                };
+                filterTags.appendChild(tag);
+            };
+        }
+
+        // Close calendar on outside click
+        document.addEventListener("click", function(e) {
+            if (calendarPicker && !calendarPicker.contains(e.target) && !filterDropdown.contains(e.target) && !filterTags.contains(e.target)) {
+                calendarPicker.classList.remove("active");
+            }
+        });
+    }
+
     let createPostClose = document.getElementById("createPostClose");
     let createPostSubmit = document.getElementById("createPostSubmit");
     let createPostImage = document.getElementById("createPostImage");

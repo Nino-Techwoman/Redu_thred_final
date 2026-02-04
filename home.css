@@ -960,10 +960,10 @@ body {
     top: 100%;
     right: 0;
     margin-top: 8px;
-    background-color: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    background-color: #262626;
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
     min-width: 240px;
     z-index: 1000;
     overflow: hidden;
@@ -985,10 +985,24 @@ body {
     font-size: 15px;
     font-weight: 600;
     text-align: left;
-    color: #000000;
+    color: #f5f5f5;
 }
 
 .post-menu-item:hover {
+    background-color: #363636;
+}
+
+[data-theme="light"] .post-menu-dropdown {
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .post-menu-item {
+    color: #000000;
+}
+
+[data-theme="light"] .post-menu-item:hover {
     background-color: #F0F2F5;
 }
 
@@ -2967,26 +2981,6 @@ body {
     border-color: rgba(255, 255, 255, 0.15);
 }
 
-[data-theme="dark"] .post-menu-dropdown {
-    background: #262626;
-    border-color: rgba(255, 255, 255, 0.15);
-}
-
-[data-theme="dark"] .post-menu-item {
-    color: #f5f5f5;
-}
-
-[data-theme="dark"] .post-menu-item:hover {
-    background-color: #f5f5f5;
-}
-
-[data-theme="dark"] .post-menu-item.danger {
-    color: #ff453a;
-}
-
-[data-theme="dark"] .post-menu-item.danger svg {
-    color: #ff453a;
-}
 
 [data-theme="dark"] .more-menu-item {
     color: #f5f5f5;
