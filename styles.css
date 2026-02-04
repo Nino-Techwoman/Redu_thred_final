@@ -674,7 +674,7 @@ body {
 /* Right Sidebar */
 .right-sidebar {
     position: fixed;
-    right: 276px;
+    left: 730px;
     top: 0;
     width: 350px;
     height: 100vh;
