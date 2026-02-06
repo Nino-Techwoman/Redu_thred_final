@@ -373,15 +373,27 @@ function createPostElement(post) {
     html = html + likesHtml;
     html = html + '</button>';
     html = html + '<button class="action-btn comment-btn" data-id="' + post.id + '">';
-    html = html + '<img src="icons/comment.svg" alt="Comment">';
+    html = html + '<svg aria-label="Comment" role="img" viewBox="0 0 18 18" width="20" height="20" fill="currentColor"><title>Comment</title><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg>';
     html = html + repliesHtml;
     html = html + '</button>';
+    html = html + '<div class="repost-container">';
     html = html + '<button class="action-btn repost-btn" data-id="' + post.id + '">';
-    html = html + '<img src="icons/repost.svg" alt="Repost">';
+    html = html + '<svg aria-label="Repost" role="img" viewBox="0 0 18 18" width="20" height="20" fill="currentColor"><title>Repost</title><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg>';
     html = html + repostsHtml;
     html = html + '</button>';
+    html = html + '<div class="repost-dropdown">';
+    html = html + '<button class="repost-dropdown-item" data-action="repost" data-id="' + post.id + '">';
+    html = html + '<span>Repost</span>';
+    html = html + '<svg aria-label="Repost" role="img" viewBox="0 0 18 18" width="20" height="20" fill="currentColor"><title>Repost</title><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg>';
+    html = html + '</button>';
+    html = html + '<button class="repost-dropdown-item" data-action="quote" data-id="' + post.id + '">';
+    html = html + '<span>Quote</span>';
+    html = html + '<svg aria-label="Quote" role="img" viewBox="0 0 20 20" width="20" height="20" fill="currentColor"><title>Quote</title><path d="M7.68694 19.611C6.70477 20.3965 5.25 19.6973 5.25 18.4396V16.3507L5 16.3507C2.37665 16.3507 0.25 14.224 0.25 11.6007V9.35066V6.10066C0.25 3.47731 2.37665 1.35066 5 1.35066H5.5H14.2188H14.9688C17.5921 1.35066 19.7188 3.47731 19.7188 6.10066V9.35066V11.6007C19.7188 14.224 17.5921 16.3507 14.9688 16.3507H14.2188L11.763 16.3507L7.68694 19.611ZM6.75 18.4396L10.8261 15.1793C11.0921 14.9666 11.4225 14.8507 11.763 14.8507L14.2187 14.8507H14.9688C16.7637 14.8507 18.2188 13.3956 18.2188 11.6007V9.35066V6.10066C18.2188 4.30574 16.7637 2.85066 14.9688 2.85066H14.2188H5.5H5C3.20507 2.85066 1.75 4.30574 1.75 6.10066V9.35066V11.6007C1.75 13.3956 3.20508 14.8507 5 14.8507H5.25C6.07843 14.8507 6.75 15.5222 6.75 16.3507V18.4396Z"></path><path d="M7.67735 6.5C6.62472 6.5 5.82617 7.20469 5.82617 8.20517C5.82617 9.16216 6.45231 9.90164 7.44142 9.90164C7.80439 9.90164 8.16737 9.84074 8.4033 9.57105H8.46682C8.14922 10.2583 7.48679 10.702 6.9151 10.8412C6.58842 10.9282 6.4886 11.0674 6.4886 11.2675C6.4886 11.485 6.67009 11.6503 6.92418 11.6503C7.81347 11.6503 9.58298 10.6411 9.58298 8.51837C9.58298 7.37869 8.81165 6.5 7.67735 6.5Z"></path><path d="M12.396 6.5C11.3434 6.5 10.5449 7.20469 10.5449 8.20517C10.5449 9.16216 11.171 9.90164 12.1692 9.90164C12.5231 9.90164 12.8861 9.84074 13.122 9.57105H13.1855C12.8679 10.2583 12.2055 10.702 11.6338 10.8412C11.3071 10.9282 11.2073 11.0674 11.2073 11.2675C11.2073 11.485 11.3888 11.6503 11.6429 11.6503C12.5322 11.6503 14.3017 10.6411 14.3017 8.51837C14.3017 7.37869 13.5303 6.5 12.396 6.5Z"></path></svg>';
+    html = html + '</button>';
+    html = html + '</div>';
+    html = html + '</div>';
     html = html + '<button class="action-btn share-btn" data-id="' + post.id + '">';
-    html = html + '<img src="icons/share.svg" alt="Share">';
+    html = html + '<svg aria-label="Share" role="img" viewBox="0 0 18 18" width="20" height="20" fill="none" stroke="currentColor"><title>Share</title><path d="M15.6097 4.09082L6.65039 9.11104" stroke-linejoin="round" stroke-width="1.25"></path><path d="M7.79128 14.439C8.00463 15.3275 8.11131 15.7718 8.33426 15.932C8.52764 16.071 8.77617 16.1081 9.00173 16.0318C9.26179 15.9438 9.49373 15.5501 9.95761 14.7628L15.5444 5.2809C15.8883 4.69727 16.0603 4.40546 16.0365 4.16566C16.0159 3.95653 15.9071 3.76612 15.7374 3.64215C15.5428 3.5 15.2041 3.5 14.5267 3.5H3.71404C2.81451 3.5 2.36474 3.5 2.15744 3.67754C1.97758 3.83158 1.88253 4.06254 1.90186 4.29856C1.92415 4.57059 2.24363 4.88716 2.88259 5.52032L6.11593 8.7243C6.26394 8.87097 6.33795 8.94431 6.39784 9.02755C6.451 9.10144 6.4958 9.18101 6.53142 9.26479C6.57153 9.35916 6.59586 9.46047 6.64451 9.66309L7.79128 14.439Z" stroke-linejoin="round" stroke-width="1.25"></path></svg>';
     html = html + sharesHtml;
     html = html + '</button>';
     html = html + '</div>';
@@ -397,12 +409,77 @@ function createPostElement(post) {
         };
     }
 
+    // add comment button click
+    let commentBtn = div.querySelector('.comment-btn');
+    if (commentBtn != null) {
+        commentBtn.onclick = function() {
+            openReplyModal(post);
+        };
+    }
+
+    // add share button click
+    let shareBtn = div.querySelector('.share-btn');
+    if (shareBtn != null) {
+        shareBtn.onclick = function() {
+            openShareModal(post);
+        };
+    }
+
     // add markup button click
     let markupBtn = div.querySelector('.post-markup-btn');
     if (markupBtn != null) {
         markupBtn.onclick = function() {
             showMarkupToast(post.username);
         };
+    }
+
+    // add repost button click (toggle dropdown)
+    let repostBtn = div.querySelector('.repost-btn');
+    let repostDropdown = div.querySelector('.repost-dropdown');
+    if (repostBtn != null && repostDropdown != null) {
+        repostBtn.onclick = function(e) {
+            e.stopPropagation();
+            let isOpen = repostDropdown.classList.contains('active');
+            // close all repost dropdowns
+            let allRepost = document.querySelectorAll('.repost-dropdown.active');
+            for (let i = 0; i < allRepost.length; i++) {
+                allRepost[i].classList.remove('active');
+            }
+            if (isOpen == false) {
+                // update dropdown to show Remove or Repost
+                let repostItem = repostDropdown.querySelector('[data-action="repost"]');
+                if (repostItem != null) {
+                    if (post.reposted) {
+                        repostItem.classList.add('remove');
+                        repostItem.querySelector('span').textContent = 'Remove';
+                    } else {
+                        repostItem.classList.remove('remove');
+                        repostItem.querySelector('span').textContent = 'Repost';
+                    }
+                }
+                repostDropdown.classList.add('active');
+            }
+        };
+
+        // repost action
+        let repostAction = repostDropdown.querySelector('[data-action="repost"]');
+        if (repostAction != null) {
+            repostAction.onclick = function(e) {
+                e.stopPropagation();
+                toggleRepost(post.id);
+                repostDropdown.classList.remove('active');
+            };
+        }
+
+        // quote action
+        let quoteAction = repostDropdown.querySelector('[data-action="quote"]');
+        if (quoteAction != null) {
+            quoteAction.onclick = function(e) {
+                e.stopPropagation();
+                repostDropdown.classList.remove('active');
+                openShareModal(post);
+            };
+        }
     }
 
     // add menu button click
@@ -424,6 +501,137 @@ function createPostElement(post) {
     }
 
     return div;
+}
+
+// get relative time string
+function getRelativeTime(timestamp) {
+    let now = Date.now();
+    let diff = now - timestamp;
+    let seconds = Math.floor(diff / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+    let days = Math.floor(hours / 24);
+    if (days > 0) return days + 'd ago';
+    if (hours > 0) return hours + 'h ago';
+    if (minutes > 0) return minutes + 'm ago';
+    return 'just now';
+}
+
+// create repost element for feed
+function createRepostElement(repostEntry) {
+    let wrapper = document.createElement('div');
+    wrapper.className = 'repost-wrapper';
+
+    // create the original post element using existing function
+    let postEl = createPostElement(repostEntry.originalPost);
+    wrapper.appendChild(postEl);
+
+    // add reposted-by footer
+    let footer = document.createElement('div');
+    footer.className = 'repost-footer';
+    let safeUsername = sanitize(repostEntry.repostedBy);
+    let timeAgo = getRelativeTime(repostEntry.repostedAt);
+    footer.innerHTML = '<svg aria-label="Repost" role="img" viewBox="0 0 18 18" width="16" height="16" fill="currentColor"><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg>' +
+        '<span>' + safeUsername + ' reposted ' + timeAgo + '</span>';
+    wrapper.appendChild(footer);
+
+    return wrapper;
+}
+
+// repost SVG icons
+let repostIconDefault = '<svg aria-label="Repost" role="img" viewBox="0 0 18 18" width="20" height="20" fill="currentColor"><title>Repost</title><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg>';
+let repostIconChecked = '<svg aria-label="Repost" role="img" viewBox="0 0 18 18" width="20" height="20" fill="currentColor"><title>Repost</title><path d="M6.413.735a.625.625 0 0 1 .88-.075l2.672 2.25a.625.625 0 0 1-.402 1.103h-4.36a2.75 2.75 0 0 0-2.75 2.75v4.5a2.75 2.75 0 0 0 2.75 2.75.625.625 0 1 1 0 1.25 4 4 0 0 1-4-4v-4.5a4 4 0 0 1 4-4H7.85L6.488 1.616a.625.625 0 0 1-.075-.88ZM11.587 17.29a.625.625 0 0 1-.88.076l-2.672-2.25a.625.625 0 0 1 .402-1.103h4.36a2.75 2.75 0 0 0 2.75-2.75v-4.5a2.75 2.75 0 0 0-2.75-2.75.625.625 0 1 1 0-1.25 4 4 0 0 1 4 4v4.5a4 4 0 0 1-4 4H10.15l1.362 1.147a.625.625 0 0 1 .075.88Z"></path><path d="m11.733 7.2-3.6 3.6L6.27 8.937" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25"></path></svg>';
+
+// toggle repost
+function toggleRepost(postId) {
+    let post = null;
+    for (let i = 0; i < feedPosts.length; i++) {
+        if (feedPosts[i].id == postId) {
+            post = feedPosts[i];
+            if (feedPosts[i].reposted == true) {
+                feedPosts[i].reposted = false;
+                feedPosts[i].reposts = feedPosts[i].reposts - 1;
+            } else {
+                feedPosts[i].reposted = true;
+                feedPosts[i].reposts = feedPosts[i].reposts + 1;
+            }
+            break;
+        }
+    }
+
+    let btn = document.querySelector('.repost-btn[data-id="' + postId + '"]');
+    if (btn != null && post != null) {
+        // swap icon
+        let svgEl = btn.querySelector('svg');
+        if (svgEl != null) svgEl.remove();
+        let spanEl = btn.querySelector('span');
+        if (post.reposted) {
+            btn.classList.add('reposted');
+            btn.insertAdjacentHTML('afterbegin', repostIconChecked);
+        } else {
+            btn.classList.remove('reposted');
+            btn.insertAdjacentHTML('afterbegin', repostIconDefault);
+        }
+        // update count
+        if (post.reposts > 0) {
+            if (spanEl == null) {
+                spanEl = document.createElement('span');
+                btn.appendChild(spanEl);
+            }
+            spanEl.textContent = post.reposts;
+        } else {
+            if (spanEl != null) spanEl.remove();
+        }
+    }
+
+    // save/remove repost to localStorage
+    if (post != null) {
+        let savedReposts = loadFromStorage('threads_user_reposts');
+        if (savedReposts == null) savedReposts = [];
+        if (post.reposted) {
+            // add repost
+            let already = false;
+            for (let r = 0; r < savedReposts.length; r++) {
+                if (savedReposts[r].originalPost.id == post.id) { already = true; break; }
+            }
+            if (!already) {
+                let repostEntry = {
+                    id: 'repost_' + post.id + '_' + Date.now(),
+                    repostedBy: currentUser != null ? currentUser.username : 'you',
+                    repostedAt: Date.now(),
+                    originalPost: {
+                        id: post.id,
+                        username: post.username,
+                        name: post.name || post.username,
+                        avatar: post.avatar,
+                        verified: post.verified || false,
+                        text: post.text || '',
+                        image: post.image || null,
+                        images: post.images || null,
+                        quote: post.quote || null,
+                        time: post.time,
+                        likes: post.likes,
+                        replies: post.replies,
+                        reposts: post.reposts,
+                        shares: post.shares,
+                        liked: post.liked || false,
+                        hasTranslate: post.hasTranslate || false
+                    }
+                };
+                savedReposts.unshift(repostEntry);
+                saveToStorage('threads_user_reposts', savedReposts);
+            }
+        } else {
+            // remove repost
+            let filtered = [];
+            for (let r = 0; r < savedReposts.length; r++) {
+                if (savedReposts[r].originalPost.id != post.id) {
+                    filtered.push(savedReposts[r]);
+                }
+            }
+            saveToStorage('threads_user_reposts', filtered);
+        }
+    }
 }
 
 // toggle like
@@ -537,6 +745,7 @@ function showPendingPost() {
 }
 
 // show post toast
+let postToastTimer = null;
 function showPostToast(state) {
     let toast = document.getElementById('postToast');
     let posting = document.getElementById('toastPosting');
@@ -544,12 +753,22 @@ function showPostToast(state) {
     if (toast == null) {
         return;
     }
+    // clear any existing timer
+    if (postToastTimer != null) {
+        clearTimeout(postToastTimer);
+        postToastTimer = null;
+    }
     if (state == 'posting') {
         posting.style.display = 'flex';
         posted.style.display = 'none';
     } else {
         posting.style.display = 'none';
         posted.style.display = 'flex';
+        // auto-hide after 4 seconds
+        postToastTimer = setTimeout(function() {
+            hidePostToast();
+            postToastTimer = null;
+        }, 4000);
     }
     toast.classList.add('active');
 }
@@ -599,6 +818,88 @@ function openModal() {
     }
 }
 
+// open share modal (new thread with quoted post)
+let shareTargetPost = null;
+
+function openShareModal(post) {
+    shareTargetPost = post;
+
+    // populate quote preview
+    let preview = document.getElementById('shareQuotePreview');
+    let quoteAvatar = document.getElementById('shareQuoteAvatar');
+    let quoteUsername = document.getElementById('shareQuoteUsername');
+    let quoteTime = document.getElementById('shareQuoteTime');
+    let quoteText = document.getElementById('shareQuoteText');
+    let quoteImage = document.getElementById('shareQuoteImage');
+    let quoteImg = document.getElementById('shareQuoteImg');
+    let quoteNested = document.getElementById('shareQuoteNested');
+
+    if (quoteAvatar != null) quoteAvatar.src = post.avatar;
+    if (quoteUsername != null) quoteUsername.textContent = post.username;
+    if (quoteTime != null) quoteTime.textContent = post.time;
+
+    if (quoteText != null) {
+        let safeText = sanitize(post.text || '');
+        safeText = safeText.replace(/#(\w+)/g, '<span class="post-hashtag">#$1</span>');
+        safeText = safeText.replace(/@(\w+)/g, '<span class="post-mention">@$1</span>');
+        safeText = safeText.replace(/\n/g, '<br>');
+        quoteText.innerHTML = safeText;
+    }
+
+    // show nested quote if original post has one
+    if (quoteNested != null) {
+        if (post.quote != null) {
+            let nestedAvatar = document.getElementById('shareQuoteNestedAvatar');
+            let nestedUsername = document.getElementById('shareQuoteNestedUsername');
+            let nestedText = document.getElementById('shareQuoteNestedText');
+            if (nestedAvatar != null) nestedAvatar.src = post.quote.avatar;
+            if (nestedUsername != null) nestedUsername.textContent = post.quote.username;
+            if (nestedText != null) {
+                let safeNested = sanitize(post.quote.text || '');
+                if (post.quote.highlight) {
+                    let safeHighlight = sanitize(post.quote.highlight);
+                    safeNested = safeNested.replace(safeHighlight, '<span class="highlight">' + safeHighlight + '</span>');
+                }
+                nestedText.innerHTML = safeNested;
+            }
+            quoteNested.style.display = 'block';
+        } else {
+            quoteNested.style.display = 'none';
+        }
+    }
+
+    // show image if exists
+    if (quoteImage != null && quoteImg != null) {
+        if (post.image != null) {
+            quoteImg.src = post.image;
+            quoteImage.style.display = 'block';
+        } else if (post.images != null && post.images.length > 0) {
+            quoteImg.src = post.images[0];
+            quoteImage.style.display = 'block';
+        } else {
+            quoteImage.style.display = 'none';
+        }
+    }
+
+    if (preview != null) preview.style.display = 'block';
+
+    // change textarea placeholder
+    let textarea = document.getElementById('createPostText');
+    if (textarea != null) {
+        textarea.placeholder = 'Share your thoughts...';
+        textarea.value = '';
+    }
+
+    // enable post button since we have a quote
+    let postBtn = document.getElementById('createPostSubmit');
+    if (postBtn != null) {
+        postBtn.disabled = false;
+        postBtn.removeAttribute('disabled');
+    }
+
+    openModal();
+}
+
 // close modal
 function closeModal() {
     let modal = document.getElementById('modalOverlay');
@@ -614,6 +915,147 @@ function closeModal() {
     let createPostForm = document.getElementById('createPostForm');
     if (draftsView != null) { draftsView.style.display = 'none'; }
     if (createPostForm != null) { createPostForm.style.display = ''; }
+    // hide share quote preview and reset placeholder
+    let sharePreview = document.getElementById('shareQuotePreview');
+    if (sharePreview != null) sharePreview.style.display = 'none';
+    shareTargetPost = null;
+    let textarea = document.getElementById('createPostText');
+    if (textarea != null) textarea.placeholder = "What's new?";
+    // reset post button to disabled
+    let postBtn = document.getElementById('createPostSubmit');
+    if (postBtn != null) postBtn.disabled = true;
+}
+
+// reply modal - current post being replied to
+let replyTargetPost = null;
+
+// open reply modal
+function openReplyModal(post) {
+    replyTargetPost = post;
+    let overlay = document.getElementById('replyModalOverlay');
+    if (overlay == null) return;
+
+    // set original post info
+    let origAvatar = document.getElementById('replyOriginalAvatar');
+    let origUsername = document.getElementById('replyOriginalUsername');
+    let origTime = document.getElementById('replyOriginalTime');
+    let origText = document.getElementById('replyOriginalText');
+    let origImage = document.getElementById('replyOriginalImage');
+    let origImg = document.getElementById('replyOriginalImg');
+
+    if (origAvatar != null) origAvatar.src = post.avatar;
+    if (origUsername != null) origUsername.textContent = post.username;
+    if (origTime != null) origTime.textContent = post.time;
+    if (origText != null) {
+        let safeText = sanitize(post.text || '');
+        safeText = safeText.replace(/#(\w+)/g, '<span class="post-hashtag">#$1</span>');
+        safeText = safeText.replace(/@(\w+)/g, '<span class="post-mention">@$1</span>');
+        safeText = safeText.replace(/\n/g, '<br>');
+        origText.innerHTML = safeText;
+    }
+
+    // show image if exists
+    if (origImage != null && origImg != null) {
+        if (post.image != null) {
+            origImg.src = post.image;
+            origImage.style.display = 'block';
+        } else if (post.images != null && post.images.length > 0) {
+            origImg.src = post.images[0];
+            origImage.style.display = 'block';
+        } else {
+            origImage.style.display = 'none';
+        }
+    }
+
+    // set current user info
+    let replyAvatar = document.getElementById('replyUserAvatar');
+    let replyUsername = document.getElementById('replyUsername');
+    let replyThreadAvatar = document.getElementById('replyAddThreadAvatar');
+    let replyTextarea = document.getElementById('replyTextarea');
+
+    if (replyAvatar != null && currentUser != null) replyAvatar.src = currentUser.avatar;
+    if (replyUsername != null && currentUser != null) replyUsername.textContent = currentUser.username;
+    if (replyThreadAvatar != null && currentUser != null) replyThreadAvatar.src = currentUser.avatar;
+    if (replyTextarea != null) {
+        replyTextarea.placeholder = 'Reply to ' + post.username + '...';
+        replyTextarea.value = '';
+        replyTextarea.style.height = 'auto';
+    }
+
+    // reset image preview
+    let preview = document.getElementById('replyImagePreview');
+    if (preview != null) preview.style.display = 'none';
+
+    overlay.classList.add('active');
+
+    if (replyTextarea != null) {
+        setTimeout(function() { replyTextarea.focus(); }, 100);
+    }
+}
+
+// close reply modal
+function closeReplyModal() {
+    let overlay = document.getElementById('replyModalOverlay');
+    if (overlay != null) {
+        overlay.classList.remove('active');
+    }
+    replyTargetPost = null;
+    let textarea = document.getElementById('replyTextarea');
+    if (textarea != null) textarea.value = '';
+    let preview = document.getElementById('replyImagePreview');
+    if (preview != null) preview.style.display = 'none';
+}
+
+// submit reply
+function submitReply() {
+    if (currentUser == null || replyTargetPost == null) return;
+    let textarea = document.getElementById('replyTextarea');
+    if (textarea == null) return;
+    let text = textarea.value.trim();
+    if (text == '') return;
+
+    // check rate limit
+    let rateCheck = postRateLimiter.check();
+    if (!rateCheck.allowed) {
+        alert(rateCheck.message);
+        return;
+    }
+
+    text = text.substring(0, 2200);
+
+    // increment reply count on the target post
+    for (let i = 0; i < feedPosts.length; i++) {
+        if (feedPosts[i].id == replyTargetPost.id) {
+            feedPosts[i].replies = feedPosts[i].replies + 1;
+            break;
+        }
+    }
+
+    // update the reply count in the UI
+    let btn = document.querySelector('.comment-btn[data-id="' + replyTargetPost.id + '"]');
+    if (btn != null) {
+        let span = btn.querySelector('span');
+        let post = null;
+        for (let i = 0; i < feedPosts.length; i++) {
+            if (feedPosts[i].id == replyTargetPost.id) {
+                post = feedPosts[i];
+                break;
+            }
+        }
+        if (post != null) {
+            if (span == null) {
+                span = document.createElement('span');
+                btn.appendChild(span);
+            }
+            span.textContent = post.replies;
+        }
+    }
+
+    closeReplyModal();
+    showPostToast('posting');
+    setTimeout(function() {
+        showPostToast('posted');
+    }, 1500);
 }
 
 // get search suggestions
@@ -785,11 +1227,18 @@ function init() {
 
     // close dropdowns when clicking outside
     document.addEventListener('click', function(e) {
-        // check if click was outside the menu container
+        // close post menu dropdowns
         if (e.target.closest('.post-menu-container') == null) {
             let allDropdowns = document.querySelectorAll('.post-menu-dropdown.active');
             for (let i = 0; i < allDropdowns.length; i++) {
                 allDropdowns[i].classList.remove('active');
+            }
+        }
+        // close repost dropdowns
+        if (e.target.closest('.repost-container') == null) {
+            let allRepost = document.querySelectorAll('.repost-dropdown.active');
+            for (let i = 0; i < allRepost.length; i++) {
+                allRepost[i].classList.remove('active');
             }
         }
     });
@@ -850,7 +1299,31 @@ function init() {
             if (previewImg != null && previewImg.src) {
                 image = previewImg.src;
             }
-            if (text != '') {
+            // if sharing a post, allow empty text (just the quote)
+            if (shareTargetPost != null) {
+                // increment share count
+                for (let i = 0; i < feedPosts.length; i++) {
+                    if (feedPosts[i].id == shareTargetPost.id) {
+                        feedPosts[i].shares = feedPosts[i].shares + 1;
+                        // update share count in UI
+                        let shareBtn = document.querySelector('.share-btn[data-id="' + shareTargetPost.id + '"]');
+                        if (shareBtn != null) {
+                            let span = shareBtn.querySelector('span');
+                            if (span == null) {
+                                span = document.createElement('span');
+                                shareBtn.appendChild(span);
+                            }
+                            span.textContent = feedPosts[i].shares;
+                        }
+                        break;
+                    }
+                }
+                createPost(text || ' ', image);
+                closeModal();
+                textarea.value = '';
+                document.getElementById('createPostImagePreview').style.display = 'none';
+                if (previewImg != null) previewImg.src = '';
+            } else if (text != '') {
                 createPost(text, image);
                 closeModal();
                 textarea.value = '';
@@ -888,6 +1361,67 @@ function init() {
         };
     }
 
+    // reply modal close
+    let replyPostClose = document.getElementById('replyPostClose');
+    if (replyPostClose != null) {
+        replyPostClose.onclick = function() {
+            closeReplyModal();
+        };
+    }
+
+    // reply modal overlay click
+    let replyModalOverlay = document.getElementById('replyModalOverlay');
+    if (replyModalOverlay != null) {
+        replyModalOverlay.onclick = function(e) {
+            if (e.target == replyModalOverlay) {
+                closeReplyModal();
+            }
+        };
+    }
+
+    // reply submit
+    let replySubmitBtn = document.getElementById('replySubmitBtn');
+    if (replySubmitBtn != null) {
+        replySubmitBtn.onclick = function() {
+            submitReply();
+        };
+    }
+
+    // reply image upload
+    let replyImageInput = document.getElementById('replyImageInput');
+    if (replyImageInput != null) {
+        replyImageInput.onchange = function(e) {
+            let file = e.target.files[0];
+            if (file != null) {
+                let reader = new FileReader();
+                reader.onload = function(ev) {
+                    document.getElementById('replyPreviewImg').src = ev.target.result;
+                    document.getElementById('replyImagePreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+    }
+
+    // reply remove image
+    let replyRemoveImageBtn = document.getElementById('replyRemoveImageBtn');
+    if (replyRemoveImageBtn != null) {
+        replyRemoveImageBtn.onclick = function() {
+            document.getElementById('replyImagePreview').style.display = 'none';
+            document.getElementById('replyPreviewImg').src = '';
+            document.getElementById('replyImageInput').value = '';
+        };
+    }
+
+    // reply textarea auto-resize
+    let replyTextarea = document.getElementById('replyTextarea');
+    if (replyTextarea != null) {
+        replyTextarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+    }
+
     // view button - show thread view
     let toastViewBtn = document.getElementById('toastViewBtn');
     let threadOverlay = document.getElementById('threadOverlay');
@@ -897,25 +1431,61 @@ function init() {
 
     if (toastViewBtn != null) {
         toastViewBtn.onclick = function() {
-            if (pendingNewPost != null && threadOverlay != null && threadContent != null) {
-                // build thread post html
-                let post = pendingNewPost;
-                let html = '<div class="thread-post">';
-                html += '<div class="thread-post-header">';
-                html += '<img src="' + post.avatar + '" class="thread-post-avatar" alt="">';
-                html += '<span class="thread-post-username">' + post.username + '</span>';
-                html += '<span class="thread-post-time">' + post.time + '</span>';
-                html += '<button class="thread-post-more"><img src="icons/more.svg" width="20" height="20" alt=""></button>';
-                html += '</div>';
-                html += '<p class="thread-post-text">' + post.text + '</p>';
-                html += '<div class="thread-post-actions">';
-                html += '<button class="action-btn"><img src="icons/heart.svg" width="20" height="20" alt="Like"></button>';
-                html += '<button class="action-btn"><img src="icons/comment.svg" width="20" height="20" alt="Comment"></button>';
-                html += '<button class="action-btn"><img src="icons/repost.svg" width="20" height="20" alt="Repost"></button>';
-                html += '<button class="action-btn"><img src="icons/share.svg" width="20" height="20" alt="Share"></button>';
-                html += '</div>';
-                html += '</div>';
-                threadContent.innerHTML = html;
+            if (threadOverlay != null && threadContent != null) {
+                // load all user posts
+                let userPosts = loadFromStorage('threads_user_posts');
+                if (userPosts == null) userPosts = [];
+
+                // also add the pending post if not yet saved
+                if (pendingNewPost != null) {
+                    let found = false;
+                    for (let i = 0; i < userPosts.length; i++) {
+                        if (userPosts[i].id == pendingNewPost.id) { found = true; break; }
+                    }
+                    if (!found) userPosts.unshift(pendingNewPost);
+                }
+
+                let allHtml = '';
+                for (let p = 0; p < userPosts.length; p++) {
+                    let post = userPosts[p];
+                    let safeUsername = sanitize(post.username);
+                    let safeText = sanitize(post.text || '');
+                    safeText = safeText.replace(/#(\w+)/g, '<span class="post-hashtag">#$1</span>');
+                    safeText = safeText.replace(/@(\w+)/g, '<span class="post-mention">@$1</span>');
+                    safeText = safeText.replace(/\n/g, '<br>');
+
+                    let imageHtml = '';
+                    if (post.image != null) {
+                        if (post.image.indexOf('data:image') == 0 || post.image.match(/\.(jpg|jpeg|png|gif|webp)($|\?)/i)) {
+                            imageHtml = '<img src="' + post.image + '" alt="Post image" class="thread-post-image">';
+                        }
+                    }
+
+                    allHtml += '<div class="thread-post">';
+                    allHtml += '<div class="thread-post-header">';
+                    allHtml += '<img src="' + encodeURI(post.avatar) + '" class="thread-post-avatar" alt="">';
+                    allHtml += '<span class="thread-post-username">' + safeUsername + '</span>';
+                    allHtml += '<span class="thread-post-time">' + post.time + '</span>';
+                    allHtml += '<button class="thread-post-more"><img src="icons/more.svg" width="20" height="20" alt=""></button>';
+                    allHtml += '</div>';
+                    if (safeText.trim() != '') {
+                        allHtml += '<p class="thread-post-text">' + safeText + '</p>';
+                    }
+                    allHtml += imageHtml;
+                    allHtml += '<div class="thread-post-actions">';
+                    allHtml += '<button class="action-btn"><svg class="heart-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>';
+                    allHtml += '<button class="action-btn"><svg aria-label="Comment" role="img" viewBox="0 0 18 18" width="20" height="20" fill="currentColor"><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg></button>';
+                    allHtml += '<button class="action-btn"><svg aria-label="Repost" role="img" viewBox="0 0 18 18" width="20" height="20" fill="currentColor"><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg></button>';
+                    allHtml += '<button class="action-btn"><svg aria-label="Share" role="img" viewBox="0 0 18 18" width="20" height="20" fill="none" stroke="currentColor"><path d="M15.6097 4.09082L6.65039 9.11104" stroke-linejoin="round" stroke-width="1.25"></path><path d="M7.79128 14.439C8.00463 15.3275 8.11131 15.7718 8.33426 15.932C8.52764 16.071 8.77617 16.1081 9.00173 16.0318C9.26179 15.9438 9.49373 15.5501 9.95761 14.7628L15.5444 5.2809C15.8883 4.69727 16.0603 4.40546 16.0365 4.16566C16.0159 3.95653 15.9071 3.76612 15.7374 3.64215C15.5428 3.5 15.2041 3.5 14.5267 3.5H3.71404C2.81451 3.5 2.36474 3.5 2.15744 3.67754C1.97758 3.83158 1.88253 4.06254 1.90186 4.29856C1.92415 4.57059 2.24363 4.88716 2.88259 5.52032L6.11593 8.7243C6.26394 8.87097 6.33795 8.94431 6.39784 9.02755C6.451 9.10144 6.4958 9.18101 6.53142 9.26479C6.57153 9.35916 6.59586 9.46047 6.64451 9.66309L7.79128 14.439Z" stroke-linejoin="round" stroke-width="1.25"></path></svg></button>';
+                    allHtml += '</div>';
+                    allHtml += '</div>';
+                }
+
+                if (allHtml == '') {
+                    allHtml = '<p style="text-align:center;color:#999;padding:40px 20px;">No posts yet.</p>';
+                }
+
+                threadContent.innerHTML = allHtml;
                 threadOverlay.classList.add('active');
                 // hide side action button
                 if (sideActionContainer != null) {
@@ -1014,6 +1584,16 @@ function init() {
                 // load following posts
                 feedPosts = getFollowingPosts();
                 renderFeed();
+
+                // add reposted posts at top of feed
+                let savedReposts = loadFromStorage('threads_user_reposts');
+                if (savedReposts != null && savedReposts.length > 0 && feed != null) {
+                    for (let r = savedReposts.length - 1; r >= 0; r--) {
+                        let repostEl = createRepostElement(savedReposts[r]);
+                        feed.insertBefore(repostEl, feed.firstChild);
+                    }
+                }
+
                 // add suggested section after 2nd post
                 let postEls = feed.querySelectorAll('.post');
                 if (postEls.length >= 2) {

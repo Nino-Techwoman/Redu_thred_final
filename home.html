@@ -332,14 +332,6 @@
                         <button class="create-post-close" id="createPostClose">Cancel</button>
                         <h2>New thread</h2>
                         <div class="create-post-header-icons">
-                            <button class="header-icon-btn" id="draftsBtn" title="Drafts">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                    <rect height="15" rx="4.5" stroke="currentColor" stroke-width="2" width="15" x="7" y="7" fill="none"/>
-                                    <path clip-rule="evenodd" d="M15.3833 4.50007C15.0018 4.15977 14.5475 3.9045 14.05 3.75672C13.7983 3.68195 13.432 3.6357 12.7078 3.68313C11.9633 3.73189 11.0102 3.86454 9.59538 4.06338C8.18054 4.26222 7.22784 4.39741 6.4987 4.55577C5.78946 4.7098 5.45011 4.85522 5.22879 4.99646C4.51904 5.44941 3.99637 6.14302 3.7566 6.95012C3.68183 7.2018 3.63558 7.56809 3.68301 8.29232C3.73177 9.03686 3.86442 9.98992 4.06326 11.4047C4.23845 12.6513 4.36423 13.5391 4.49997 14.2313V17.5001C4.49997 17.737 4.51175 17.9713 4.53475 18.2022C4.05772 17.8249 3.64282 17.3681 3.31041 16.8473C2.66675 15.8387 2.47208 14.4535 2.08272 11.6831C1.69337 8.91269 1.49869 7.52748 1.83941 6.38057C2.21619 5.11227 3.03754 4.02231 4.15285 3.31053C5.16142 2.66688 6.54662 2.4722 9.31703 2.08284C12.0874 1.69349 13.4726 1.49881 14.6196 1.83953C15.8878 2.21631 16.9778 3.03766 17.6896 4.15297C17.7623 4.26696 17.8294 4.38577 17.8916 4.51084C17.7619 4.50369 17.6314 4.50007 17.5 4.50007H15.3833Z" fill-rule="evenodd"/>
-                                    <rect height="2" rx="1" width="9" x="10" y="12"/>
-                                    <rect height="2" rx="1" width="6" x="10" y="15"/>
-                                </svg>
-                            </button>
                             <div class="more-menu-container">
                                 <button class="header-icon-btn" id="moreMenuBtn" title="More">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -352,13 +344,6 @@
                                 <div class="more-menu-dropdown" id="moreMenuDropdown">
                                     <button class="more-menu-item">Add AI label</button>
                                     <button class="more-menu-item">Mark as paid partnership</button>
-                                    <div class="more-menu-divider"></div>
-                                    <button class="more-menu-item">
-                                        <span>Schedule...</span>
-                                        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-                                            <path clip-rule="evenodd" d="M7.99984 14.0013C4.68613 14.0013 1.99984 11.315 1.99984 8.0013C1.99984 4.68759 4.68613 2.0013 7.99984 2.0013C11.3135 2.0013 13.9998 4.68759 13.9998 8.0013C13.9998 11.315 11.3135 14.0013 7.99984 14.0013ZM0.666504 8.0013C0.666504 3.95122 3.94975 0.667969 7.99984 0.667969C12.0499 0.667969 15.3332 3.95122 15.3332 8.0013C15.3332 12.0514 12.0499 15.3346 7.99984 15.3346C3.94975 15.3346 0.666504 12.0514 0.666504 8.0013ZM7.33325 4.00065C7.33325 3.63246 7.63173 3.33398 7.99992 3.33398C8.36811 3.33398 8.66659 3.63246 8.66659 4.00065V8.00065C8.66659 8.09789 8.64577 8.19027 8.60834 8.27358C8.57586 8.34983 8.52852 8.42127 8.46632 8.48347L6.5807 10.3691C6.32035 10.6294 5.89824 10.6294 5.63789 10.3691C5.37754 10.1087 5.37754 9.68663 5.63789 9.42628L7.33325 7.73092V4.00065Z" fill-rule="evenodd"/>
-                                        </svg>
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -421,6 +406,31 @@
                                     </svg>
                                 </button>
                             </div>
+                            <!-- Share Quote Preview -->
+                            <div class="share-quote-preview" id="shareQuotePreview" style="display: none;">
+                                <div class="share-quote-card">
+                                    <div class="share-quote-header">
+                                        <img src="" alt="avatar" class="share-quote-avatar" id="shareQuoteAvatar">
+                                        <span class="share-quote-username" id="shareQuoteUsername"></span>
+                                        <span class="share-quote-time" id="shareQuoteTime"></span>
+                                        <button class="share-quote-markup">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.651 4.148c-.414-.372-4.117-3.573-6.28-1.335-1.764 1.825.155 4.336 1.077 5.543l.221.29c.067.091.161.207.27.34.903 1.104 1.242 1.8 1.008 2.07-.443.512-1.674-.39-3.24-1.622-.55-.433-1.118-.88-1.693-1.273-1.55-1.058-3.526-2.062-5.058-.435-.912.969-1.329 2.764 1.864 5.811.269.257.562.526.866.804 1.776 1.63 3.987 3.657 3.193 5.073a1.067 1.067 0 0 1-.856.571c-1.243.177-3.767-.85-7.384-4.028a2.995 2.995 0 1 0-1.37 1.45c3.39 2.985 6.337 4.596 8.485 4.596a4 4 0 0 0 .548-.037 3.053 3.053 0 0 0 2.321-1.574c1.57-2.797-1.41-5.53-3.586-7.525-.293-.269-.576-.528-.836-.776-1.451-1.386-2.17-2.589-1.789-2.994.18-.192.555-.595 2.475.716.518.353 1.06.78 1.583 1.192 1.9 1.496 4.261 3.354 5.99 1.36 1.452-1.68-.247-3.758-.973-4.644a9.342 9.342 0 0 1-.213-.266l-.237-.314c-.537-.704-1.796-2.351-1.228-2.939.568-.583 2.432.477 3.51 1.436a1 1 0 0 0 1.332-1.49z"/></svg>
+                                        </button>
+                                    </div>
+                                    <p class="share-quote-text" id="shareQuoteText"></p>
+                                    <!-- Nested quote if original post has one -->
+                                    <div class="share-quote-nested" id="shareQuoteNested" style="display: none;">
+                                        <div class="share-quote-nested-header">
+                                            <img src="" alt="" class="share-quote-nested-avatar" id="shareQuoteNestedAvatar">
+                                            <span class="share-quote-nested-username" id="shareQuoteNestedUsername"></span>
+                                        </div>
+                                        <p class="share-quote-nested-text" id="shareQuoteNestedText"></p>
+                                    </div>
+                                    <div class="share-quote-image" id="shareQuoteImage" style="display: none;">
+                                        <img src="" alt="Post image" id="shareQuoteImg">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="add-to-thread">
@@ -477,7 +487,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="create-post-submit" id="createPostSubmit">Post</button>
+                        <button class="create-post-submit" id="createPostSubmit" disabled>Post</button>
                     </div>
                 </div>
                 <!-- Drafts view (inside same modal) -->
@@ -585,6 +595,138 @@
         </div>
     </div>
 
+
+    <!-- Reply Modal -->
+    <div class="modal-overlay" id="replyModalOverlay">
+        <div class="modal">
+            <div class="modal-content create-post-modal" id="replyPostForm">
+                <div class="create-post-header">
+                    <button class="create-post-close" id="replyPostClose">Cancel</button>
+                    <h2>Reply</h2>
+                    <div class="create-post-header-icons">
+                        <div class="more-menu-container">
+                            <button class="header-icon-btn" id="replyMoreMenuBtn" title="More">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M7.5 13.5C6.67157 13.5 6 12.8284 6 12C6 11.1716 6.67157 10.5 7.5 10.5C8.32843 10.5 9 11.1716 9 12C9 12.8284 8.32843 13.5 7.5 13.5Z"/>
+                                    <path d="M12 13.5C11.1716 13.5 10.5 12.8284 10.5 12C10.5 11.1716 11.1716 10.5 12 10.5C12.8284 10.5 13.5 11.1716 13.5 12C13.5 12.8284 12.8284 13.5 12 13.5Z"/>
+                                    <path d="M16.5 13.5C15.6716 13.5 15 12.8284 15 12C15 11.1716 15.6716 10.5 16.5 10.5C17.3284 10.5 18 11.1716 18 12C18 12.8284 17.3284 13.5 16.5 13.5Z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="reply-modal-body">
+                    <!-- Original post -->
+                    <div class="reply-original-post">
+                        <div class="create-post-user">
+                            <img src="" alt="avatar" class="create-post-avatar" id="replyOriginalAvatar">
+                            <div class="create-post-line"></div>
+                        </div>
+                        <div class="create-post-content">
+                            <div class="reply-original-header">
+                                <span class="create-post-username" id="replyOriginalUsername"></span>
+                                <span class="post-time" id="replyOriginalTime"></span>
+                            </div>
+                            <p class="reply-original-text" id="replyOriginalText"></p>
+                            <div class="reply-original-image" id="replyOriginalImage" style="display: none;">
+                                <img src="" alt="Post image" id="replyOriginalImg">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Reply input -->
+                    <div class="reply-input-section">
+                        <div class="create-post-user">
+                            <img src="" alt="avatar" class="create-post-avatar" id="replyUserAvatar">
+                        </div>
+                        <div class="create-post-content">
+                            <div class="create-post-user-row">
+                                <span class="create-post-username" id="replyUsername"></span>
+                                <button class="add-topic-btn">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
+                                    Add a topic
+                                </button>
+                            </div>
+                            <textarea class="create-post-textarea" id="replyTextarea" placeholder="Reply to ..." maxlength="2200"></textarea>
+                            <div class="reply-image-preview" id="replyImagePreview" style="display: none;">
+                                <img src="" alt="preview" id="replyPreviewImg">
+                                <button class="remove-image-btn" id="replyRemoveImageBtn">&times;</button>
+                            </div>
+                            <div class="create-post-actions">
+                                <label class="action-icon-btn" title="Add image">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                                        <polyline points="21 15 16 10 5 21"/>
+                                    </svg>
+                                    <input type="file" accept="image/*" id="replyImageInput" style="display: none;">
+                                </label>
+                                <button class="action-icon-btn" title="Add GIF">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="2" y="4" width="20" height="16" rx="2"/>
+                                        <text x="6" y="15" font-size="8" fill="currentColor" stroke="none" font-weight="bold">GIF</text>
+                                    </svg>
+                                </button>
+                                <button class="action-icon-btn" title="Add emoji">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                                        <line x1="9" y1="9" x2="9.01" y2="9"/>
+                                        <line x1="15" y1="9" x2="15.01" y2="9"/>
+                                    </svg>
+                                </button>
+                                <button class="action-icon-btn" title="Add hashtag">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="4" y1="9" x2="20" y2="9"/>
+                                        <line x1="4" y1="15" x2="20" y2="15"/>
+                                        <line x1="10" y1="3" x2="8" y2="21"/>
+                                        <line x1="16" y1="3" x2="14" y2="21"/>
+                                    </svg>
+                                </button>
+                                <button class="action-icon-btn" title="Add poll">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                        <line x1="7" y1="8" x2="17" y2="8"/>
+                                        <line x1="7" y1="12" x2="14" y2="12"/>
+                                        <line x1="7" y1="16" x2="11" y2="16"/>
+                                    </svg>
+                                </button>
+                                <button class="action-icon-btn" title="Add location">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                        <circle cx="12" cy="10" r="3"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="add-to-thread">
+                    <img src="" alt="avatar" class="add-thread-avatar" id="replyAddThreadAvatar">
+                    <span class="add-thread-text">Add to thread</span>
+                </div>
+                <div class="create-post-footer">
+                    <div class="reply-options-container">
+                        <button class="reply-options-btn" id="replyOptionsBtn2">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M22.4551 20.7695C22.0058 21.6518 21.3052 22.3789 20.4443 22.8613L20.2695 22.9551C19.6773 23.2567 19.0373 23.3828 18.3086 23.4424C17.5914 23.501 16.7032 23.5 15.5996 23.5H8.40039C7.29681 23.5 6.40858 23.501 5.69141 23.4424C5.0536 23.3903 4.48344 23.2877 3.9541 23.0605L3.73047 22.9551C2.78971 22.4757 2.0243 21.7106 1.54492 20.7695L3.32715 19.8623C3.61471 20.4266 4.0735 20.8853 4.6377 21.1729L4.74121 21.2217C4.99243 21.3298 5.32513 21.406 5.85449 21.4492C6.4713 21.4996 7.26395 21.5 8.40039 21.5H15.5996C16.7361 21.5 17.5287 21.4996 18.1455 21.4492C18.7507 21.3998 19.0989 21.3071 19.3623 21.1729L19.5684 21.0576C20.0384 20.7694 20.4212 20.3562 20.6729 19.8623L22.4551 20.7695Z" fill="#999999"/>
+                                <path d="M15.5996 1.5C16.7032 1.5 17.5914 1.49902 18.3086 1.55762C19.0373 1.61716 19.6773 1.74326 20.2695 2.04492L20.4443 2.13867C21.3052 2.62114 22.0057 3.34834 22.4551 4.23047L22.5605 4.4541C22.7877 4.98343 22.8903 5.55359 22.9424 6.19141C23.001 6.90856 23 7.7968 23 8.90039V16.0996C23 17.2032 23.001 18.0914 22.9424 18.8086C22.8828 19.5373 22.7568 20.1774 22.4551 20.7695L21.5645 20.3154L20.6729 19.8623C20.8069 19.5991 20.8998 19.2505 20.9492 18.6455C20.9996 18.0287 21 17.2361 21 16.0996V8.90039C21 7.76395 20.9996 6.97128 20.9492 6.35449C20.906 5.82503 20.8299 5.49237 20.7217 5.24121L20.6729 5.13867C20.4211 4.64473 20.0383 4.23057 19.5684 3.94238L19.3623 3.82715C19.099 3.69296 18.7507 3.60023 18.1455 3.55078C17.5287 3.5004 16.7361 3.5 15.5996 3.5H8.40039C7.26396 3.5 6.4713 3.5004 5.85449 3.55078C5.24933 3.60023 4.90109 3.69295 4.6377 3.82715L4.43164 3.94238C3.96163 4.2306 3.57876 4.6438 3.32715 5.1377L3.27832 5.24121C3.17014 5.49237 3.09405 5.82502 3.05078 6.35449C3.0004 6.97127 3 7.76394 3 8.90039V16.0996C3 17.2361 3.00041 18.0287 3.05078 18.6455C3.10021 19.2505 3.19307 19.5991 3.32715 19.8623L2.43555 20.3154L1.54492 20.7695C1.24321 20.1774 1.11716 19.5373 1.05762 18.8086C0.999026 18.0914 1 17.2032 1 16.0996V8.90039C1 7.79681 0.999022 6.90856 1.05762 6.19141C1.11716 5.46271 1.2432 4.82264 1.54492 4.23047L1.6377 4.05567C2.12007 3.19456 2.84778 2.4943 3.72949 2.04492C4.32169 1.74327 4.96271 1.61716 5.69141 1.55762C6.40858 1.49902 7.29682 1.5 8.40039 1.5H15.5996Z" fill="#999999"/>
+                                <path d="M8.00586 6.50586C8.55812 6.50589 9.00586 6.9536 9.00586 7.50586V13.5H10C10.5523 13.5 11 13.9477 11 14.5C11 15.0523 10.5523 15.5 10 15.5H9.00586V17.5059C9.00579 18.0581 8.55808 18.5058 8.00586 18.5059C7.45362 18.5059 7.00593 18.0581 7.00586 17.5059V15.5H6C5.44778 15.4999 5 15.0522 5 14.5C5 13.9478 5.44778 13.5001 6 13.5H7.00586V7.50586C7.00586 6.95358 7.45358 6.50586 8.00586 6.50586Z" fill="#999999"/>
+                                <path d="M16.0059 6.50586C16.5581 6.50589 17.0059 6.9536 17.0059 7.50586V9.5H18C18.5523 9.5 19 9.94772 19 10.5C19 11.0523 18.5523 11.5 18 11.5H17.0059V17.5059C17.0058 18.0581 16.5581 18.5058 16.0059 18.5059C15.4536 18.5059 15.0059 18.0581 15.0059 17.5059V11.5H14C13.4478 11.4999 13 11.0522 13 10.5C13 9.94776 13.4478 9.50007 14 9.5H15.0059V7.50586C15.0059 6.95358 15.4536 6.50586 16.0059 6.50586Z" fill="#999999"/>
+                            </svg>
+                            <span>Reply options</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <button class="create-post-submit" id="replySubmitBtn">Post</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="security.js"></script>
     <script src="home.js"></script>
