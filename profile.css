@@ -1164,6 +1164,10 @@ body {
     border-color: rgba(255, 255, 255, 0.15);
 }
 
+[data-theme="dark"] .submenu-back {
+    color: #777;
+}
+
 [data-theme="dark"] .submenu-back:hover {
     color: #f5f5f5;
 }
@@ -1275,9 +1279,26 @@ body {
 
 [data-theme="dark"] .content-wrapper {
     background-color: #101010;
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 [data-theme="dark"] .drafts-back-btn {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .drafts-empty-icon {
+    color: #777;
+}
+
+[data-theme="dark"] .create-post-textarea {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .action-icon-btn {
+    color: #777;
+}
+
+[data-theme="dark"] .action-icon-btn:hover {
     color: #f5f5f5;
 }
 

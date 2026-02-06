@@ -2270,6 +2270,174 @@ body {
     border-bottom: none;
 }
 
+/* Embedded original post card */
+.embed-card {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+    background-color: #fafafa;
+}
+
+.embed-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.embed-card-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.embed-card-username {
+    font-weight: 600;
+    font-size: 14px;
+    color: #000;
+}
+
+.embed-card-time {
+    color: #999;
+    font-size: 13px;
+}
+
+.embed-card-quote-icon {
+    margin-left: auto;
+    color: #999;
+    opacity: 0.5;
+}
+
+.embed-card-text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #000;
+    margin-bottom: 10px;
+}
+
+.embed-card-citation {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.embed-card-citation svg {
+    flex-shrink: 0;
+    color: #999;
+}
+
+.embed-card-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.embed-card-gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin-bottom: 10px;
+}
+
+.embed-card-gallery-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.embed-card-actions {
+    display: flex;
+    gap: 16px;
+    padding-top: 8px;
+}
+
+.embed-card-action {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #666;
+    font-size: 13px;
+}
+
+.embed-card-action .heart-icon {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+}
+
+.embed-card-action svg {
+    color: #666;
+}
+
+/* Embed card - Light mode */
+[data-theme="light"] .embed-card {
+    background-color: #fafafa;
+    border-color: rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .embed-card-username {
+    color: #000;
+}
+
+[data-theme="light"] .embed-card-text {
+    color: #000;
+}
+
+[data-theme="light"] .embed-card-action {
+    color: #666;
+}
+
+[data-theme="light"] .embed-card-action svg {
+    color: #666;
+}
+
+/* Embed card - Dark mode */
+[data-theme="dark"] .embed-card {
+    background-color: #222;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .embed-card-username {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .embed-card-text {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .embed-card-time {
+    color: #777;
+}
+
+[data-theme="dark"] .embed-card-quote-icon {
+    color: #777;
+}
+
+[data-theme="dark"] .embed-card-citation {
+    color: #777;
+}
+
+[data-theme="dark"] .embed-card-citation svg {
+    color: #777;
+}
+
+[data-theme="dark"] .embed-card-action {
+    color: #777;
+}
+
+[data-theme="dark"] .embed-card-action svg {
+    color: #777;
+}
+
 .repost-footer {
     display: flex;
     align-items: center;
@@ -3962,6 +4130,135 @@ body {
 [data-theme="light"] .repost-footer {
     background-color: #fff;
     border-bottom-color: #e0e0e0;
+}
+
+/* Embed card */
+/* Embed card - default dark */
+.embed-card {
+    background-color: #1a1a1a;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.embed-card-username {
+    color: #f5f5f5;
+}
+
+.embed-card-text {
+    color: #f5f5f5;
+}
+
+.embed-card-time {
+    color: #777;
+}
+
+.embed-card-quote-icon {
+    color: #777;
+}
+
+.embed-card-citation {
+    color: #777;
+}
+
+.embed-card-citation svg {
+    color: #777;
+}
+
+.embed-card-action {
+    color: #777;
+}
+
+.embed-card-action svg {
+    color: #777;
+}
+
+.embed-card-action .heart-icon {
+    fill: none;
+    stroke: #777;
+    stroke-width: 1.5;
+}
+
+/* Embed card - light mode overrides */
+[data-theme="light"] .embed-card {
+    background-color: #fafafa;
+    border-color: rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .embed-card-username {
+    color: #000;
+}
+
+[data-theme="light"] .embed-card-text {
+    color: #000;
+}
+
+[data-theme="light"] .embed-card-time {
+    color: #999;
+}
+
+[data-theme="light"] .embed-card-quote-icon {
+    color: #999;
+}
+
+[data-theme="light"] .embed-card-citation {
+    color: #999;
+}
+
+[data-theme="light"] .embed-card-citation svg {
+    color: #999;
+}
+
+[data-theme="light"] .embed-card-action {
+    color: #666;
+}
+
+[data-theme="light"] .embed-card-action svg {
+    color: #666;
+}
+
+[data-theme="light"] .embed-card-action .heart-icon {
+    stroke: #666;
+}
+
+/* Embed card - dark mode overrides */
+[data-theme="dark"] .embed-card {
+    background-color: #222;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .embed-card-username {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .embed-card-text {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .embed-card-time {
+    color: #777;
+}
+
+[data-theme="dark"] .embed-card-quote-icon {
+    color: #777;
+}
+
+[data-theme="dark"] .embed-card-citation {
+    color: #777;
+}
+
+[data-theme="dark"] .embed-card-citation svg {
+    color: #777;
+}
+
+[data-theme="dark"] .embed-card-action {
+    color: #777;
+}
+
+[data-theme="dark"] .embed-card-action svg {
+    color: #777;
+}
+
+[data-theme="dark"] .embed-card-action .heart-icon {
+    stroke: #777;
 }
 
 [data-theme="dark"] .repost-footer {

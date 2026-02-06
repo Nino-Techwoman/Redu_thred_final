@@ -408,6 +408,10 @@
             color: #999999;
         }
 
+        [data-theme="light"] .profile-post-text {
+            color: #000;
+        }
+
         .profile-post-text {
             font-size: 15px;
             line-height: 1.4;
@@ -456,9 +460,64 @@
             font-size: 15px;
         }
 
-        /* Media Feed */
+        /* Media Grid */
         .media-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
             padding: 0;
+        }
+
+        .media-grid-item {
+            position: relative;
+            aspect-ratio: 1;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .media-grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: opacity 0.2s;
+        }
+
+        .media-grid-item:hover img {
+            opacity: 0.85;
+        }
+
+        .media-grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .media-grid-item:hover .media-grid-overlay {
+            opacity: 1;
+        }
+
+        .media-grid-stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .media-grid-stat svg {
+            width: 18px;
+            height: 18px;
         }
 
         /* Edit Profile Modal */
@@ -748,6 +807,47 @@
             background: #181818;
         }
 
+        [data-theme="dark"] .interests-input {
+            color: #f5f5f5;
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        [data-theme="dark"] .interests-input:focus {
+            border-color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .interests-suggestions {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        [data-theme="dark"] .interests-suggestion-item {
+            border-bottom-color: rgba(255, 255, 255, 0.15);
+        }
+
+        [data-theme="dark"] .interests-suggestion-item:hover {
+            background-color: #262626;
+        }
+
+        [data-theme="dark"] .interests-suggestion-name {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .interests-selected-item {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        [data-theme="dark"] .interests-selected-name {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .interests-remove-btn:hover {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .interests-display {
+            color: #f5f5f5;
+        }
+
         .interests-input-container {
             position: relative;
         }
@@ -988,6 +1088,40 @@
 
         [data-theme="dark"] .links-suggestions {
             background: #181818;
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        [data-theme="dark"] .links-input {
+            color: #f5f5f5;
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        [data-theme="dark"] .links-input:focus {
+            border-color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .links-suggestion-item {
+            border-bottom-color: rgba(255, 255, 255, 0.15);
+        }
+
+        [data-theme="dark"] .links-suggestion-item:hover {
+            background-color: #262626;
+        }
+
+        [data-theme="dark"] .links-suggestion-name {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .links-selected-item {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        [data-theme="dark"] .links-selected-name {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .links-remove-btn:hover {
+            color: #f5f5f5;
         }
 
         .links-display {
@@ -1030,6 +1164,170 @@
 
         .links-remove-btn:hover {
             color: #000000;
+        }
+
+        /* Reply Thread Layout */
+        .reply-thread {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        .reply-thread-original {
+            display: flex;
+            padding: 16px 20px 0 20px;
+            gap: 12px;
+            position: relative;
+        }
+
+        .reply-thread-original .reply-avatar-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .reply-thread-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .reply-thread-line {
+            width: 2px;
+            flex: 1;
+            background-color: rgba(0, 0, 0, 0.15);
+            margin-top: 8px;
+            margin-bottom: 8px;
+            border-radius: 1px;
+        }
+
+        .reply-thread-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .reply-thread-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .reply-thread-username {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .reply-thread-verified {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        .reply-thread-time {
+            font-size: 14px;
+            color: #999999;
+        }
+
+        .reply-thread-menu {
+            margin-left: auto;
+            position: relative;
+        }
+
+        .reply-thread-text {
+            font-size: 15px;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .reply-thread-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .reply-thread-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding-bottom: 12px;
+        }
+
+        .reply-thread-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #000000;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+        }
+
+        .reply-thread-action-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .reply-thread-action-count {
+            color: #999;
+            font-size: 13px;
+        }
+
+        /* Reply (user's own reply) */
+        .reply-thread-reply {
+            display: flex;
+            padding: 0 20px 16px 20px;
+            gap: 12px;
+        }
+
+        .reply-thread-reply .reply-thread-actions {
+            padding-bottom: 0;
+        }
+
+        /* Dark mode */
+        [data-theme="dark"] .reply-thread {
+            border-bottom-color: rgba(255, 255, 255, 0.15);
+        }
+
+        [data-theme="dark"] .reply-thread-line {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        [data-theme="dark"] .reply-thread-username {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .reply-thread-time {
+            color: #999999;
+        }
+
+        [data-theme="dark"] .reply-thread-text {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .reply-thread-action-btn {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .reply-thread-action-count {
+            color: #777;
+        }
+
+        /* Light mode */
+        [data-theme="light"] .reply-thread-username {
+            color: #000;
+        }
+
+        [data-theme="light"] .reply-thread-text {
+            color: #000;
+        }
+
+        [data-theme="light"] .reply-thread-action-btn {
+            color: #000;
         }
 
     </style>
@@ -1239,6 +1537,10 @@
 
                 <!-- Profile Feed -->
                 <div class="profile-feed" id="profileFeed">
+                </div>
+
+                <!-- Replies Feed -->
+                <div class="replies-feed" id="repliesFeed" style="display: none;">
                 </div>
 
                 <!-- Media Grid -->
@@ -1930,6 +2232,203 @@
             }
         }
 
+        // get relative time string
+        function getRelativeTime(timestamp) {
+            let now = Date.now();
+            let diff = now - timestamp;
+            let seconds = Math.floor(diff / 1000);
+            let minutes = Math.floor(seconds / 60);
+            let hours = Math.floor(minutes / 60);
+            let days = Math.floor(hours / 24);
+            if (days > 0) return days + 'd ago';
+            if (hours > 0) return hours + 'h ago';
+            if (minutes > 0) return minutes + 'm ago';
+            return 'just now';
+        }
+
+        // render replies tab
+        function renderReplies() {
+            let repliesFeed = document.getElementById('repliesFeed');
+            let emptyState = document.getElementById('emptyTabState');
+            let emptyText = document.getElementById('emptyTabText');
+            if (!repliesFeed) return;
+
+            // load replies from localStorage
+            let replies = [];
+            try {
+                let data = localStorage.getItem('threads_user_replies');
+                if (data) {
+                    replies = JSON.parse(data);
+                }
+            } catch(e) {}
+
+            // sort newest first
+            replies.sort(function(a, b) {
+                return (b.repliedAt || 0) - (a.repliedAt || 0);
+            });
+
+            if (replies.length == 0) {
+                repliesFeed.style.display = 'none';
+                if (emptyState && emptyText) {
+                    emptyText.textContent = 'No replies yet';
+                    emptyState.style.display = '';
+                }
+                return;
+            }
+
+            repliesFeed.innerHTML = '';
+            repliesFeed.style.display = '';
+            if (emptyState) emptyState.style.display = 'none';
+
+            for (let i = 0; i < replies.length; i++) {
+                let entry = replies[i];
+                let orig = entry.originalPost;
+                if (!orig) continue;
+
+                let threadDiv = document.createElement('div');
+                threadDiv.className = 'reply-thread';
+
+                // === Original post (top) ===
+                let origSection = document.createElement('div');
+                origSection.className = 'reply-thread-original';
+
+                // avatar column with connecting line
+                let avatarCol = document.createElement('div');
+                avatarCol.className = 'reply-avatar-col';
+
+                let origAvatar = document.createElement('img');
+                origAvatar.className = 'reply-thread-avatar';
+                origAvatar.src = orig.avatar || 'images/avatar1.jpg';
+                origAvatar.alt = '';
+                avatarCol.appendChild(origAvatar);
+
+                let line = document.createElement('div');
+                line.className = 'reply-thread-line';
+                avatarCol.appendChild(line);
+
+                origSection.appendChild(avatarCol);
+
+                // original post content
+                let origContent = document.createElement('div');
+                origContent.className = 'reply-thread-content';
+
+                // header
+                let origHeader = document.createElement('div');
+                origHeader.className = 'reply-thread-header';
+
+                let origUsername = document.createElement('span');
+                origUsername.className = 'reply-thread-username';
+                origUsername.textContent = orig.username || 'user';
+                origHeader.appendChild(origUsername);
+
+                if (orig.verified) {
+                    let verifiedSvg = document.createElement('span');
+                    verifiedSvg.innerHTML = '<svg class="reply-thread-verified" viewBox="0 0 40 40" fill="none"><path d="M19.998 3.094L14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v6.354h6.234L14.638 40l5.36-3.094L25.358 40l2.972-5.15h6.234v-6.354L40 25.359 36.906 20 40 14.641l-5.436-3.137V5.15h-6.234L25.358 0l-5.36 3.094Z" fill="#0095F6"/><path d="m17.884 28.468-6.116-6.22 2.852-2.853 3.264 3.264 8.332-8.332 2.852 2.853-11.184 11.288Z" fill="#fff"/></svg>';
+                    origHeader.appendChild(verifiedSvg);
+                }
+
+                let origTime = document.createElement('span');
+                origTime.className = 'reply-thread-time';
+                origTime.textContent = orig.time || '';
+                origHeader.appendChild(origTime);
+
+                origContent.appendChild(origHeader);
+
+                // text
+                if (orig.text) {
+                    let origText = document.createElement('p');
+                    origText.className = 'reply-thread-text';
+                    origText.textContent = orig.text;
+                    origContent.appendChild(origText);
+                }
+
+                // image
+                if (orig.image && typeof orig.image == 'string' && orig.image.length > 0) {
+                    let origImg = document.createElement('img');
+                    origImg.className = 'reply-thread-image';
+                    origImg.src = orig.image;
+                    origImg.alt = '';
+                    origImg.loading = 'lazy';
+                    origContent.appendChild(origImg);
+                }
+
+                // action buttons with counts
+                let origActions = document.createElement('div');
+                origActions.className = 'reply-thread-actions';
+
+                let likesCount = orig.likes > 0 ? '<span class="reply-thread-action-count">' + orig.likes + '</span>' : '';
+                let repliesCount = orig.replies > 0 ? '<span class="reply-thread-action-count">' + orig.replies + '</span>' : '';
+                let repostsCount = orig.reposts > 0 ? '<span class="reply-thread-action-count">' + orig.reposts + '</span>' : '';
+                let sharesCount = orig.shares > 0 ? '<span class="reply-thread-action-count">' + orig.shares + '</span>' : '';
+
+                origActions.innerHTML = '<button class="reply-thread-action-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>' + likesCount + '</button>'
+                    + '<button class="reply-thread-action-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>' + repliesCount + '</button>'
+                    + '<button class="reply-thread-action-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>' + repostsCount + '</button>'
+                    + '<button class="reply-thread-action-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>' + sharesCount + '</button>';
+
+                origContent.appendChild(origActions);
+                origSection.appendChild(origContent);
+                threadDiv.appendChild(origSection);
+
+                // === User's reply (bottom) ===
+                let replySection = document.createElement('div');
+                replySection.className = 'reply-thread-reply';
+
+                let replyAvatar = document.createElement('img');
+                replyAvatar.className = 'reply-thread-avatar';
+                replyAvatar.src = currentUser ? currentUser.avatar : 'images/avatar1.jpg';
+                replyAvatar.alt = '';
+                replySection.appendChild(replyAvatar);
+
+                let replyContent = document.createElement('div');
+                replyContent.className = 'reply-thread-content';
+
+                // reply header
+                let replyHeader = document.createElement('div');
+                replyHeader.className = 'reply-thread-header';
+
+                let replyUsername = document.createElement('span');
+                replyUsername.className = 'reply-thread-username';
+                replyUsername.textContent = entry.repliedBy || (currentUser ? currentUser.username : 'you');
+                replyHeader.appendChild(replyUsername);
+
+                let replyTime = document.createElement('span');
+                replyTime.className = 'reply-thread-time';
+                replyTime.textContent = getRelativeTime(entry.repliedAt);
+                replyHeader.appendChild(replyTime);
+
+                // three dots menu
+                let replyMenu = document.createElement('div');
+                replyMenu.className = 'reply-thread-menu';
+                replyMenu.innerHTML = '<button class="post-menu-btn"><svg aria-label="More" role="img" viewBox="0 0 24 24" style="--x-fill: currentColor; --x-height: 20px; --x-width: 20px;"><title>More</title><circle cx="12" cy="12" r="1.5"></circle><circle cx="6" cy="12" r="1.5"></circle><circle cx="18" cy="12" r="1.5"></circle></svg></button>';
+                replyHeader.appendChild(replyMenu);
+
+                replyContent.appendChild(replyHeader);
+
+                // reply text
+                if (entry.userText) {
+                    let replyText = document.createElement('p');
+                    replyText.className = 'reply-thread-text';
+                    replyText.textContent = entry.userText;
+                    replyContent.appendChild(replyText);
+                }
+
+                // reply action buttons (no counts)
+                let replyActions = document.createElement('div');
+                replyActions.className = 'reply-thread-actions';
+                replyActions.innerHTML = '<button class="reply-thread-action-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>'
+                    + '<button class="reply-thread-action-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></button>'
+                    + '<button class="reply-thread-action-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>'
+                    + '<button class="reply-thread-action-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>';
+                replyContent.appendChild(replyActions);
+
+                replySection.appendChild(replyContent);
+                threadDiv.appendChild(replySection);
+
+                repliesFeed.appendChild(threadDiv);
+            }
+        }
+
         // switch profile tab view
         let activeTab = 'threads';
         function switchTab(tab) {
@@ -1937,12 +2436,14 @@
             let feed = document.getElementById('profileFeed');
             let composer = document.getElementById('profileComposer');
             let grid = document.getElementById('mediaGrid');
+            let repliesFeed = document.getElementById('repliesFeed');
             let emptyState = document.getElementById('emptyTabState');
             let emptyText = document.getElementById('emptyTabText');
 
             // hide all
             feed.style.display = 'none';
             grid.style.display = 'none';
+            if (repliesFeed) repliesFeed.style.display = 'none';
             if (composer) composer.style.display = 'none';
             if (emptyState) emptyState.style.display = 'none';
 
@@ -1954,10 +2455,7 @@
                 grid.style.display = '';
                 renderMedia();
             } else if (tab == 'replies') {
-                if (emptyState && emptyText) {
-                    emptyText.textContent = 'No replies yet';
-                    emptyState.style.display = '';
-                }
+                renderReplies();
             } else if (tab == 'reposts') {
                 if (emptyState && emptyText) {
                     emptyText.textContent = 'No reposts yet';

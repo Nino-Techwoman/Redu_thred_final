@@ -517,22 +517,280 @@ function getRelativeTime(timestamp) {
     return 'just now';
 }
 
-// create repost element for feed
-function createRepostElement(repostEntry) {
+// build embedded original post card html
+function buildEmbedCardHtml(orig) {
+    let safeUsername = sanitize(orig.username);
+    let safeAvatar = encodeURI(orig.avatar);
+
+    // build text
+    let textHtml = '';
+    if (orig.text) {
+        let safeText = sanitize(orig.text);
+        safeText = safeText.replace(/#(\w+)/g, '<span class="post-hashtag">#$1</span>');
+        safeText = safeText.replace(/@(\w+)/g, '<span class="post-mention">@$1</span>');
+        safeText = safeText.replace(/\n/g, '<br>');
+        textHtml = '<p class="embed-card-text">' + safeText + '</p>';
+    }
+
+    // build nested quote
+    let quoteHtml = '';
+    if (orig.quote != null) {
+        let safeQuoteText = sanitize(orig.quote.text);
+        let highlightedText = safeQuoteText;
+        if (orig.quote.highlight) {
+            let safeHighlight = sanitize(orig.quote.highlight);
+            highlightedText = safeQuoteText.replace(safeHighlight, '<span class="highlight">' + safeHighlight + '</span>');
+        }
+        let safeQuoteUsername = sanitize(orig.quote.username);
+        quoteHtml = '<div class="quoted-post">';
+        quoteHtml += '<div class="quoted-header">';
+        quoteHtml += '<img src="' + encodeURI(orig.quote.avatar) + '" alt="" class="quoted-avatar">';
+        quoteHtml += '<span class="quoted-username">' + safeQuoteUsername + '</span>';
+        quoteHtml += '</div>';
+        quoteHtml += '<p class="quoted-text">' + highlightedText + '</p>';
+        quoteHtml += '</div>';
+        // quote citation
+        quoteHtml += '<p class="embed-card-citation">';
+        quoteHtml += '<svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor"><path d="M7.68 6.5C6.62 6.5 5.83 7.2 5.83 8.2c0 .96.63 1.7 1.62 1.7.36 0 .72-.06.96-.33h.06c-.32.69-.98 1.13-1.55 1.27-.33.09-.43.23-.43.43 0 .22.18.38.44.38.89 0 2.66-1.01 2.66-3.13C9.58 7.38 8.81 6.5 7.68 6.5ZM12.4 6.5c-1.05 0-1.85.7-1.85 1.7 0 .96.63 1.7 1.62 1.7.36 0 .72-.06.96-.33h.06c-.32.69-.98 1.13-1.55 1.27-.33.09-.43.23-.43.43 0 .22.18.38.44.38.89 0 2.66-1.01 2.66-3.13 0-1.14-.77-2.02-1.91-2.02Z"></path></svg>';
+        quoteHtml += ' ' + safeQuoteUsername + ': ' + safeQuoteText;
+        quoteHtml += '</p>';
+    }
+
+    // build image
+    let imageHtml = '';
+    if (orig.images != null && orig.images.length > 0) {
+        if (orig.images.length == 1) {
+            imageHtml = '<img src="' + orig.images[0] + '" alt="" class="embed-card-image">';
+        } else {
+            imageHtml = '<div class="embed-card-gallery">';
+            for (let img = 0; img < orig.images.length; img++) {
+                imageHtml += '<img src="' + orig.images[img] + '" alt="" class="embed-card-gallery-img">';
+            }
+            imageHtml += '</div>';
+        }
+    } else if (orig.image != null) {
+        imageHtml = '<img src="' + orig.image + '" alt="" class="embed-card-image">';
+    }
+
+    // build counts
+    let likesHtml = orig.likes > 0 ? '<span>' + orig.likes + '</span>' : '';
+    let repliesHtml = orig.replies > 0 ? '<span>' + orig.replies + '</span>' : '';
+    let repostsHtml = orig.reposts > 0 ? '<span>' + orig.reposts + '</span>' : '';
+    let sharesHtml = orig.shares > 0 ? '<span>' + orig.shares + '</span>' : '';
+
+    let html = '<div class="embed-card">';
+    html += '<div class="embed-card-header">';
+    html += '<img src="' + safeAvatar + '" alt="" class="embed-card-avatar">';
+    html += '<span class="embed-card-username">' + safeUsername + '</span>';
+    html += '<span class="embed-card-time">' + orig.time + '</span>';
+    html += '<svg class="embed-card-quote-icon" viewBox="0 0 20 20" width="18" height="18" fill="currentColor"><path d="M7.68 6.5C6.62 6.5 5.83 7.2 5.83 8.2c0 .96.63 1.7 1.62 1.7.36 0 .72-.06.96-.33h.06c-.32.69-.98 1.13-1.55 1.27-.33.09-.43.23-.43.43 0 .22.18.38.44.38.89 0 2.66-1.01 2.66-3.13C9.58 7.38 8.81 6.5 7.68 6.5ZM12.4 6.5c-1.05 0-1.85.7-1.85 1.7 0 .96.63 1.7 1.62 1.7.36 0 .72-.06.96-.33h.06c-.32.69-.98 1.13-1.55 1.27-.33.09-.43.23-.43.43 0 .22.18.38.44.38.89 0 2.66-1.01 2.66-3.13 0-1.14-.77-2.02-1.91-2.02Z"></path></svg>';
+    html += '</div>';
+    html += textHtml;
+    html += quoteHtml;
+    html += imageHtml;
+    html += '<div class="embed-card-actions">';
+    html += '<span class="embed-card-action"><svg class="heart-icon" viewBox="0 0 24 24" width="16" height="16"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>' + likesHtml + '</span>';
+    html += '<span class="embed-card-action"><svg viewBox="0 0 18 18" width="16" height="16" fill="currentColor"><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg>' + repliesHtml + '</span>';
+    html += '<span class="embed-card-action"><svg viewBox="0 0 18 18" width="16" height="16" fill="currentColor"><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg>' + repostsHtml + '</span>';
+    html += '<span class="embed-card-action"><svg viewBox="0 0 18 18" width="16" height="16" fill="none" stroke="currentColor"><path d="M15.6097 4.09082L6.65039 9.11104" stroke-linejoin="round" stroke-width="1.25"></path><path d="M7.79128 14.439C8.00463 15.3275 8.11131 15.7718 8.33426 15.932C8.52764 16.071 8.77617 16.1081 9.00173 16.0318C9.26179 15.9438 9.49373 15.5501 9.95761 14.7628L15.5444 5.2809C15.8883 4.69727 16.0603 4.40546 16.0365 4.16566C16.0159 3.95653 15.9071 3.76612 15.7374 3.64215C15.5428 3.5 15.2041 3.5 14.5267 3.5H3.71404C2.81451 3.5 2.36474 3.5 2.15744 3.67754C1.97758 3.83158 1.88253 4.06254 1.90186 4.29856C1.92415 4.57059 2.24363 4.88716 2.88259 5.52032L6.11593 8.7243C6.26394 8.87097 6.33795 8.94431 6.39784 9.02755C6.451 9.10144 6.4958 9.18101 6.53142 9.26479C6.57153 9.35916 6.59586 9.46047 6.64451 9.66309L7.79128 14.439Z" stroke-linejoin="round" stroke-width="1.25"></path></svg>' + sharesHtml + '</span>';
+    html += '</div>';
+    html += '</div>';
+    return html;
+}
+
+// create repost/reply element for following feed
+function createActivityElement(entry) {
     let wrapper = document.createElement('div');
     wrapper.className = 'repost-wrapper';
 
-    // create the original post element using existing function
-    let postEl = createPostElement(repostEntry.originalPost);
-    wrapper.appendChild(postEl);
+    // build the user's own post wrapper with the embedded original post card
+    let userAvatar = currentUser != null ? encodeURI(currentUser.avatar) : 'images/avatar1.jpg';
+    let userName = sanitize(entry.repostedBy || entry.repliedBy || 'you');
+    let timeAgo = getRelativeTime(entry.repostedAt || entry.repliedAt);
 
-    // add reposted-by footer
+    // user text (for quote reposts or replies)
+    let userTextHtml = '';
+    if (entry.userText && entry.userText.trim() != '') {
+        let safeText = sanitize(entry.userText);
+        safeText = safeText.replace(/#(\w+)/g, '<span class="post-hashtag">#$1</span>');
+        safeText = safeText.replace(/@(\w+)/g, '<span class="post-mention">@$1</span>');
+        safeText = safeText.replace(/\n/g, '<br>');
+        userTextHtml = '<p class="post-text">' + safeText + '</p>';
+    }
+
+    // build embedded card from original post
+    let embedHtml = buildEmbedCardHtml(entry.originalPost);
+
+    let postDiv = document.createElement('div');
+    postDiv.className = 'post';
+
+    let html = '';
+    html += '<div class="post-avatar-container">';
+    html += '<img src="' + userAvatar + '" alt="' + userName + '" class="post-avatar">';
+    html += '<div class="post-line"></div>';
+    html += '</div>';
+    html += '<div class="post-content">';
+    html += '<div class="post-header">';
+    html += '<span class="post-username">' + userName + '</span>';
+    html += '<span class="post-time">' + timeAgo + '</span>';
+    html += '<div class="post-header-icons">';
+    html += '<div class="post-menu-container">';
+    html += '<button class="post-icon-btn post-menu-btn">';
+    html += '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="1.5"/><circle cx="6" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/></svg>';
+    html += '</button>';
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+    let origPost = entry.originalPost;
+    let origPostId = origPost.id;
+
+    html += userTextHtml;
+    html += embedHtml;
+    html += '<div class="post-actions">';
+    html += '<button class="action-btn like-btn" data-id="' + origPostId + '">';
+    html += '<svg class="heart-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+    html += '</button>';
+    html += '<button class="action-btn comment-btn" data-id="' + origPostId + '">';
+    html += '<svg aria-label="Comment" role="img" viewBox="0 0 18 18" width="20" height="20" fill="currentColor"><title>Comment</title><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg>';
+    html += '</button>';
+    html += '<div class="repost-container">';
+    html += '<button class="action-btn repost-btn" data-id="' + origPostId + '">';
+    html += '<svg aria-label="Repost" role="img" viewBox="0 0 18 18" width="20" height="20" fill="currentColor"><title>Repost</title><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg>';
+    html += '</button>';
+    html += '<div class="repost-dropdown">';
+    html += '<button class="repost-dropdown-item" data-action="repost" data-id="' + origPostId + '">';
+    html += '<span>Repost</span>';
+    html += '<svg aria-label="Repost" role="img" viewBox="0 0 18 18" width="20" height="20" fill="currentColor"><title>Repost</title><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg>';
+    html += '</button>';
+    html += '<button class="repost-dropdown-item" data-action="quote" data-id="' + origPostId + '">';
+    html += '<span>Quote</span>';
+    html += '<svg aria-label="Quote" role="img" viewBox="0 0 20 20" width="20" height="20" fill="currentColor"><title>Quote</title><path d="M7.68694 19.611C6.70477 20.3965 5.25 19.6973 5.25 18.4396V16.3507L5 16.3507C2.37665 16.3507 0.25 14.224 0.25 11.6007V9.35066V6.10066C0.25 3.47731 2.37665 1.35066 5 1.35066H5.5H14.2188H14.9688C17.5921 1.35066 19.7188 3.47731 19.7188 6.10066V9.35066V11.6007C19.7188 14.224 17.5921 16.3507 14.9688 16.3507H14.2188L11.763 16.3507L7.68694 19.611ZM6.75 18.4396L10.8261 15.1793C11.0921 14.9666 11.4225 14.8507 11.763 14.8507L14.2187 14.8507H14.9688C16.7637 14.8507 18.2188 13.3956 18.2188 11.6007V9.35066V6.10066C18.2188 4.30574 16.7637 2.85066 14.9688 2.85066H14.2188H5.5H5C3.20507 2.85066 1.75 4.30574 1.75 6.10066V9.35066V11.6007C1.75 13.3956 3.20508 14.8507 5 14.8507H5.25C6.07843 14.8507 6.75 15.5222 6.75 16.3507V18.4396Z"></path><path d="M7.67735 6.5C6.62472 6.5 5.82617 7.20469 5.82617 8.20517C5.82617 9.16216 6.45231 9.90164 7.44142 9.90164C7.80439 9.90164 8.16737 9.84074 8.4033 9.57105H8.46682C8.14922 10.2583 7.48679 10.702 6.9151 10.8412C6.58842 10.9282 6.4886 11.0674 6.4886 11.2675C6.4886 11.485 6.67009 11.6503 6.92418 11.6503C7.81347 11.6503 9.58298 10.6411 9.58298 8.51837C9.58298 7.37869 8.81165 6.5 7.67735 6.5Z"></path><path d="M12.396 6.5C11.3434 6.5 10.5449 7.20469 10.5449 8.20517C10.5449 9.16216 11.171 9.90164 12.1692 9.90164C12.5231 9.90164 12.8861 9.84074 13.122 9.57105H13.1855C12.8679 10.2583 12.2055 10.702 11.6338 10.8412C11.3071 10.9282 11.2073 11.0674 11.2073 11.2675C11.2073 11.485 11.3888 11.6503 11.6429 11.6503C12.5322 11.6503 14.3017 10.6411 14.3017 8.51837C14.3017 7.37869 13.5303 6.5 12.396 6.5Z"></path></svg>';
+    html += '</button>';
+    html += '</div>';
+    html += '</div>';
+    html += '<button class="action-btn share-btn" data-id="' + origPostId + '">';
+    html += '<svg aria-label="Share" role="img" viewBox="0 0 18 18" width="20" height="20" fill="none" stroke="currentColor"><title>Share</title><path d="M15.6097 4.09082L6.65039 9.11104" stroke-linejoin="round" stroke-width="1.25"></path><path d="M7.79128 14.439C8.00463 15.3275 8.11131 15.7718 8.33426 15.932C8.52764 16.071 8.77617 16.1081 9.00173 16.0318C9.26179 15.9438 9.49373 15.5501 9.95761 14.7628L15.5444 5.2809C15.8883 4.69727 16.0603 4.40546 16.0365 4.16566C16.0159 3.95653 15.9071 3.76612 15.7374 3.64215C15.5428 3.5 15.2041 3.5 14.5267 3.5H3.71404C2.81451 3.5 2.36474 3.5 2.15744 3.67754C1.97758 3.83158 1.88253 4.06254 1.90186 4.29856C1.92415 4.57059 2.24363 4.88716 2.88259 5.52032L6.11593 8.7243C6.26394 8.87097 6.33795 8.94431 6.39784 9.02755C6.451 9.10144 6.4958 9.18101 6.53142 9.26479C6.57153 9.35916 6.59586 9.46047 6.64451 9.66309L7.79128 14.439Z" stroke-linejoin="round" stroke-width="1.25"></path></svg>';
+    html += '</button>';
+    html += '</div>';
+    html += '</div>';
+
+    postDiv.innerHTML = html;
+    wrapper.appendChild(postDiv);
+
+    // add like button click - direct toggle since post may not be in feedPosts
+    let likeBtn = postDiv.querySelector('.like-btn');
+    if (likeBtn != null) {
+        likeBtn.onclick = function() {
+            // try feedPosts first
+            let found = false;
+            for (let i = 0; i < feedPosts.length; i++) {
+                if (feedPosts[i].id == origPostId) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                toggleLike(origPostId);
+            } else {
+                // toggle directly on button
+                if (likeBtn.classList.contains('liked')) {
+                    likeBtn.classList.remove('liked');
+                    origPost.liked = false;
+                    origPost.likes = origPost.likes - 1;
+                } else {
+                    likeBtn.classList.add('liked');
+                    origPost.liked = true;
+                    origPost.likes = origPost.likes + 1;
+                }
+                // update count
+                let span = likeBtn.querySelector('span');
+                if (origPost.likes > 0) {
+                    if (span == null) {
+                        span = document.createElement('span');
+                        likeBtn.appendChild(span);
+                    }
+                    span.textContent = origPost.likes;
+                } else {
+                    if (span != null) span.remove();
+                }
+            }
+        };
+    }
+
+    // add comment button click - opens reply modal for the original post
+    let commentBtn = postDiv.querySelector('.comment-btn');
+    if (commentBtn != null) {
+        commentBtn.onclick = function() {
+            openReplyModal(origPost);
+        };
+    }
+
+    // add share button click
+    let shareBtn = postDiv.querySelector('.share-btn');
+    if (shareBtn != null) {
+        shareBtn.onclick = function() {
+            openShareModal(origPost);
+        };
+    }
+
+    // add repost button click (toggle dropdown)
+    let repostBtn = postDiv.querySelector('.repost-btn');
+    let repostDropdown = postDiv.querySelector('.repost-dropdown');
+    if (repostBtn != null && repostDropdown != null) {
+        repostBtn.onclick = function(e) {
+            e.stopPropagation();
+            let isOpen = repostDropdown.classList.contains('active');
+            let allRepost = document.querySelectorAll('.repost-dropdown.active');
+            for (let i = 0; i < allRepost.length; i++) {
+                allRepost[i].classList.remove('active');
+            }
+            if (isOpen == false) {
+                let repostItem = repostDropdown.querySelector('[data-action="repost"]');
+                if (repostItem != null) {
+                    if (origPost.reposted) {
+                        repostItem.classList.add('remove');
+                        repostItem.querySelector('span').textContent = 'Remove';
+                    } else {
+                        repostItem.classList.remove('remove');
+                        repostItem.querySelector('span').textContent = 'Repost';
+                    }
+                }
+                repostDropdown.classList.add('active');
+            }
+        };
+
+        let repostAction = repostDropdown.querySelector('[data-action="repost"]');
+        if (repostAction != null) {
+            repostAction.onclick = function(e) {
+                e.stopPropagation();
+                toggleRepost(origPostId);
+                repostDropdown.classList.remove('active');
+            };
+        }
+
+        let quoteAction = repostDropdown.querySelector('[data-action="quote"]');
+        if (quoteAction != null) {
+            quoteAction.onclick = function(e) {
+                e.stopPropagation();
+                repostDropdown.classList.remove('active');
+                openShareModal(origPost);
+            };
+        }
+    }
+
+    // add footer label
     let footer = document.createElement('div');
     footer.className = 'repost-footer';
-    let safeUsername = sanitize(repostEntry.repostedBy);
-    let timeAgo = getRelativeTime(repostEntry.repostedAt);
-    footer.innerHTML = '<svg aria-label="Repost" role="img" viewBox="0 0 18 18" width="16" height="16" fill="currentColor"><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg>' +
-        '<span>' + safeUsername + ' reposted ' + timeAgo + '</span>';
+    let footerIcon = '';
+    let footerLabel = '';
+    if (entry.type == 'reply') {
+        footerIcon = '<svg viewBox="0 0 18 18" width="16" height="16" fill="currentColor"><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg>';
+        footerLabel = userName + ' replied ' + timeAgo;
+    } else {
+        footerIcon = '<svg viewBox="0 0 18 18" width="16" height="16" fill="currentColor"><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg>';
+        footerLabel = userName + ' reposted ' + timeAgo;
+    }
+    footer.innerHTML = footerIcon + '<span>' + footerLabel + '</span>';
     wrapper.appendChild(footer);
 
     return wrapper;
@@ -1050,6 +1308,36 @@ function submitReply() {
             span.textContent = post.replies;
         }
     }
+
+    // save reply to localStorage for following feed
+    let savedReplies = loadFromStorage('threads_user_replies');
+    if (savedReplies == null) savedReplies = [];
+    let replyEntry = {
+        id: 'reply_' + replyTargetPost.id + '_' + Date.now(),
+        type: 'reply',
+        repliedBy: currentUser != null ? currentUser.username : 'you',
+        repliedAt: Date.now(),
+        userText: text,
+        originalPost: {
+            id: replyTargetPost.id,
+            username: replyTargetPost.username,
+            name: replyTargetPost.name || replyTargetPost.username,
+            avatar: replyTargetPost.avatar,
+            verified: replyTargetPost.verified || false,
+            text: replyTargetPost.text || '',
+            image: replyTargetPost.image || null,
+            images: replyTargetPost.images || null,
+            quote: replyTargetPost.quote || null,
+            time: replyTargetPost.time,
+            likes: replyTargetPost.likes,
+            replies: replyTargetPost.replies,
+            reposts: replyTargetPost.reposts,
+            shares: replyTargetPost.shares,
+            hasTranslate: replyTargetPost.hasTranslate || false
+        }
+    };
+    savedReplies.unshift(replyEntry);
+    saveToStorage('threads_user_replies', savedReplies);
 
     closeReplyModal();
     showPostToast('posting');
@@ -1585,12 +1873,30 @@ function init() {
                 feedPosts = getFollowingPosts();
                 renderFeed();
 
-                // add reposted posts at top of feed
+                // add reposted and replied posts at top of feed
                 let savedReposts = loadFromStorage('threads_user_reposts');
-                if (savedReposts != null && savedReposts.length > 0 && feed != null) {
-                    for (let r = savedReposts.length - 1; r >= 0; r--) {
-                        let repostEl = createRepostElement(savedReposts[r]);
-                        feed.insertBefore(repostEl, feed.firstChild);
+                if (savedReposts == null) savedReposts = [];
+                let savedReplies = loadFromStorage('threads_user_replies');
+                if (savedReplies == null) savedReplies = [];
+
+                // merge and sort by time (newest first)
+                let allActivity = [];
+                for (let r = 0; r < savedReposts.length; r++) {
+                    savedReposts[r].type = 'repost';
+                    savedReposts[r].sortTime = savedReposts[r].repostedAt;
+                    allActivity.push(savedReposts[r]);
+                }
+                for (let r = 0; r < savedReplies.length; r++) {
+                    savedReplies[r].type = 'reply';
+                    savedReplies[r].sortTime = savedReplies[r].repliedAt;
+                    allActivity.push(savedReplies[r]);
+                }
+                allActivity.sort(function(a, b) { return b.sortTime - a.sortTime; });
+
+                if (allActivity.length > 0 && feed != null) {
+                    for (let r = allActivity.length - 1; r >= 0; r--) {
+                        let actEl = createActivityElement(allActivity[r]);
+                        feed.insertBefore(actEl, feed.firstChild);
                     }
                 }
 
