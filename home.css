@@ -1982,30 +1982,40 @@ body {
 }
 
 .create-post-image-preview {
-    position: relative;
+    display: flex;
+    gap: 8px;
     margin-top: 12px;
+    overflow-x: auto;
+    padding-bottom: 4px;
 }
 
-.create-post-image-preview img {
-    width: 100%;
+.create-post-image-item {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.create-post-image-item img {
+    max-height: 200px;
     border-radius: 12px;
+    display: block;
 }
 
-.remove-image-btn {
+.create-post-image-preview .remove-image-btn {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 28px;
-    height: 28px;
+    top: 6px;
+    right: 6px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     background-color: rgba(0, 0, 0, 0.7);
     color: #fff;
     border: none;
-    font-size: 18px;
+    font-size: 14px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
 }
 
 .create-post-actions {
@@ -3838,6 +3848,159 @@ body {
 .drafts-empty-text {
     font-size: 14px;
     color: #999999;
+}
+
+/* Draft Saved Toast */
+.draft-saved-toast {
+    position: fixed;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.draft-saved-toast.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.draft-saved-toast-content {
+    background-color: #000;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="dark"] .draft-saved-toast-content {
+    background-color: #363636;
+}
+
+/* Save to Drafts Confirmation Dialog */
+.drafts-confirm-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 10001;
+    align-items: center;
+    justify-content: center;
+}
+
+.drafts-confirm-overlay.active {
+    display: flex;
+}
+
+.drafts-confirm-dialog {
+    background: #fff;
+    border-radius: 20px;
+    width: 300px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.drafts-confirm-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0;
+    padding: 24px 24px 8px;
+}
+
+.drafts-confirm-text {
+    font-size: 14px;
+    color: #999;
+    margin: 0;
+    padding: 0 24px 20px;
+    line-height: 1.4;
+}
+
+.drafts-confirm-btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    border: none;
+    background: none;
+    font-size: 15px;
+    cursor: pointer;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.drafts-confirm-save {
+    font-weight: 700;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+}
+
+.drafts-confirm-save .drafts-spinner {
+    width: 20px;
+    height: 20px;
+    animation: drafts-spin 0.8s linear infinite;
+}
+
+@keyframes drafts-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.drafts-confirm-dont-save {
+    color: #ff3040;
+    font-weight: 400;
+}
+
+.drafts-confirm-cancel {
+    color: #000;
+    font-weight: 400;
+}
+
+[data-theme="dark"] .drafts-confirm-dialog {
+    background: #262626;
+}
+
+[data-theme="dark"] .drafts-confirm-title {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .drafts-confirm-text {
+    color: #777;
+}
+
+[data-theme="dark"] .drafts-confirm-btn {
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .drafts-confirm-save {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .drafts-confirm-cancel {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .drafts-confirm-dont-save {
+    color: #ff4a4a;
+}
+
+[data-theme="dark"] .drafts-confirm-overlay {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .create-post-image-preview .remove-image-btn {
+    background-color: rgba(255, 255, 255, 0.25);
+    color: #fff;
 }
 
 [data-theme="dark"] .more-menu-dropdown {

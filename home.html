@@ -227,6 +227,11 @@
             </div>
         </div>
 
+        <!-- Draft Saved Toast -->
+        <div class="draft-saved-toast" id="draftSavedToast">
+            <div class="draft-saved-toast-content">Draft saved</div>
+        </div>
+
         <!-- Thread View Overlay -->
         <div class="thread-overlay" id="threadOverlay">
             <div class="thread-view">
@@ -365,8 +370,6 @@
                             </div>
                             <textarea class="create-post-textarea" id="createPostText" placeholder="What's new?" maxlength="2200"></textarea>
                             <div class="create-post-image-preview" id="createPostImagePreview" style="display: none;">
-                                <img src="" alt="preview" id="createPostPreviewImg">
-                                <button class="remove-image-btn" id="removeImageBtn">&times;</button>
                             </div>
                             <div class="create-post-actions">
                                 <label class="action-icon-btn" title="Add image">
@@ -375,7 +378,7 @@
                                         <circle cx="8.5" cy="8.5" r="1.5"/>
                                         <polyline points="21 15 16 10 5 21"/>
                                     </svg>
-                                    <input type="file" accept="image/*" id="createPostImage" style="display: none;">
+                                    <input type="file" accept="image/*" id="createPostImage" style="display: none;" multiple>
                                 </label>
                                 <button class="action-icon-btn" title="Add GIF">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -516,6 +519,17 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Save to Drafts Confirmation Dialog -->
+    <div class="drafts-confirm-overlay" id="draftsConfirmOverlay">
+        <div class="drafts-confirm-dialog">
+            <h3 class="drafts-confirm-title">Save to drafts?</h3>
+            <p class="drafts-confirm-text">Save to drafts to edit<br>and post at a later time.</p>
+            <button class="drafts-confirm-btn drafts-confirm-save" id="draftsConfirmSave">Save</button>
+            <button class="drafts-confirm-btn drafts-confirm-dont-save" id="draftsConfirmDontSave">Don't save</button>
+            <button class="drafts-confirm-btn drafts-confirm-cancel" id="draftsConfirmCancel">Cancel</button>
         </div>
     </div>
 

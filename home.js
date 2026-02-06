@@ -212,6 +212,15 @@ function getFollowingPosts() {
             quote: null, time: "4h", likes: 345, replies: 45, reposts: 23, shares: 67, liked: false
         }
     ];
+
+    // add user posts from localStorage at the top
+    let userPosts = loadFromStorage('threads_user_posts');
+    if (userPosts != null) {
+        for (let i = userPosts.length - 1; i >= 0; i--) {
+            posts.unshift(userPosts[i]);
+        }
+    }
+
     return posts;
 }
 
@@ -940,11 +949,14 @@ function toggleLike(postId) {
 let pendingNewPost = null;
 
 // create post
-function createPost(text, image) {
+function createPost(text, images) {
     if (currentUser == null) {
         return;
     }
-    if (text.trim() == '') {
+    // allow post if there is text or images
+    let hasText = text != null && text.trim() != '';
+    let hasImages = images != null && images.length > 0;
+    if (!hasText && !hasImages) {
         return;
     }
     // check rate limit
@@ -954,40 +966,36 @@ function createPost(text, image) {
         return;
     }
     // trim text if too long
-    text = text.substring(0, 2200);
-    console.log("creating post");
-    showPostToast('posting');
+    if (text != null) {
+        text = text.substring(0, 2200);
+    }
 
-    setTimeout(function() {
-        let newPost = {
-            id: nextId++,
-            username: currentUser.username,
-            name: currentUser.name,
-            avatar: currentUser.avatar,
-            verified: false,
-            text: text.trim(),
-            image: image,
-            time: "now",
-            likes: 0,
-            replies: 0,
-            reposts: 0,
-            shares: 0,
-            liked: false
-        };
+    let newPost = {
+        id: nextId++,
+        username: currentUser.username,
+        name: currentUser.name,
+        avatar: currentUser.avatar,
+        verified: false,
+        text: (text || '').trim(),
+        images: images || [],
+        time: "now",
+        likes: 0,
+        replies: 0,
+        reposts: 0,
+        shares: 0,
+        liked: false
+    };
 
-        // save to user posts
-        let userPosts = loadFromStorage('threads_user_posts');
-        if (userPosts == null) {
-            userPosts = [];
-        }
-        userPosts.unshift(newPost);
-        saveToStorage('threads_user_posts', userPosts);
+    // save to user posts
+    let userPosts = loadFromStorage('threads_user_posts');
+    if (userPosts == null) {
+        userPosts = [];
+    }
+    userPosts.unshift(newPost);
+    saveToStorage('threads_user_posts', userPosts);
 
-        // store pending post - dont show until view is clicked
-        pendingNewPost = newPost;
-
-        showPostToast('posted');
-    }, 1500);
+    // store pending post
+    pendingNewPost = newPost;
 }
 
 // show pending post
@@ -1156,6 +1164,77 @@ function openShareModal(post) {
     }
 
     openModal();
+}
+
+// check if create post modal has unsaved content
+function modalHasContent() {
+    let textarea = document.getElementById('createPostText');
+    let preview = document.getElementById('createPostImagePreview');
+    let hasText = textarea != null && textarea.value.trim() != '';
+    let hasImages = preview != null && preview.querySelectorAll('.create-post-image-item').length > 0;
+    return hasText || hasImages;
+}
+
+// show save to drafts confirmation dialog
+function showDraftsConfirm() {
+    let overlay = document.getElementById('draftsConfirmOverlay');
+    if (overlay != null) {
+        overlay.classList.add('active');
+    }
+}
+
+// hide save to drafts confirmation dialog
+function hideDraftsConfirm() {
+    let overlay = document.getElementById('draftsConfirmOverlay');
+    if (overlay != null) {
+        overlay.classList.remove('active');
+    }
+}
+
+// save current post as draft to localStorage
+function saveDraft() {
+    let textarea = document.getElementById('createPostText');
+    let preview = document.getElementById('createPostImagePreview');
+    let text = textarea != null ? textarea.value.trim() : '';
+    let images = [];
+    if (preview != null) {
+        let imgElements = preview.querySelectorAll('.create-post-image-item img');
+        for (let i = 0; i < imgElements.length; i++) {
+            if (imgElements[i].src && imgElements[i].src != '') {
+                images.push(imgElements[i].src);
+            }
+        }
+    }
+    if (text == '' && images.length == 0) return;
+
+    let drafts = [];
+    try {
+        let stored = localStorage.getItem('threads_drafts');
+        if (stored != null) {
+            drafts = JSON.parse(stored);
+        }
+    } catch(e) {}
+
+    drafts.unshift({
+        text: text,
+        images: images,
+        savedAt: Date.now()
+    });
+
+    localStorage.setItem('threads_drafts', JSON.stringify(drafts));
+}
+
+// clear the create post form
+function clearCreatePostForm() {
+    let textarea = document.getElementById('createPostText');
+    let imagePreview = document.getElementById('createPostImagePreview');
+    let fileInput = document.getElementById('createPostImage');
+    if (textarea != null) textarea.value = '';
+    if (imagePreview != null) {
+        imagePreview.innerHTML = '';
+        imagePreview.style.display = 'none';
+    }
+    if (fileInput != null) fileInput.value = '';
 }
 
 // close modal
@@ -1556,13 +1635,16 @@ function init() {
         };
     }
 
-    // modal close
+    // modal close (Cancel button)
     let createPostClose = document.getElementById('createPostClose');
     if (createPostClose != null) {
         createPostClose.onclick = function() {
-            closeModal();
-            document.getElementById('createPostText').value = '';
-            document.getElementById('createPostImagePreview').style.display = 'none';
+            if (modalHasContent()) {
+                showDraftsConfirm();
+            } else {
+                clearCreatePostForm();
+                closeModal();
+            }
         };
     }
 
@@ -1571,8 +1653,59 @@ function init() {
     if (modalOverlay != null) {
         modalOverlay.onclick = function(e) {
             if (e.target == modalOverlay) {
-                closeModal();
+                if (modalHasContent()) {
+                    showDraftsConfirm();
+                } else {
+                    closeModal();
+                }
             }
+        };
+    }
+
+    // drafts confirm dialog buttons
+    let draftsConfirmSave = document.getElementById('draftsConfirmSave');
+    let draftsConfirmDontSave = document.getElementById('draftsConfirmDontSave');
+    let draftsConfirmCancel = document.getElementById('draftsConfirmCancel');
+
+    if (draftsConfirmSave != null) {
+        draftsConfirmSave.onclick = function() {
+            // show loading spinner
+            draftsConfirmSave.innerHTML = '<svg class="drafts-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>';
+            draftsConfirmSave.disabled = true;
+            draftsConfirmSave.style.pointerEvents = 'none';
+            // save after brief delay to show animation
+            setTimeout(function() {
+                saveDraft();
+                hideDraftsConfirm();
+                clearCreatePostForm();
+                closeModal();
+                // reset button
+                draftsConfirmSave.innerHTML = 'Save';
+                draftsConfirmSave.disabled = false;
+                draftsConfirmSave.style.pointerEvents = '';
+                // show "Draft saved" toast
+                let draftToast = document.getElementById('draftSavedToast');
+                if (draftToast != null) {
+                    draftToast.classList.add('active');
+                    setTimeout(function() {
+                        draftToast.classList.remove('active');
+                    }, 2500);
+                }
+            }, 800);
+        };
+    }
+
+    if (draftsConfirmDontSave != null) {
+        draftsConfirmDontSave.onclick = function() {
+            hideDraftsConfirm();
+            clearCreatePostForm();
+            closeModal();
+        };
+    }
+
+    if (draftsConfirmCancel != null) {
+        draftsConfirmCancel.onclick = function() {
+            hideDraftsConfirm();
         };
     }
 
@@ -1581,19 +1714,29 @@ function init() {
     if (createPostSubmit != null) {
         createPostSubmit.onclick = function() {
             let textarea = document.getElementById('createPostText');
-            let previewImg = document.getElementById('createPostPreviewImg');
+            let preview = document.getElementById('createPostImagePreview');
             let text = textarea.value.trim();
-            let image = null;
-            if (previewImg != null && previewImg.src) {
-                image = previewImg.src;
+
+            // collect all preview images
+            let images = [];
+            if (preview != null) {
+                let imgElements = preview.querySelectorAll('.create-post-image-item img');
+                for (let i = 0; i < imgElements.length; i++) {
+                    if (imgElements[i].src && imgElements[i].src != '') {
+                        images.push(imgElements[i].src);
+                    }
+                }
             }
-            // if sharing a post, allow empty text (just the quote)
+
+            let hasText = text != '';
+            let hasImages = images.length > 0;
+
+            // if sharing a post, allow empty text
             if (shareTargetPost != null) {
                 // increment share count
                 for (let i = 0; i < feedPosts.length; i++) {
                     if (feedPosts[i].id == shareTargetPost.id) {
                         feedPosts[i].shares = feedPosts[i].shares + 1;
-                        // update share count in UI
                         let shareBtn = document.querySelector('.share-btn[data-id="' + shareTargetPost.id + '"]');
                         if (shareBtn != null) {
                             let span = shareBtn.querySelector('span');
@@ -1606,46 +1749,74 @@ function init() {
                         break;
                     }
                 }
-                createPost(text || ' ', image);
                 closeModal();
-                textarea.value = '';
-                document.getElementById('createPostImagePreview').style.display = 'none';
-                if (previewImg != null) previewImg.src = '';
-            } else if (text != '') {
-                createPost(text, image);
+                clearCreatePostForm();
+                showPostToast('posting');
+                setTimeout(function() {
+                    createPost(text || ' ', images);
+                    showPostToast('posted');
+                }, 1200);
+            } else if (hasText || hasImages) {
                 closeModal();
-                textarea.value = '';
-                document.getElementById('createPostImagePreview').style.display = 'none';
-                if (previewImg != null) {
-                    previewImg.src = '';
-                }
+                clearCreatePostForm();
+                showPostToast('posting');
+                setTimeout(function() {
+                    createPost(text, images);
+                    showPostToast('posted');
+                }, 1200);
             }
         };
     }
 
-    // image upload
+    // image upload (multiple)
     let createPostImage = document.getElementById('createPostImage');
     if (createPostImage != null) {
         createPostImage.onchange = function(e) {
-            let file = e.target.files[0];
-            if (file != null) {
-                let reader = new FileReader();
-                reader.onload = function(ev) {
-                    document.getElementById('createPostPreviewImg').src = ev.target.result;
-                    document.getElementById('createPostImagePreview').style.display = 'block';
-                };
-                reader.readAsDataURL(file);
+            let files = e.target.files;
+            if (files == null || files.length == 0) return;
+            let preview = document.getElementById('createPostImagePreview');
+            if (preview == null) return;
+            preview.style.display = 'flex';
+            for (let f = 0; f < files.length; f++) {
+                (function(file) {
+                    let reader = new FileReader();
+                    reader.onload = function(ev) {
+                        let item = document.createElement('div');
+                        item.className = 'create-post-image-item';
+                        let img = document.createElement('img');
+                        img.src = ev.target.result;
+                        img.alt = 'preview';
+                        item.appendChild(img);
+                        let removeBtn = document.createElement('button');
+                        removeBtn.className = 'remove-image-btn';
+                        removeBtn.innerHTML = '&times;';
+                        removeBtn.onclick = function() {
+                            item.remove();
+                            // hide preview container if no images left
+                            if (preview.children.length == 0) {
+                                preview.style.display = 'none';
+                                // disable Post button if no text either
+                                let textarea = document.getElementById('createPostText');
+                                let postBtn = document.getElementById('createPostSubmit');
+                                if (postBtn != null && textarea != null && textarea.value.trim() == '') {
+                                    postBtn.disabled = true;
+                                }
+                            }
+                        };
+                        item.appendChild(removeBtn);
+                        preview.appendChild(item);
+                    };
+                    reader.readAsDataURL(file);
+                })(files[f]);
             }
-        };
-    }
-
-    // remove image
-    let removeImageBtn = document.getElementById('removeImageBtn');
-    if (removeImageBtn != null) {
-        removeImageBtn.onclick = function() {
-            document.getElementById('createPostImagePreview').style.display = 'none';
-            document.getElementById('createPostPreviewImg').src = '';
-            document.getElementById('createPostImage').value = '';
+            // enable Post button
+            let postBtn = document.getElementById('createPostSubmit');
+            if (postBtn != null) {
+                postBtn.disabled = false;
+                postBtn.removeAttribute('disabled');
+            }
+            // reset file input so same files can be added again
+            createPostImage.value = '';
         };
     }
 
@@ -1743,7 +1914,11 @@ function init() {
                     safeText = safeText.replace(/\n/g, '<br>');
 
                     let imageHtml = '';
-                    if (post.image != null) {
+                    if (post.images != null && post.images.length > 0) {
+                        for (let im = 0; im < post.images.length; im++) {
+                            imageHtml = imageHtml + '<img src="' + post.images[im] + '" alt="Post image" class="thread-post-image">';
+                        }
+                    } else if (post.image != null) {
                         if (post.image.indexOf('data:image') == 0 || post.image.match(/\.(jpg|jpeg|png|gif|webp)($|\?)/i)) {
                             imageHtml = '<img src="' + post.image + '" alt="Post image" class="thread-post-image">';
                         }
