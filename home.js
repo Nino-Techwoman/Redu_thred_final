@@ -25,13 +25,9 @@ let postRateLimiter = createRateLimiter(10, 60000); // 10 posts per minute
 
 // load from storage
 function loadFromStorage(key) {
-    try {
-        let data = localStorage.getItem(key);
-        if (data != null) {
-            return JSON.parse(data);
-        }
-    } catch(e) {
-        console.error('loadFromStorage error:', e);
+    let data = localStorage.getItem(key);
+    if (data != null) {
+        return JSON.parse(data);
     }
     return null;
 }
@@ -66,34 +62,7 @@ function compressImage(dataUrl, callback) {
 
 // save to storage
 function saveToStorage(key, data) {
-    console.log("saving: " + key);
-    try {
-        localStorage.setItem(key, JSON.stringify(data));
-    } catch(e) {
-        // storage full - try to free space by trimming old posts with large images
-        console.error('Storage full, attempting cleanup...', e);
-        if (key == 'threads_user_posts' && Array.isArray(data) && data.length > 1) {
-            // remove images from older posts to free space
-            for (let i = data.length - 1; i >= 1; i--) {
-                if (data[i].images && data[i].images.length > 0) {
-                    data[i].images = [];
-                }
-                if (data[i].image) {
-                    delete data[i].image;
-                }
-            }
-            try {
-                localStorage.setItem(key, JSON.stringify(data));
-                return;
-            } catch(e2) {}
-        }
-        // last resort - just try to save
-        try {
-            localStorage.setItem(key, JSON.stringify(data));
-        } catch(e3) {
-            console.error('Could not save even after cleanup');
-        }
-    }
+    localStorage.setItem(key, JSON.stringify(data));
 }
 
 // get random avatar
@@ -1645,36 +1614,31 @@ function initSuggestedCards() {
     }
 }
 
-// init function
-// clean up oversized images in stored posts on load
+// clean up big images from old posts so storage doesnt get full
 function cleanupOldPosts() {
-    try {
-        let raw = localStorage.getItem('threads_user_posts');
-        if (raw == null) return;
-        let posts = JSON.parse(raw);
-        if (!Array.isArray(posts)) return;
-        let changed = false;
-        for (let i = 0; i < posts.length; i++) {
-            if (posts[i].images && posts[i].images.length > 0) {
-                for (let j = 0; j < posts[i].images.length; j++) {
-                    if (posts[i].images[j] && posts[i].images[j].length > 200000) {
-                        posts[i].images[j] = '';
-                        changed = true;
-                    }
+    let raw = localStorage.getItem('threads_user_posts');
+    if (raw == null) return;
+    let posts = JSON.parse(raw);
+    let changed = false;
+    for (let i = 0; i < posts.length; i++) {
+        if (posts[i].images && posts[i].images.length > 0) {
+            let cleaned = [];
+            for (let j = 0; j < posts[i].images.length; j++) {
+                if (posts[i].images[j] && posts[i].images[j].length > 200000) {
+                    changed = true;
+                } else if (posts[i].images[j] && posts[i].images[j] != '') {
+                    cleaned.push(posts[i].images[j]);
                 }
-                posts[i].images = posts[i].images.filter(function(img) { return img != ''; });
             }
-            if (posts[i].image && posts[i].image.length > 200000) {
-                delete posts[i].image;
-                changed = true;
-            }
+            posts[i].images = cleaned;
         }
-        if (changed) {
-            localStorage.setItem('threads_user_posts', JSON.stringify(posts));
+        if (posts[i].image && posts[i].image.length > 200000) {
+            posts[i].image = '';
+            changed = true;
         }
-    } catch(e) {
-        console.error('cleanup error:', e);
-        try { localStorage.removeItem('threads_user_posts'); } catch(e2) {}
+    }
+    if (changed) {
+        localStorage.setItem('threads_user_posts', JSON.stringify(posts));
     }
 }
 
@@ -1707,7 +1671,7 @@ function init() {
         feedPosts.push(samplePosts[i]);
     }
 
-    try { renderFeed(); } catch(e) { console.error("renderFeed error:", e); }
+    try { renderFeed(); } catch(e) { console.log("renderFeed error:", e); }
 
     // close dropdowns when clicking outside
     document.addEventListener('click', function(e) {
@@ -1836,7 +1800,7 @@ function init() {
             try {
                 let textarea = document.getElementById('createPostText');
                 let preview = document.getElementById('createPostImagePreview');
-                if (textarea == null) { console.error("textarea not found"); return; }
+                if (textarea == null) { console.log("textarea not found"); return; }
                 let text = textarea.value.trim();
 
                 // collect all preview images
@@ -1876,7 +1840,7 @@ function init() {
                     clearCreatePostForm();
                     showPostToast('posting');
                     setTimeout(function() {
-                        try { createPost(text || ' ', images); } catch(e) { console.error(e); }
+                        try { createPost(text || ' ', images); } catch(e) { console.log(e); }
                         showPostToast('posted');
                     }, 1200);
                 } else if (hasText || hasImages) {
@@ -1884,19 +1848,19 @@ function init() {
                     clearCreatePostForm();
                     showPostToast('posting');
                     setTimeout(function() {
-                        try { createPost(text, images); } catch(e) { console.error(e); }
+                        try { createPost(text, images); } catch(e) { console.log(e); }
                         showPostToast('posted');
                     }, 1200);
                 } else {
                     console.log("No text or images to post");
                 }
             } catch(err) {
-                console.error("Post submit error:", err);
+                console.log("Post submit error:", err);
             }
         });
         console.log("Post submit handler attached");
     } else {
-        console.error("createPostSubmit button not found");
+        console.log("createPostSubmit button not found");
     }
 
     // image upload (multiple)
@@ -2166,7 +2130,7 @@ function init() {
             }
         });
     } else {
-        console.error("createPostText or postBtn not found:", createPostText, postBtn);
+        console.log("createPostText or postBtn not found:", createPostText, postBtn);
     }
 
     // feed tabs

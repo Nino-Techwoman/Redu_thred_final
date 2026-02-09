@@ -810,7 +810,7 @@ function init() {
                     posts.unshift(newPost);
                     localStorage.setItem('threads_user_posts', JSON.stringify(posts));
                 } catch(e) {
-                    console.error('Post save error:', e);
+                    console.log('Post save error:', e);
                 }
                 showPostToast('posted');
             }, 1200);

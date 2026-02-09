@@ -1088,32 +1088,28 @@ function setupEventListeners() {
                 date: new Date().toISOString()
             };
 
-            // Convert attachments to base64
-            let promises = [];
-            for (let i = 0; i < attachments.length; i++) {
-                promises.push(fileToBase64(attachments[i]));
-            }
-
-            if (promises.length > 0) {
-                Promise.all(promises).then(function(base64Images) {
-                    report.attachments = base64Images;
-                    reports.push(report);
-                    localStorage.setItem("threads_reports", JSON.stringify(reports));
-                });
+            // read attachments and save report
+            if (attachments.length > 0) {
+                let base64Images = [];
+                let loaded = 0;
+                for (let i = 0; i < attachments.length; i++) {
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        base64Images.push(e.target.result);
+                        loaded++;
+                        // when all files are loaded, save the report
+                        if (loaded == attachments.length) {
+                            report.attachments = base64Images;
+                            reports.push(report);
+                            localStorage.setItem("threads_reports", JSON.stringify(reports));
+                        }
+                    };
+                    reader.readAsDataURL(attachments[i]);
+                }
             } else {
                 reports.push(report);
                 localStorage.setItem("threads_reports", JSON.stringify(reports));
             }
-        }
-
-        function fileToBase64(file) {
-            return new Promise(function(resolve) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    resolve(e.target.result);
-                };
-                reader.readAsDataURL(file);
-            });
         }
         if (reportTextarea != null && reportSubmitBtn != null) {
             reportTextarea.oninput = function() {

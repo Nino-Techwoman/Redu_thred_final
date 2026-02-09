@@ -2852,35 +2852,31 @@
         }
 
         // load user data
-        // clean up oversized images in stored posts on load
+        // clean up big images from old posts so storage doesnt get full
         function cleanupOldPosts() {
-            try {
-                let raw = localStorage.getItem('threads_user_posts');
-                if (raw == null) return;
-                let posts = JSON.parse(raw);
-                if (!Array.isArray(posts)) return;
-                let changed = false;
-                for (let i = 0; i < posts.length; i++) {
-                    if (posts[i].images && posts[i].images.length > 0) {
-                        for (let j = 0; j < posts[i].images.length; j++) {
-                            if (posts[i].images[j] && posts[i].images[j].length > 200000) {
-                                posts[i].images[j] = '';
-                                changed = true;
-                            }
+            let raw = localStorage.getItem('threads_user_posts');
+            if (raw == null) return;
+            let posts = JSON.parse(raw);
+            let changed = false;
+            for (let i = 0; i < posts.length; i++) {
+                if (posts[i].images && posts[i].images.length > 0) {
+                    let cleaned = [];
+                    for (let j = 0; j < posts[i].images.length; j++) {
+                        if (posts[i].images[j] && posts[i].images[j].length > 200000) {
+                            changed = true;
+                        } else if (posts[i].images[j] && posts[i].images[j] != '') {
+                            cleaned.push(posts[i].images[j]);
                         }
-                        posts[i].images = posts[i].images.filter(function(img) { return img != ''; });
                     }
-                    if (posts[i].image && posts[i].image.length > 200000) {
-                        delete posts[i].image;
-                        changed = true;
-                    }
+                    posts[i].images = cleaned;
                 }
-                if (changed) {
-                    localStorage.setItem('threads_user_posts', JSON.stringify(posts));
+                if (posts[i].image && posts[i].image.length > 200000) {
+                    posts[i].image = '';
+                    changed = true;
                 }
-            } catch(e) {
-                console.error('cleanup error:', e);
-                try { localStorage.removeItem('threads_user_posts'); } catch(e2) {}
+            }
+            if (changed) {
+                localStorage.setItem('threads_user_posts', JSON.stringify(posts));
             }
         }
 
@@ -3205,7 +3201,7 @@
                     posts.unshift(newPost);
                     localStorage.setItem('threads_user_posts', JSON.stringify(posts));
                 } catch(e) {
-                    console.error('Post save error:', e);
+                    console.log('Post save error:', e);
                 }
 
                 showPostToast('posted');
