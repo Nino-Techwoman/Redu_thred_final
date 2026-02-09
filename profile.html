@@ -1658,11 +1658,7 @@
         <div class="modal">
             <div class="modal-content create-post-modal" id="createPostForm">
                 <div class="create-post-header">
-                    <button class="create-post-close" id="createPostClose">
-                        <svg aria-label="Close" role="img" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                            <path d="M19.707 5.707a1 1 0 0 0-1.414-1.414L12 10.586 5.707 4.293a1 1 0 0 0-1.414 1.414L10.586 12l-6.293 6.293a1 1 0 1 0 1.414 1.414L12 13.414l6.293 6.293a1 1 0 0 0 1.414-1.414L13.414 12l6.293-6.293Z"/>
-                        </svg>
-                    </button>
+                    <button class="create-post-close" id="createPostClose">Cancel</button>
                     <h2>New thread</h2>
                     <div class="create-post-header-icons">
                         <button class="header-icon-btn" id="draftsBtn" title="Drafts">
@@ -1705,8 +1701,16 @@
                     <div class="create-post-content">
                         <div class="create-post-user-row">
                             <span class="create-post-username" id="createPostUsername"></span>
+                            <button class="add-topic-btn">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="9 18 15 12 9 6"/>
+                                </svg>
+                                Add a topic
+                            </button>
                         </div>
-                        <textarea class="create-post-textarea" id="createPostText" placeholder="What's new?"></textarea>
+                        <textarea class="create-post-textarea" id="createPostText" placeholder="What's new?" maxlength="2200"></textarea>
+                        <div class="create-post-image-preview" id="createPostImagePreview" style="display: none;">
+                        </div>
                         <div class="create-post-actions">
                             <label class="action-icon-btn" title="Add image">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1714,12 +1718,20 @@
                                     <circle cx="8.5" cy="8.5" r="1.5"/>
                                     <polyline points="21 15 16 10 5 21"/>
                                 </svg>
-                                <input type="file" accept="image/*" id="createPostImage" style="display: none;">
+                                <input type="file" accept="image/*" id="createPostImage" style="display: none;" multiple>
                             </label>
                             <button class="action-icon-btn" title="Add GIF">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="2" y="4" width="20" height="16" rx="2"/>
                                     <text x="6" y="15" font-size="8" fill="currentColor" stroke="none" font-weight="bold">GIF</text>
+                                </svg>
+                            </button>
+                            <button class="action-icon-btn" title="Emoji">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                                    <line x1="9" y1="9" x2="9.01" y2="9"/>
+                                    <line x1="15" y1="9" x2="15.01" y2="9"/>
                                 </svg>
                             </button>
                             <button class="action-icon-btn" title="Add hashtag">
@@ -1747,13 +1759,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="create-post-add-thread">
-                    <img src="" alt="avatar" class="create-post-avatar-small" id="createPostAvatarSmall">
+                <div class="add-to-thread">
+                    <img src="" alt="avatar" class="add-thread-avatar" id="createPostAvatarSmall">
                     <span class="add-thread-text">Add to thread</span>
                 </div>
                 <div class="create-post-footer">
-                    <span class="reply-options-text">Anyone can reply</span>
-                    <button class="post-btn" id="postBtn" disabled>Post</button>
+                    <div class="reply-options-container">
+                        <button class="reply-options-btn" id="replyOptionsBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M22.4551 20.7695C22.0058 21.6518 21.3052 22.3789 20.4443 22.8613L20.2695 22.9551C19.6773 23.2567 19.0373 23.3828 18.3086 23.4424C17.5914 23.501 16.7032 23.5 15.5996 23.5H8.40039C7.29681 23.5 6.40858 23.501 5.69141 23.4424C5.0536 23.3903 4.48344 23.2877 3.9541 23.0605L3.73047 22.9551C2.78971 22.4757 2.0243 21.7106 1.54492 20.7695L3.32715 19.8623C3.61471 20.4266 4.0735 20.8853 4.6377 21.1729L4.74121 21.2217C4.99243 21.3298 5.32513 21.406 5.85449 21.4492C6.4713 21.4996 7.26395 21.5 8.40039 21.5H15.5996C16.7361 21.5 17.5287 21.4996 18.1455 21.4492C18.7507 21.3998 19.0989 21.3071 19.3623 21.1729L19.5684 21.0576C20.0384 20.7694 20.4212 20.3562 20.6729 19.8623L22.4551 20.7695Z" fill="#999999"/>
+                                <path d="M15.5996 1.5C16.7032 1.5 17.5914 1.49902 18.3086 1.55762C19.0373 1.61716 19.6773 1.74326 20.2695 2.04492L20.4443 2.13867C21.3052 2.62114 22.0057 3.34834 22.4551 4.23047L22.5605 4.4541C22.7877 4.98343 22.8903 5.55359 22.9424 6.19141C23.001 6.90856 23 7.7968 23 8.90039V16.0996C23 17.2032 23.001 18.0914 22.9424 18.8086C22.8828 19.5373 22.7568 20.1774 22.4551 20.7695L21.5645 20.3154L20.6729 19.8623C20.8069 19.5991 20.8998 19.2505 20.9492 18.6455C20.9996 18.0287 21 17.2361 21 16.0996V8.90039C21 7.76395 20.9996 6.97128 20.9492 6.35449C20.906 5.82503 20.8299 5.49237 20.7217 5.24121L20.6729 5.13867C20.4211 4.64473 20.0383 4.23057 19.5684 3.94238L19.3623 3.82715C19.099 3.69296 18.7507 3.60023 18.1455 3.55078C17.5287 3.5004 16.7361 3.5 15.5996 3.5H8.40039C7.26396 3.5 6.4713 3.5004 5.85449 3.55078C5.24933 3.60023 4.90109 3.69295 4.6377 3.82715L4.43164 3.94238C3.96163 4.2306 3.57876 4.6438 3.32715 5.1377L3.27832 5.24121C3.17014 5.49237 3.09405 5.82502 3.05078 6.35449C3.0004 6.97127 3 7.76394 3 8.90039V16.0996C3 17.2361 3.00041 18.0287 3.05078 18.6455C3.10021 19.2505 3.19307 19.5991 3.32715 19.8623L2.43555 20.3154L1.54492 20.7695C1.24321 20.1774 1.11716 19.5373 1.05762 18.8086C0.999026 18.0914 1 17.2032 1 16.0996V8.90039C1 7.79681 0.999022 6.90856 1.05762 6.19141C1.11716 5.46271 1.2432 4.82264 1.54492 4.23047L1.6377 4.05567C2.12007 3.19456 2.84778 2.4943 3.72949 2.04492C4.32169 1.74327 4.96271 1.61716 5.69141 1.55762C6.40858 1.49902 7.29682 1.5 8.40039 1.5H15.5996Z" fill="#999999"/>
+                                <path d="M8.00586 6.50586C8.55812 6.50589 9.00586 6.9536 9.00586 7.50586V13.5H10C10.5523 13.5 11 13.9477 11 14.5C11 15.0523 10.5523 15.5 10 15.5H9.00586V17.5059C9.00579 18.0581 8.55808 18.5058 8.00586 18.5059C7.45362 18.5059 7.00593 18.0581 7.00586 17.5059V15.5H6C5.44778 15.4999 5 15.0522 5 14.5C5 13.9478 5.44778 13.5001 6 13.5H7.00586V7.50586C7.00586 6.95358 7.45358 6.50586 8.00586 6.50586Z" fill="#999999"/>
+                                <path d="M16.0059 6.50586C16.5581 6.50589 17.0059 6.9536 17.0059 7.50586V9.5H18C18.5523 9.5 19 9.94772 19 10.5C19 11.0523 18.5523 11.5 18 11.5H17.0059V17.5059C17.0058 18.0581 16.5581 18.5058 16.0059 18.5059C15.4536 18.5059 15.0059 18.0581 15.0059 17.5059V11.5H14C13.4478 11.4999 13 11.0522 13 10.5C13 9.94776 13.4478 9.50007 14 9.5H15.0059V7.50586C15.0059 6.95358 15.4536 6.50586 16.0059 6.50586Z" fill="#999999"/>
+                            </svg>
+                            <span>Reply options</span>
+                        </button>
+                    </div>
+                    <button type="button" class="create-post-submit" id="postBtn" disabled>Post</button>
                 </div>
             </div>
             <!-- Drafts view (inside same modal) -->
@@ -1906,6 +1928,42 @@
                 </div>
                 <div class="interests-selected-list" id="interestsSelectedList"></div>
                 <p class="interests-hint">Your communities and interests are public.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Post Toast -->
+    <div class="post-toast" id="postToast">
+        <div class="toast-content posting" id="toastPosting">
+            <div class="toast-left">
+                <div class="toast-spinner"></div>
+                <span>Posting</span>
+            </div>
+        </div>
+        <div class="toast-content posted" id="toastPosted" style="display: none;">
+            <div class="toast-left">
+                <svg class="toast-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span>Posted</span>
+            </div>
+            <button class="toast-view-btn" id="toastViewBtn">View</button>
+        </div>
+    </div>
+
+    <!-- Thread View Overlay -->
+    <div class="thread-overlay" id="threadOverlay">
+        <div class="thread-view">
+            <div class="thread-header">
+                <button class="thread-back-btn" id="threadBackBtn">
+                    <img src="icons/arrow-left.svg" width="20" height="20" alt="Back">
+                </button>
+                <span class="thread-title">Thread</span>
+                <button class="thread-more-btn" id="threadMoreBtn">
+                    <img src="icons/more.svg" width="20" height="20" alt="More">
+                </button>
+            </div>
+            <div class="thread-content" id="threadContent">
             </div>
         </div>
     </div>
@@ -2717,7 +2775,42 @@
         }
 
         // load user data
+        // clean up oversized images in stored posts on load
+        function cleanupOldPosts() {
+            try {
+                var raw = localStorage.getItem('threads_user_posts');
+                if (raw == null) return;
+                var posts = JSON.parse(raw);
+                if (!Array.isArray(posts)) return;
+                var changed = false;
+                for (var i = 0; i < posts.length; i++) {
+                    if (posts[i].images && posts[i].images.length > 0) {
+                        for (var j = 0; j < posts[i].images.length; j++) {
+                            if (posts[i].images[j] && posts[i].images[j].length > 200000) {
+                                posts[i].images[j] = '';
+                                changed = true;
+                            }
+                        }
+                        posts[i].images = posts[i].images.filter(function(img) { return img != ''; });
+                    }
+                    if (posts[i].image && posts[i].image.length > 200000) {
+                        delete posts[i].image;
+                        changed = true;
+                    }
+                }
+                if (changed) {
+                    localStorage.setItem('threads_user_posts', JSON.stringify(posts));
+                }
+            } catch(e) {
+                console.error('cleanup error:', e);
+                try { localStorage.removeItem('threads_user_posts'); } catch(e2) {}
+            }
+        }
+
         function init() {
+            // clean up old oversized images from storage
+            cleanupOldPosts();
+
             let isLoggedIn = localStorage.getItem('threads_is_logged_in') == 'true';
             let user = null;
             // try to get data, ignore errors
@@ -2840,6 +2933,14 @@
                 if (createPostText) createPostText.value = '';
                 if (postBtn) postBtn.disabled = true;
             }
+            // clear image preview
+            let preview = document.getElementById('createPostImagePreview');
+            if (preview) {
+                preview.innerHTML = '';
+                preview.style.display = 'none';
+            }
+            let fileInput = document.getElementById('createPostImage');
+            if (fileInput) fileInput.value = '';
             let fab = document.getElementById('fab');
             if (fab) fab.style.display = '';
         }
@@ -2854,27 +2955,271 @@
             });
         }
 
+        // check if modal has text or images
+        function checkPostBtn() {
+            let hasText = createPostText && createPostText.value.trim().length > 0;
+            let preview = document.getElementById('createPostImagePreview');
+            let hasImages = preview && preview.querySelectorAll('.create-post-image-item').length > 0;
+            if (postBtn) {
+                if (hasText || hasImages) {
+                    postBtn.disabled = false;
+                } else {
+                    postBtn.disabled = true;
+                }
+            }
+        }
+
         if (createPostText) {
             createPostText.addEventListener('input', function() {
-                if (postBtn) postBtn.disabled = this.value.trim().length == 0;
+                checkPostBtn();
             });
         }
 
+        // compress image using canvas
+        function compressImage(dataUrl, callback) {
+            var maxW = 800;
+            var maxH = 800;
+            var quality = 0.7;
+            var tempImg = new Image();
+            tempImg.onload = function() {
+                var w = tempImg.width;
+                var h = tempImg.height;
+                if (w > maxW || h > maxH) {
+                    var ratio = Math.min(maxW / w, maxH / h);
+                    w = Math.round(w * ratio);
+                    h = Math.round(h * ratio);
+                }
+                var canvas = document.createElement('canvas');
+                canvas.width = w;
+                canvas.height = h;
+                var ctx = canvas.getContext('2d');
+                ctx.drawImage(tempImg, 0, 0, w, h);
+                var compressed = canvas.toDataURL('image/jpeg', quality);
+                callback(compressed);
+            };
+            tempImg.onerror = function() {
+                callback(dataUrl);
+            };
+            tempImg.src = dataUrl;
+        }
+
+        // image upload
+        let createPostImage = document.getElementById('createPostImage');
+        if (createPostImage) {
+            createPostImage.onchange = function(e) {
+                let files = e.target.files;
+                if (!files || files.length == 0) return;
+                let preview = document.getElementById('createPostImagePreview');
+                if (!preview) return;
+                preview.style.display = 'flex';
+
+                for (let f = 0; f < files.length; f++) {
+                    (function(file) {
+                        let reader = new FileReader();
+                        reader.onload = function(ev) {
+                            compressImage(ev.target.result, function(compressedSrc) {
+                                let item = document.createElement('div');
+                                item.className = 'create-post-image-item';
+
+                                let img = document.createElement('img');
+                                img.src = compressedSrc;
+                                img.alt = 'preview';
+                                item.appendChild(img);
+
+                                // remove button
+                                let removeBtn = document.createElement('button');
+                                removeBtn.className = 'remove-image-btn';
+                                removeBtn.innerHTML = '&times;';
+                                removeBtn.onclick = function() {
+                                    item.remove();
+                                    if (preview.children.length == 0) {
+                                        preview.style.display = 'none';
+                                    }
+                                    checkPostBtn();
+                                };
+                                item.appendChild(removeBtn);
+                                preview.appendChild(item);
+                                checkPostBtn();
+                            });
+                        };
+                        reader.readAsDataURL(file);
+                    })(files[f]);
+                }
+                // reset so same file can be picked again
+                createPostImage.value = '';
+            };
+        }
+
+        // toast functions
+        var postToastTimer = null;
+        function showPostToast(state) {
+            var toast = document.getElementById('postToast');
+            var posting = document.getElementById('toastPosting');
+            var posted = document.getElementById('toastPosted');
+            if (toast == null) return;
+            if (postToastTimer != null) {
+                clearTimeout(postToastTimer);
+                postToastTimer = null;
+            }
+            if (state == 'posting') {
+                posting.style.display = 'flex';
+                posted.style.display = 'none';
+            } else {
+                posting.style.display = 'none';
+                posted.style.display = 'flex';
+                postToastTimer = setTimeout(function() {
+                    hidePostToast();
+                    postToastTimer = null;
+                }, 4000);
+            }
+            toast.classList.add('active');
+        }
+
+        function hidePostToast() {
+            var toast = document.getElementById('postToast');
+            if (toast != null) toast.classList.remove('active');
+        }
+
+        function doPost() {
+            if (!currentUser) return;
+
+            let text = '';
+            if (createPostText) {
+                text = createPostText.value.trim();
+            }
+
+            // get images from preview
+            let images = [];
+            let preview = document.getElementById('createPostImagePreview');
+            if (preview) {
+                let imgElements = preview.querySelectorAll('img');
+                for (let i = 0; i < imgElements.length; i++) {
+                    if (imgElements[i].src && imgElements[i].src.length > 0 && imgElements[i].alt == 'preview') {
+                        images.push(imgElements[i].src);
+                    }
+                }
+            }
+
+            // need at least text or image
+            if (text.length == 0 && images.length == 0) return;
+
+            closeModal();
+            showPostToast('posting');
+
+            setTimeout(function() {
+                try {
+                    // get existing posts
+                    let posts = getUserPosts();
+
+                    // make the new post object
+                    let newPost = {
+                        username: currentUser.username,
+                        avatar: currentUser.avatar,
+                        text: text,
+                        time: 'now',
+                        likes: 0,
+                        comments: 0
+                    };
+
+                    if (images.length > 0) {
+                        newPost.images = images;
+                    }
+
+                    posts.unshift(newPost);
+                    localStorage.setItem('threads_user_posts', JSON.stringify(posts));
+                } catch(e) {
+                    console.error('Post save error:', e);
+                }
+
+                showPostToast('posted');
+
+                // switch to Threads tab and render
+                activeTab = 'threads';
+                let allTabs = document.querySelectorAll('.profile-tab');
+                for (let t = 0; t < allTabs.length; t++) {
+                    allTabs[t].classList.remove('active');
+                    if (allTabs[t].getAttribute('data-tab') == 'threads') {
+                        allTabs[t].classList.add('active');
+                    }
+                }
+                switchTab('threads');
+            }, 1200);
+        }
+
         if (postBtn) {
-            postBtn.onclick = function() {
-                if (!createPostText || createPostText.value.trim().length == 0) return;
-                let posts = getUserPosts();
-                posts.unshift({
-                    username: currentUser.username,
-                    avatar: currentUser.avatar,
-                    text: createPostText.value.trim(),
-                    time: 'now',
-                    likes: 0,
-                    comments: 0
-                });
-                localStorage.setItem('threads_user_posts', JSON.stringify(posts));
-                closeModal();
-                renderPosts();
+            postBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                doPost();
+            });
+        }
+
+        // View button — show all user posts in thread overlay
+        var toastViewBtn = document.getElementById('toastViewBtn');
+        var threadOverlay = document.getElementById('threadOverlay');
+        var threadBackBtn = document.getElementById('threadBackBtn');
+        var threadContent = document.getElementById('threadContent');
+
+        if (toastViewBtn != null) {
+            toastViewBtn.onclick = function() {
+                if (threadOverlay == null || threadContent == null) return;
+
+                var userPosts = getUserPosts();
+                var allHtml = '';
+
+                for (var p = 0; p < userPosts.length; p++) {
+                    var post = userPosts[p];
+                    var safeUsername = sanitize(post.username || '');
+                    var safeText = sanitize(post.text || '');
+                    safeText = safeText.replace(/#(\w+)/g, '<span class="post-hashtag">#$1</span>');
+                    safeText = safeText.replace(/@(\w+)/g, '<span class="post-mention">@$1</span>');
+                    safeText = safeText.replace(/\n/g, '<br>');
+
+                    var imageHtml = '';
+                    if (post.images != null && post.images.length > 0) {
+                        for (var im = 0; im < post.images.length; im++) {
+                            if (post.images[im] && post.images[im] != '') {
+                                imageHtml += '<img src="' + post.images[im] + '" alt="Post image" class="thread-post-image">';
+                            }
+                        }
+                    } else if (post.image != null) {
+                        imageHtml = '<img src="' + post.image + '" alt="Post image" class="thread-post-image">';
+                    }
+
+                    allHtml += '<div class="thread-post">';
+                    allHtml += '<div class="thread-post-header">';
+                    allHtml += '<img src="' + encodeURI(post.avatar || 'images/avatar1.jpg') + '" class="thread-post-avatar" alt="">';
+                    allHtml += '<span class="thread-post-username">' + safeUsername + '</span>';
+                    allHtml += '<span class="thread-post-time">' + (post.time || '') + '</span>';
+                    allHtml += '<button class="thread-post-more"><img src="icons/more.svg" width="20" height="20" alt=""></button>';
+                    allHtml += '</div>';
+                    if (safeText.trim() != '') {
+                        allHtml += '<p class="thread-post-text">' + safeText + '</p>';
+                    }
+                    allHtml += imageHtml;
+                    allHtml += '<div class="thread-post-actions">';
+                    allHtml += '<button class="action-btn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>';
+                    allHtml += '<button class="action-btn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>';
+                    allHtml += '<button class="action-btn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>';
+                    allHtml += '<button class="action-btn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>';
+                    allHtml += '</div>';
+                    allHtml += '</div>';
+                }
+
+                if (allHtml == '') {
+                    allHtml = '<p style="text-align:center;color:#999;padding:40px 20px;">No posts yet.</p>';
+                }
+
+                threadContent.innerHTML = allHtml;
+                threadOverlay.classList.add('active');
+                hidePostToast();
+            };
+        }
+
+        // Thread back button
+        if (threadBackBtn != null && threadOverlay != null) {
+            threadBackBtn.onclick = function() {
+                threadOverlay.classList.remove('active');
             };
         }
 

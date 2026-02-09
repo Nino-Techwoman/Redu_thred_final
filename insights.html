@@ -14,6 +14,7 @@
             position: relative;
             width: 100%;
             max-width: 600px;
+            box-sizing: border-box;
         }
 
         .insights-header-title {
@@ -146,7 +147,8 @@
         }
 
         .insights-menu-container {
-            position: relative;
+            position: absolute;
+            right: 20px;
         }
 
         .insights-menu {
@@ -388,7 +390,7 @@
                 <div class="insights-header-dropdown">
                     <div class="insights-header-title">
                         <span>Insights</span>
-                        <span class="insights-header-date">4 Jan - 2 Feb</span>
+                        <span class="insights-header-date" id="insightsHeaderDate"></span>
                     </div>
                     <div class="date-range-container">
                         <div class="insights-dropdown-circle" id="dateRangeBtn">
@@ -566,6 +568,7 @@
                                 </svg>
                             </button>
                         </div>
+                        <div class="create-post-image-preview" id="createPostImagePreview" style="display: none;"></div>
                     </div>
                 </div>
                 <div class="create-post-add-thread">
@@ -666,6 +669,14 @@
                 if (createPostText) createPostText.value = '';
                 if (postBtn) postBtn.disabled = true;
             }
+            // clear image preview
+            let preview = document.getElementById('createPostImagePreview');
+            if (preview) {
+                preview.innerHTML = '';
+                preview.style.display = 'none';
+            }
+            let fileInput = document.getElementById('createPostImage');
+            if (fileInput) fileInput.value = '';
             if (fab) fab.style.display = '';
         }
 
@@ -679,28 +690,127 @@
             });
         }
 
+        // check if modal has text or images
+        function checkPostBtn() {
+            let hasText = createPostText && createPostText.value.trim().length > 0;
+            let preview = document.getElementById('createPostImagePreview');
+            let hasImages = preview && preview.querySelectorAll('.create-post-image-item').length > 0;
+            if (postBtn) {
+                if (hasText || hasImages) {
+                    postBtn.disabled = false;
+                } else {
+                    postBtn.disabled = true;
+                }
+            }
+        }
+
         if (createPostText) {
             createPostText.addEventListener('input', function() {
-                if (postBtn) postBtn.disabled = this.value.trim().length == 0;
+                checkPostBtn();
             });
+        }
+
+        // image upload
+        let createPostImage = document.getElementById('createPostImage');
+        if (createPostImage) {
+            createPostImage.onchange = function(e) {
+                let files = e.target.files;
+                if (!files || files.length == 0) return;
+                let preview = document.getElementById('createPostImagePreview');
+                if (!preview) return;
+                preview.style.display = 'flex';
+
+                for (let f = 0; f < files.length; f++) {
+                    (function(file) {
+                        let reader = new FileReader();
+                        reader.onload = function(ev) {
+                            let item = document.createElement('div');
+                            item.className = 'create-post-image-item';
+
+                            let img = document.createElement('img');
+                            img.src = ev.target.result;
+                            img.alt = 'preview';
+                            item.appendChild(img);
+
+                            // remove button
+                            let removeBtn = document.createElement('button');
+                            removeBtn.className = 'remove-image-btn';
+                            removeBtn.innerHTML = '&times;';
+                            removeBtn.onclick = function() {
+                                item.remove();
+                                if (preview.children.length == 0) {
+                                    preview.style.display = 'none';
+                                }
+                                checkPostBtn();
+                            };
+                            item.appendChild(removeBtn);
+                            preview.appendChild(item);
+                            checkPostBtn();
+                        };
+                        reader.readAsDataURL(file);
+                    })(files[f]);
+                }
+                // reset so same file can be picked again
+                createPostImage.value = '';
+            };
         }
 
         if (postBtn) {
             postBtn.onclick = function() {
-                if (!createPostText || createPostText.value.trim().length == 0) return;
+                if (!currentUser) return;
+
+                let text = '';
+                if (createPostText) {
+                    text = createPostText.value.trim();
+                }
+
+                // get images from preview
+                let images = [];
+                let preview = document.getElementById('createPostImagePreview');
+                if (preview) {
+                    let imgElements = preview.querySelectorAll('.create-post-image-item img');
+                    for (let i = 0; i < imgElements.length; i++) {
+                        if (imgElements[i].src && imgElements[i].src != '') {
+                            images.push(imgElements[i].src);
+                        }
+                    }
+                }
+
+                // need at least text or image
+                if (text.length == 0 && images.length == 0) return;
+
+                // get existing posts from localstorage
                 let posts = [];
                 try {
                     let data = localStorage.getItem('threads_user_posts');
-                    if (data) posts = JSON.parse(data) || [];
-                } catch(e) {}
-                posts.unshift({
+                    if (data) {
+                        posts = JSON.parse(data);
+                    }
+                    if (!posts) {
+                        posts = [];
+                    }
+                } catch(e) {
+                    posts = [];
+                }
+
+                // add new post to the top
+                let newPost = {
                     username: currentUser.username,
                     avatar: currentUser.avatar,
-                    text: createPostText.value.trim(),
+                    text: text,
                     time: 'now',
                     likes: 0,
                     comments: 0
-                });
+                };
+
+                // add images if we have any
+                if (images.length > 0) {
+                    newPost.images = images;
+                }
+
+                posts.unshift(newPost);
+
+                // save back to localstorage
                 localStorage.setItem('threads_user_posts', JSON.stringify(posts));
                 closeModal();
             };
@@ -754,7 +864,22 @@
         let dateRangeBtn = document.getElementById('dateRangeBtn');
         let dateRangeDropdown = document.getElementById('dateRangeDropdown');
         let dateRangeItems = document.querySelectorAll('.date-range-item');
-        let insightsHeaderDate = document.querySelector('.insights-header-date');
+        let insightsHeaderDate = document.getElementById('insightsHeaderDate');
+
+        function updateDateRange(days) {
+            let endDate = new Date();
+            let startDate = new Date();
+            startDate.setDate(endDate.getDate() - parseInt(days));
+            let options = { day: 'numeric', month: 'short' };
+            let startStr = startDate.toLocaleDateString('en-GB', options);
+            let endStr = endDate.toLocaleDateString('en-GB', options);
+            if (insightsHeaderDate) {
+                insightsHeaderDate.textContent = startStr + ' \u2013 ' + endStr;
+            }
+        }
+
+        // Set initial date range (30 days default)
+        updateDateRange(30);
 
         if (dateRangeBtn && dateRangeDropdown) {
             dateRangeBtn.addEventListener('click', function(e) {
@@ -771,23 +896,11 @@
         // Date range selection
         for (let i = 0; i < dateRangeItems.length; i++) {
             dateRangeItems[i].addEventListener('click', function() {
-                // Remove active from all
                 for (let j = 0; j < dateRangeItems.length; j++) {
                     dateRangeItems[j].classList.remove('active');
                 }
-                // Set active on clicked
                 this.classList.add('active');
-                // Update header date text
-                let days = this.getAttribute('data-days');
-                let endDate = new Date();
-                let startDate = new Date();
-                startDate.setDate(endDate.getDate() - parseInt(days));
-                let options = { day: 'numeric', month: 'short' };
-                let startStr = startDate.toLocaleDateString('en-GB', options);
-                let endStr = endDate.toLocaleDateString('en-GB', options);
-                if (insightsHeaderDate) {
-                    insightsHeaderDate.textContent = startStr + ' - ' + endStr;
-                }
+                updateDateRange(this.getAttribute('data-days'));
                 dateRangeDropdown.classList.remove('active');
             });
         }

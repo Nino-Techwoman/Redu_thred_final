@@ -25,17 +25,75 @@ let postRateLimiter = createRateLimiter(10, 60000); // 10 posts per minute
 
 // load from storage
 function loadFromStorage(key) {
-    let data = localStorage.getItem(key);
-    if (data != null) {
-        return JSON.parse(data);
+    try {
+        let data = localStorage.getItem(key);
+        if (data != null) {
+            return JSON.parse(data);
+        }
+    } catch(e) {
+        console.error('loadFromStorage error:', e);
     }
     return null;
+}
+
+// compress image using canvas
+function compressImage(dataUrl, callback) {
+    var maxW = 800;
+    var maxH = 800;
+    var quality = 0.7;
+    var tempImg = new Image();
+    tempImg.onload = function() {
+        var w = tempImg.width;
+        var h = tempImg.height;
+        if (w > maxW || h > maxH) {
+            var ratio = Math.min(maxW / w, maxH / h);
+            w = Math.round(w * ratio);
+            h = Math.round(h * ratio);
+        }
+        var canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(tempImg, 0, 0, w, h);
+        var compressed = canvas.toDataURL('image/jpeg', quality);
+        callback(compressed);
+    };
+    tempImg.onerror = function() {
+        callback(dataUrl);
+    };
+    tempImg.src = dataUrl;
 }
 
 // save to storage
 function saveToStorage(key, data) {
     console.log("saving: " + key);
-    localStorage.setItem(key, JSON.stringify(data));
+    try {
+        localStorage.setItem(key, JSON.stringify(data));
+    } catch(e) {
+        // storage full - try to free space by trimming old posts with large images
+        console.error('Storage full, attempting cleanup...', e);
+        if (key == 'threads_user_posts' && Array.isArray(data) && data.length > 1) {
+            // remove images from older posts to free space
+            for (var i = data.length - 1; i >= 1; i--) {
+                if (data[i].images && data[i].images.length > 0) {
+                    data[i].images = [];
+                }
+                if (data[i].image) {
+                    delete data[i].image;
+                }
+            }
+            try {
+                localStorage.setItem(key, JSON.stringify(data));
+                return;
+            } catch(e2) {}
+        }
+        // last resort - just try to save
+        try {
+            localStorage.setItem(key, JSON.stringify(data));
+        } catch(e3) {
+            console.error('Could not save even after cleanup');
+        }
+    }
 }
 
 // get random avatar
@@ -1564,8 +1622,43 @@ function initSuggestedCards() {
 }
 
 // init function
+// clean up oversized images in stored posts on load
+function cleanupOldPosts() {
+    try {
+        var raw = localStorage.getItem('threads_user_posts');
+        if (raw == null) return;
+        var posts = JSON.parse(raw);
+        if (!Array.isArray(posts)) return;
+        var changed = false;
+        for (var i = 0; i < posts.length; i++) {
+            if (posts[i].images && posts[i].images.length > 0) {
+                for (var j = 0; j < posts[i].images.length; j++) {
+                    if (posts[i].images[j] && posts[i].images[j].length > 200000) {
+                        posts[i].images[j] = '';
+                        changed = true;
+                    }
+                }
+                posts[i].images = posts[i].images.filter(function(img) { return img != ''; });
+            }
+            if (posts[i].image && posts[i].image.length > 200000) {
+                delete posts[i].image;
+                changed = true;
+            }
+        }
+        if (changed) {
+            localStorage.setItem('threads_user_posts', JSON.stringify(posts));
+        }
+    } catch(e) {
+        console.error('cleanup error:', e);
+        try { localStorage.removeItem('threads_user_posts'); } catch(e2) {}
+    }
+}
+
 function init() {
     console.log("init starting");
+
+    // clean up old oversized images from storage
+    cleanupOldPosts();
 
     // check if logged in
     let isLoggedIn = localStorage.getItem('threads_is_logged_in');
@@ -1753,7 +1846,7 @@ function init() {
                 clearCreatePostForm();
                 showPostToast('posting');
                 setTimeout(function() {
-                    createPost(text || ' ', images);
+                    try { createPost(text || ' ', images); } catch(e) { console.error(e); }
                     showPostToast('posted');
                 }, 1200);
             } else if (hasText || hasImages) {
@@ -1761,7 +1854,7 @@ function init() {
                 clearCreatePostForm();
                 showPostToast('posting');
                 setTimeout(function() {
-                    createPost(text, images);
+                    try { createPost(text, images); } catch(e) { console.error(e); }
                     showPostToast('posted');
                 }, 1200);
             }
@@ -1781,30 +1874,32 @@ function init() {
                 (function(file) {
                     let reader = new FileReader();
                     reader.onload = function(ev) {
-                        let item = document.createElement('div');
-                        item.className = 'create-post-image-item';
-                        let img = document.createElement('img');
-                        img.src = ev.target.result;
-                        img.alt = 'preview';
-                        item.appendChild(img);
-                        let removeBtn = document.createElement('button');
-                        removeBtn.className = 'remove-image-btn';
-                        removeBtn.innerHTML = '&times;';
-                        removeBtn.onclick = function() {
-                            item.remove();
-                            // hide preview container if no images left
-                            if (preview.children.length == 0) {
-                                preview.style.display = 'none';
-                                // disable Post button if no text either
-                                let textarea = document.getElementById('createPostText');
-                                let postBtn = document.getElementById('createPostSubmit');
-                                if (postBtn != null && textarea != null && textarea.value.trim() == '') {
-                                    postBtn.disabled = true;
+                        compressImage(ev.target.result, function(compressedSrc) {
+                            let item = document.createElement('div');
+                            item.className = 'create-post-image-item';
+                            let img = document.createElement('img');
+                            img.src = compressedSrc;
+                            img.alt = 'preview';
+                            item.appendChild(img);
+                            let removeBtn = document.createElement('button');
+                            removeBtn.className = 'remove-image-btn';
+                            removeBtn.innerHTML = '&times;';
+                            removeBtn.onclick = function() {
+                                item.remove();
+                                // hide preview container if no images left
+                                if (preview.children.length == 0) {
+                                    preview.style.display = 'none';
+                                    // disable Post button if no text either
+                                    let textarea = document.getElementById('createPostText');
+                                    let postBtn = document.getElementById('createPostSubmit');
+                                    if (postBtn != null && textarea != null && textarea.value.trim() == '') {
+                                        postBtn.disabled = true;
+                                    }
                                 }
-                            }
-                        };
-                        item.appendChild(removeBtn);
-                        preview.appendChild(item);
+                            };
+                            item.appendChild(removeBtn);
+                            preview.appendChild(item);
+                        });
                     };
                     reader.readAsDataURL(file);
                 })(files[f]);
@@ -1854,8 +1949,10 @@ function init() {
             if (file != null) {
                 let reader = new FileReader();
                 reader.onload = function(ev) {
-                    document.getElementById('replyPreviewImg').src = ev.target.result;
-                    document.getElementById('replyImagePreview').style.display = 'block';
+                    compressImage(ev.target.result, function(compressedSrc) {
+                        document.getElementById('replyPreviewImg').src = compressedSrc;
+                        document.getElementById('replyImagePreview').style.display = 'block';
+                    });
                 };
                 reader.readAsDataURL(file);
             }
