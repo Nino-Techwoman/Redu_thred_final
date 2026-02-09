@@ -163,7 +163,7 @@ function applyTheme() {
     if (theme == "light") {
         document.documentElement.setAttribute("data-theme", "light");
     } else {
-        document.documentElement.removeAttribute("data-theme");
+        document.documentElement.setAttribute("data-theme", "dark");
     }
 }
 applyTheme();
@@ -1011,13 +1011,13 @@ function setupEventListeners() {
                     document.documentElement.setAttribute("data-theme", "light");
                     saveToStorage("threads_theme", "light");
                 } else if (theme == "dark") {
-                    document.documentElement.removeAttribute("data-theme");
+                    document.documentElement.setAttribute("data-theme", "dark");
                     saveToStorage("threads_theme", "dark");
                 } else {
                     if (window.matchMedia("(prefers-color-scheme: light)").matches) {
                         document.documentElement.setAttribute("data-theme", "light");
                     } else {
-                        document.documentElement.removeAttribute("data-theme");
+                        document.documentElement.setAttribute("data-theme", "dark");
                     }
                     saveToStorage("threads_theme", "auto");
                 }

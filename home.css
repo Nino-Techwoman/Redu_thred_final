@@ -1785,6 +1785,10 @@ body {
 
 .create-post-modal {
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh;
+    overflow: hidden;
 }
 
 .create-post-header {

@@ -63,7 +63,9 @@
                             <div class="menu-section">
                                 <button class="menu-item has-arrow" id="appearanceBtn">
                                     Appearance
-                                    <img src="icons/arrow-right.svg" width="16" height="16" alt="">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
                                 </button>
                                 <button class="menu-item">Insights</button>
                                 <button class="menu-item">Settings</button>
@@ -72,7 +74,9 @@
                             <div class="menu-section">
                                 <button class="menu-item has-arrow" id="menuFeedsBtn">
                                     Feeds
-                                    <img src="icons/arrow-right.svg" width="16" height="16" alt="">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
                                 </button>
                                 <button class="menu-item">Saved</button>
                                 <button class="menu-item">Liked</button>
@@ -87,17 +91,31 @@
                         <div class="menu-submenu" id="menuAppearanceSubmenu">
                             <div class="submenu-header">
                                 <button class="submenu-back" id="appearanceBackBtn">
-                                    <img src="icons/arrow-left.svg" width="20" height="20" alt="">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="15 18 9 12 15 6"/>
+                                    </svg>
                                 </button>
                                 <span class="submenu-title">Appearance</span>
                                 <div class="submenu-spacer"></div>
                             </div>
                             <div class="appearance-options">
                                 <button class="appearance-option active" data-theme="light">
-                                    <img src="icons/sun.svg" width="24" height="24" alt="Light">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <circle cx="12" cy="12" r="4"/>
+                                        <line x1="12" y1="2" x2="12" y2="4"/>
+                                        <line x1="12" y1="20" x2="12" y2="22"/>
+                                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                                        <line x1="2" y1="12" x2="4" y2="12"/>
+                                        <line x1="20" y1="12" x2="22" y2="12"/>
+                                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                                    </svg>
                                 </button>
                                 <button class="appearance-option" data-theme="dark">
-                                    <img src="icons/moon.svg" width="24" height="24" alt="Dark">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                                    </svg>
                                 </button>
                                 <button class="appearance-option" data-theme="auto">
                                     Auto
@@ -108,7 +126,9 @@
                         <div class="menu-submenu" id="menuFeedsSubmenu">
                             <div class="submenu-header">
                                 <button class="submenu-back" id="menuFeedsBackBtn">
-                                    <img src="icons/arrow-left.svg" width="20" height="20" alt="">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="15 18 9 12 15 6"/>
+                                    </svg>
                                 </button>
                                 <span class="submenu-title">Feeds</span>
                                 <button class="submenu-add">
@@ -490,7 +510,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="create-post-submit" id="createPostSubmit" disabled>Post</button>
+                        <button type="button" class="create-post-submit" id="createPostSubmit" disabled>Post</button>
                     </div>
                 </div>
                 <!-- Drafts view (inside same modal) -->

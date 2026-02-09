@@ -257,6 +257,7 @@
                             <span class="create-post-username" id="createPostUsername"></span>
                         </div>
                         <textarea class="create-post-textarea" id="createPostText" placeholder="What's new?"></textarea>
+                        <div class="create-post-image-preview" id="createPostImagePreview" style="display: none;"></div>
                         <div class="create-post-actions">
                             <label class="action-icon-btn" title="Add image">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -264,7 +265,7 @@
                                     <circle cx="8.5" cy="8.5" r="1.5"/>
                                     <polyline points="21 15 16 10 5 21"/>
                                 </svg>
-                                <input type="file" accept="image/*" id="createPostImage" style="display: none;">
+                                <input type="file" accept="image/*" id="createPostImage" style="display: none;" multiple>
                             </label>
                             <button class="action-icon-btn" title="Add GIF">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -334,6 +335,21 @@
         </div>
     </div>
 
+    <!-- Post Toast -->
+    <div class="post-toast" id="postToast">
+        <div class="post-toast-content">
+            <div class="post-toast-posting" id="toastPosting">
+                <svg class="post-toast-spinner" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                <span>Posting...</span>
+            </div>
+            <div class="post-toast-posted" id="toastPosted" style="display: none;">
+                <span>Posted</span>
+                <button class="post-toast-view" id="toastViewBtn">View</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="security.js"></script>
     <script src="activity.js"></script>
 </body>
 </html>

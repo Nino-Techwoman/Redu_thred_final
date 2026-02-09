@@ -49,6 +49,82 @@
             color: #000000;
         }
 
+        .profile-interest-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 8px 0;
+        }
+
+        .profile-interest-tags:empty {
+            display: none;
+        }
+
+        .interest-tag {
+            padding: 8px 16px;
+            border-radius: 45px;
+            border: 0.5px solid rgba(0, 0, 0, 0.15);
+            background-color: rgb(255, 255, 255);
+            font-size: 13px;
+            line-height: 21px;
+            color: rgb(153, 153, 153);
+            cursor: pointer;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 18px;
+            transition: transform 0.2s;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .interest-tag:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .interest-tag-add {
+            padding: 8px 16px;
+            border-radius: 45px;
+            border: 0.5px solid rgba(0, 0, 0, 0.15);
+            background-color: rgb(255, 255, 255);
+            font-size: 13px;
+            line-height: 21px;
+            color: rgb(153, 153, 153);
+            cursor: pointer;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 18px;
+            transition: transform 0.2s;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .interest-tag-add:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="dark"] .interest-tag {
+            border-color: rgba(255, 255, 255, 0.15);
+            background-color: #000;
+            color: #777;
+        }
+
+        [data-theme="dark"] .interest-tag:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="dark"] .interest-tag-add {
+            border-color: rgba(255, 255, 255, 0.15);
+            background-color: #000;
+            color: #777;
+        }
+
+        [data-theme="dark"] .interest-tag-add:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
         .profile-stats-row {
             display: flex;
             align-items: center;
@@ -1582,6 +1658,7 @@
                         <img src="" alt="avatar" class="profile-avatar" id="profileAvatar">
                     </div>
                     <p class="profile-bio" id="profileBio"></p>
+                    <div class="profile-interest-tags" id="profileInterestTags"></div>
                     <div class="profile-stats-row">
                         <div class="profile-followers">
                             <div class="follower-avatars">
@@ -2778,14 +2855,14 @@
         // clean up oversized images in stored posts on load
         function cleanupOldPosts() {
             try {
-                var raw = localStorage.getItem('threads_user_posts');
+                let raw = localStorage.getItem('threads_user_posts');
                 if (raw == null) return;
-                var posts = JSON.parse(raw);
+                let posts = JSON.parse(raw);
                 if (!Array.isArray(posts)) return;
-                var changed = false;
-                for (var i = 0; i < posts.length; i++) {
+                let changed = false;
+                for (let i = 0; i < posts.length; i++) {
                     if (posts[i].images && posts[i].images.length > 0) {
-                        for (var j = 0; j < posts[i].images.length; j++) {
+                        for (let j = 0; j < posts[i].images.length; j++) {
                             if (posts[i].images[j] && posts[i].images[j].length > 200000) {
                                 posts[i].images[j] = '';
                                 changed = true;
@@ -2858,7 +2935,7 @@
                 } else if (tab == 'search') {
                     window.location.href = 'home.html#search';
                 } else if (tab == 'create') {
-                    window.location.href = 'home.html#create';
+                    openModal();
                 } else if (tab == 'activity') {
                     window.location.href = 'activity.html';
                 } else if (tab == 'profile') {
@@ -2977,24 +3054,24 @@
 
         // compress image using canvas
         function compressImage(dataUrl, callback) {
-            var maxW = 800;
-            var maxH = 800;
-            var quality = 0.7;
-            var tempImg = new Image();
+            let maxW = 800;
+            let maxH = 800;
+            let quality = 0.7;
+            let tempImg = new Image();
             tempImg.onload = function() {
-                var w = tempImg.width;
-                var h = tempImg.height;
+                let w = tempImg.width;
+                let h = tempImg.height;
                 if (w > maxW || h > maxH) {
-                    var ratio = Math.min(maxW / w, maxH / h);
+                    let ratio = Math.min(maxW / w, maxH / h);
                     w = Math.round(w * ratio);
                     h = Math.round(h * ratio);
                 }
-                var canvas = document.createElement('canvas');
+                let canvas = document.createElement('canvas');
                 canvas.width = w;
                 canvas.height = h;
-                var ctx = canvas.getContext('2d');
+                let ctx = canvas.getContext('2d');
                 ctx.drawImage(tempImg, 0, 0, w, h);
-                var compressed = canvas.toDataURL('image/jpeg', quality);
+                let compressed = canvas.toDataURL('image/jpeg', quality);
                 callback(compressed);
             };
             tempImg.onerror = function() {
@@ -3051,11 +3128,11 @@
         }
 
         // toast functions
-        var postToastTimer = null;
+        let postToastTimer = null;
         function showPostToast(state) {
-            var toast = document.getElementById('postToast');
-            var posting = document.getElementById('toastPosting');
-            var posted = document.getElementById('toastPosted');
+            let toast = document.getElementById('postToast');
+            let posting = document.getElementById('toastPosting');
+            let posted = document.getElementById('toastPosted');
             if (toast == null) return;
             if (postToastTimer != null) {
                 clearTimeout(postToastTimer);
@@ -3076,7 +3153,7 @@
         }
 
         function hidePostToast() {
-            var toast = document.getElementById('postToast');
+            let toast = document.getElementById('postToast');
             if (toast != null) toast.classList.remove('active');
         }
 
@@ -3155,29 +3232,29 @@
         }
 
         // View button — show all user posts in thread overlay
-        var toastViewBtn = document.getElementById('toastViewBtn');
-        var threadOverlay = document.getElementById('threadOverlay');
-        var threadBackBtn = document.getElementById('threadBackBtn');
-        var threadContent = document.getElementById('threadContent');
+        let toastViewBtn = document.getElementById('toastViewBtn');
+        let threadOverlay = document.getElementById('threadOverlay');
+        let threadBackBtn = document.getElementById('threadBackBtn');
+        let threadContent = document.getElementById('threadContent');
 
         if (toastViewBtn != null) {
             toastViewBtn.onclick = function() {
                 if (threadOverlay == null || threadContent == null) return;
 
-                var userPosts = getUserPosts();
-                var allHtml = '';
+                let userPosts = getUserPosts();
+                let allHtml = '';
 
-                for (var p = 0; p < userPosts.length; p++) {
-                    var post = userPosts[p];
-                    var safeUsername = sanitize(post.username || '');
-                    var safeText = sanitize(post.text || '');
+                for (let p = 0; p < userPosts.length; p++) {
+                    let post = userPosts[p];
+                    let safeUsername = sanitize(post.username || '');
+                    let safeText = sanitize(post.text || '');
                     safeText = safeText.replace(/#(\w+)/g, '<span class="post-hashtag">#$1</span>');
                     safeText = safeText.replace(/@(\w+)/g, '<span class="post-mention">@$1</span>');
                     safeText = safeText.replace(/\n/g, '<br>');
 
-                    var imageHtml = '';
+                    let imageHtml = '';
                     if (post.images != null && post.images.length > 0) {
-                        for (var im = 0; im < post.images.length; im++) {
+                        for (let im = 0; im < post.images.length; im++) {
                             if (post.images[im] && post.images[im] != '') {
                                 imageHtml += '<img src="' + post.images[im] + '" alt="Post image" class="thread-post-image">';
                             }
@@ -3793,11 +3870,20 @@
         let interestsDisplay = document.getElementById('interestsDisplay');
         let selectedInterests = [];
 
-        // Load saved interests
+        // Load saved interests or use defaults
         try {
             let saved = localStorage.getItem('threads_interests');
             if (saved) {
-                selectedInterests = JSON.parse(saved) || [];
+                let parsed = JSON.parse(saved);
+                if (parsed && parsed.length > 0) {
+                    selectedInterests = parsed;
+                } else {
+                    selectedInterests = ['dance', 'singlelife'];
+                    localStorage.setItem('threads_interests', JSON.stringify(selectedInterests));
+                }
+            } else {
+                selectedInterests = ['dance', 'singlelife'];
+                localStorage.setItem('threads_interests', JSON.stringify(selectedInterests));
             }
         } catch(e) {}
 
@@ -3812,6 +3898,34 @@
             }
             // Save to localStorage
             localStorage.setItem('threads_interests', JSON.stringify(selectedInterests));
+            // Update profile interest tags
+            renderProfileInterestTags();
+        }
+
+        function renderProfileInterestTags() {
+            let container = document.getElementById('profileInterestTags');
+            if (!container) return;
+            container.innerHTML = '';
+            for (let i = 0; i < selectedInterests.length; i++) {
+                let tag = document.createElement('button');
+                tag.className = 'interest-tag';
+                tag.textContent = selectedInterests[i];
+                tag.onclick = (function(name) {
+                    return function() {
+                        window.location.href = name + '.html';
+                    };
+                })(selectedInterests[i]);
+                container.appendChild(tag);
+            }
+            // add the "+" button
+            let addBtn = document.createElement('button');
+            addBtn.className = 'interest-tag-add';
+            addBtn.textContent = '+';
+            addBtn.onclick = function() {
+                let overlay = document.getElementById('interestsModalOverlay');
+                if (overlay) overlay.classList.add('active');
+            };
+            container.appendChild(addBtn);
         }
 
         function renderSelectedInterests() {

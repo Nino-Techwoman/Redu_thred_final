@@ -604,6 +604,19 @@ function init() {
             modalOverlay.classList.remove('from-fab');
         }
         if (fab != null) fab.style.display = '';
+        // clear form
+        if (createPostText != null) createPostText.value = '';
+        if (postBtn != null) {
+            postBtn.disabled = true;
+            postBtn.setAttribute('disabled', '');
+        }
+        let preview = document.getElementById('createPostImagePreview');
+        if (preview != null) {
+            preview.innerHTML = '';
+            preview.style.display = 'none';
+        }
+        let fileInput = document.getElementById('createPostImage');
+        if (fileInput != null) fileInput.value = '';
     }
 
     // close modal
@@ -620,31 +633,187 @@ function init() {
         };
     }
 
-    // enable/disable post button based on text
+    // check if post button should be enabled
     let addThreadText = document.querySelector('.add-thread-text');
     let addThreadAvatar = document.querySelector('.create-post-avatar-small');
 
-    if (createPostText != null && postBtn != null) {
+    function checkPostBtn() {
+        if (postBtn == null) return;
+        let hasText = createPostText != null && createPostText.value.trim() != '';
+        let preview = document.getElementById('createPostImagePreview');
+        let hasImages = preview != null && preview.querySelectorAll('.create-post-image-item').length > 0;
+        if (hasText || hasImages) {
+            postBtn.disabled = false;
+            postBtn.removeAttribute('disabled');
+        } else {
+            postBtn.disabled = true;
+            postBtn.setAttribute('disabled', '');
+        }
+    }
+
+    if (createPostText != null) {
         createPostText.addEventListener('input', function() {
-            let text = this.value.trim();
-            if (text != '') {
-                postBtn.disabled = false;
-                postBtn.removeAttribute('disabled');
-                if (addThreadText != null) {
+            checkPostBtn();
+            if (addThreadText != null) {
+                if (this.value.trim() != '') {
                     addThreadText.classList.add('active');
-                }
-                if (addThreadAvatar != null) {
-                    addThreadAvatar.classList.add('active');
-                }
-            } else {
-                postBtn.disabled = true;
-                if (addThreadText != null) {
+                } else {
                     addThreadText.classList.remove('active');
                 }
-                if (addThreadAvatar != null) {
-                    addThreadAvatar.classList.remove('active');
+            }
+        });
+    }
+
+    // compress image using canvas
+    function compressImage(dataUrl, callback) {
+        let maxW = 800;
+        let maxH = 800;
+        let quality = 0.7;
+        let tempImg = new Image();
+        tempImg.onload = function() {
+            let w = tempImg.width;
+            let h = tempImg.height;
+            if (w > maxW || h > maxH) {
+                let ratio = Math.min(maxW / w, maxH / h);
+                w = Math.round(w * ratio);
+                h = Math.round(h * ratio);
+            }
+            let canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            let ctx = canvas.getContext('2d');
+            ctx.drawImage(tempImg, 0, 0, w, h);
+            let compressed = canvas.toDataURL('image/jpeg', quality);
+            callback(compressed);
+        };
+        tempImg.onerror = function() {
+            callback(dataUrl);
+        };
+        tempImg.src = dataUrl;
+    }
+
+    // image upload
+    let createPostImage = document.getElementById('createPostImage');
+    if (createPostImage != null) {
+        createPostImage.onchange = function(e) {
+            let files = e.target.files;
+            if (files == null || files.length == 0) return;
+            let preview = document.getElementById('createPostImagePreview');
+            if (preview == null) return;
+            preview.style.display = 'flex';
+            for (let f = 0; f < files.length; f++) {
+                (function(file) {
+                    let reader = new FileReader();
+                    reader.onload = function(ev) {
+                        compressImage(ev.target.result, function(compressedSrc) {
+                            let item = document.createElement('div');
+                            item.className = 'create-post-image-item';
+                            let img = document.createElement('img');
+                            img.src = compressedSrc;
+                            img.alt = 'preview';
+                            item.appendChild(img);
+                            let removeBtn = document.createElement('button');
+                            removeBtn.className = 'remove-image-btn';
+                            removeBtn.innerHTML = '&times;';
+                            removeBtn.onclick = function() {
+                                item.remove();
+                                if (preview.children.length == 0) {
+                                    preview.style.display = 'none';
+                                }
+                                checkPostBtn();
+                            };
+                            item.appendChild(removeBtn);
+                            preview.appendChild(item);
+                            checkPostBtn();
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                })(files[f]);
+            }
+            createPostImage.value = '';
+        };
+    }
+
+    // toast functions
+    let postToastTimer = null;
+    function showPostToast(state) {
+        let toast = document.getElementById('postToast');
+        let posting = document.getElementById('toastPosting');
+        let posted = document.getElementById('toastPosted');
+        if (toast == null) return;
+        if (postToastTimer != null) {
+            clearTimeout(postToastTimer);
+            postToastTimer = null;
+        }
+        if (state == 'posting') {
+            if (posting != null) posting.style.display = 'flex';
+            if (posted != null) posted.style.display = 'none';
+        } else {
+            if (posting != null) posting.style.display = 'none';
+            if (posted != null) posted.style.display = 'flex';
+            postToastTimer = setTimeout(function() {
+                toast.classList.remove('active');
+                postToastTimer = null;
+            }, 4000);
+        }
+        toast.classList.add('active');
+    }
+
+    // post button click handler
+    if (postBtn != null) {
+        postBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (currentUser == null || !currentUser.username) return;
+
+            let text = '';
+            if (createPostText != null) text = createPostText.value.trim();
+
+            // collect images
+            let images = [];
+            let preview = document.getElementById('createPostImagePreview');
+            if (preview != null) {
+                let imgElements = preview.querySelectorAll('.create-post-image-item img');
+                for (let i = 0; i < imgElements.length; i++) {
+                    if (imgElements[i].src && imgElements[i].src != '') {
+                        images.push(imgElements[i].src);
+                    }
                 }
             }
+
+            if (text == '' && images.length == 0) return;
+
+            closeModal();
+            showPostToast('posting');
+
+            setTimeout(function() {
+                try {
+                    let posts = [];
+                    let raw = localStorage.getItem('threads_user_posts');
+                    if (raw != null) {
+                        posts = JSON.parse(raw);
+                        if (!Array.isArray(posts)) posts = [];
+                    }
+
+                    let newPost = {
+                        username: currentUser.username,
+                        avatar: currentUser.avatar || '',
+                        text: text,
+                        time: 'now',
+                        likes: 0,
+                        comments: 0
+                    };
+                    if (images.length > 0) {
+                        newPost.images = images;
+                    }
+
+                    posts.unshift(newPost);
+                    localStorage.setItem('threads_user_posts', JSON.stringify(posts));
+                } catch(e) {
+                    console.error('Post save error:', e);
+                }
+                showPostToast('posted');
+            }, 1200);
         });
     }
 

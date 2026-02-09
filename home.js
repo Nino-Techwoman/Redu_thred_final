@@ -38,24 +38,24 @@ function loadFromStorage(key) {
 
 // compress image using canvas
 function compressImage(dataUrl, callback) {
-    var maxW = 800;
-    var maxH = 800;
-    var quality = 0.7;
-    var tempImg = new Image();
+    let maxW = 800;
+    let maxH = 800;
+    let quality = 0.7;
+    let tempImg = new Image();
     tempImg.onload = function() {
-        var w = tempImg.width;
-        var h = tempImg.height;
+        let w = tempImg.width;
+        let h = tempImg.height;
         if (w > maxW || h > maxH) {
-            var ratio = Math.min(maxW / w, maxH / h);
+            let ratio = Math.min(maxW / w, maxH / h);
             w = Math.round(w * ratio);
             h = Math.round(h * ratio);
         }
-        var canvas = document.createElement('canvas');
+        let canvas = document.createElement('canvas');
         canvas.width = w;
         canvas.height = h;
-        var ctx = canvas.getContext('2d');
+        let ctx = canvas.getContext('2d');
         ctx.drawImage(tempImg, 0, 0, w, h);
-        var compressed = canvas.toDataURL('image/jpeg', quality);
+        let compressed = canvas.toDataURL('image/jpeg', quality);
         callback(compressed);
     };
     tempImg.onerror = function() {
@@ -74,7 +74,7 @@ function saveToStorage(key, data) {
         console.error('Storage full, attempting cleanup...', e);
         if (key == 'threads_user_posts' && Array.isArray(data) && data.length > 1) {
             // remove images from older posts to free space
-            for (var i = data.length - 1; i >= 1; i--) {
+            for (let i = data.length - 1; i >= 1; i--) {
                 if (data[i].images && data[i].images.length > 0) {
                     data[i].images = [];
                 }
@@ -1054,6 +1054,10 @@ function createPost(text, images) {
 
     // store pending post
     pendingNewPost = newPost;
+
+    // add to feed and re-render so the post appears immediately
+    feedPosts.unshift(newPost);
+    renderFeed();
 }
 
 // show pending post
@@ -1135,9 +1139,20 @@ function openModal() {
         if (addThreadAvatar != null && currentUser != null) {
             addThreadAvatar.src = currentUser.avatar;
         }
+        // ensure post button matches textarea content
         let textarea = document.getElementById('createPostText');
+        let postBtn = document.getElementById('createPostSubmit');
+        if (textarea != null && postBtn != null) {
+            if (textarea.value.trim() != '') {
+                postBtn.disabled = false;
+                postBtn.removeAttribute('disabled');
+            } else {
+                postBtn.disabled = true;
+                postBtn.setAttribute('disabled', '');
+            }
+        }
         if (textarea != null) {
-            textarea.focus();
+            setTimeout(function() { textarea.focus(); }, 50);
         }
     }
 }
@@ -1287,12 +1302,21 @@ function clearCreatePostForm() {
     let textarea = document.getElementById('createPostText');
     let imagePreview = document.getElementById('createPostImagePreview');
     let fileInput = document.getElementById('createPostImage');
+    let postBtn = document.getElementById('createPostSubmit');
+    let addThreadText = document.querySelector('.add-thread-text');
+    let addThreadAvatar = document.getElementById('addThreadAvatar');
     if (textarea != null) textarea.value = '';
     if (imagePreview != null) {
         imagePreview.innerHTML = '';
         imagePreview.style.display = 'none';
     }
     if (fileInput != null) fileInput.value = '';
+    if (postBtn != null) {
+        postBtn.disabled = true;
+        postBtn.setAttribute('disabled', '');
+    }
+    if (addThreadText != null) addThreadText.classList.remove('active');
+    if (addThreadAvatar != null) addThreadAvatar.classList.remove('active');
 }
 
 // close modal
@@ -1625,14 +1649,14 @@ function initSuggestedCards() {
 // clean up oversized images in stored posts on load
 function cleanupOldPosts() {
     try {
-        var raw = localStorage.getItem('threads_user_posts');
+        let raw = localStorage.getItem('threads_user_posts');
         if (raw == null) return;
-        var posts = JSON.parse(raw);
+        let posts = JSON.parse(raw);
         if (!Array.isArray(posts)) return;
-        var changed = false;
-        for (var i = 0; i < posts.length; i++) {
+        let changed = false;
+        for (let i = 0; i < posts.length; i++) {
             if (posts[i].images && posts[i].images.length > 0) {
-                for (var j = 0; j < posts[i].images.length; j++) {
+                for (let j = 0; j < posts[i].images.length; j++) {
                     if (posts[i].images[j] && posts[i].images[j].length > 200000) {
                         posts[i].images[j] = '';
                         changed = true;
@@ -1683,7 +1707,7 @@ function init() {
         feedPosts.push(samplePosts[i]);
     }
 
-    renderFeed();
+    try { renderFeed(); } catch(e) { console.error("renderFeed error:", e); }
 
     // close dropdowns when clicking outside
     document.addEventListener('click', function(e) {
@@ -1805,60 +1829,74 @@ function init() {
     // modal submit
     let createPostSubmit = document.getElementById('createPostSubmit');
     if (createPostSubmit != null) {
-        createPostSubmit.onclick = function() {
-            let textarea = document.getElementById('createPostText');
-            let preview = document.getElementById('createPostImagePreview');
-            let text = textarea.value.trim();
+        createPostSubmit.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("Post button clicked");
+            try {
+                let textarea = document.getElementById('createPostText');
+                let preview = document.getElementById('createPostImagePreview');
+                if (textarea == null) { console.error("textarea not found"); return; }
+                let text = textarea.value.trim();
 
-            // collect all preview images
-            let images = [];
-            if (preview != null) {
-                let imgElements = preview.querySelectorAll('.create-post-image-item img');
-                for (let i = 0; i < imgElements.length; i++) {
-                    if (imgElements[i].src && imgElements[i].src != '') {
-                        images.push(imgElements[i].src);
-                    }
-                }
-            }
-
-            let hasText = text != '';
-            let hasImages = images.length > 0;
-
-            // if sharing a post, allow empty text
-            if (shareTargetPost != null) {
-                // increment share count
-                for (let i = 0; i < feedPosts.length; i++) {
-                    if (feedPosts[i].id == shareTargetPost.id) {
-                        feedPosts[i].shares = feedPosts[i].shares + 1;
-                        let shareBtn = document.querySelector('.share-btn[data-id="' + shareTargetPost.id + '"]');
-                        if (shareBtn != null) {
-                            let span = shareBtn.querySelector('span');
-                            if (span == null) {
-                                span = document.createElement('span');
-                                shareBtn.appendChild(span);
-                            }
-                            span.textContent = feedPosts[i].shares;
+                // collect all preview images
+                let images = [];
+                if (preview != null) {
+                    let imgElements = preview.querySelectorAll('.create-post-image-item img');
+                    for (let i = 0; i < imgElements.length; i++) {
+                        if (imgElements[i].src && imgElements[i].src != '') {
+                            images.push(imgElements[i].src);
                         }
-                        break;
                     }
                 }
-                closeModal();
-                clearCreatePostForm();
-                showPostToast('posting');
-                setTimeout(function() {
-                    try { createPost(text || ' ', images); } catch(e) { console.error(e); }
-                    showPostToast('posted');
-                }, 1200);
-            } else if (hasText || hasImages) {
-                closeModal();
-                clearCreatePostForm();
-                showPostToast('posting');
-                setTimeout(function() {
-                    try { createPost(text, images); } catch(e) { console.error(e); }
-                    showPostToast('posted');
-                }, 1200);
+
+                let hasText = text != '';
+                let hasImages = images.length > 0;
+                console.log("hasText:", hasText, "hasImages:", hasImages);
+
+                // if sharing a post, allow empty text
+                if (shareTargetPost != null) {
+                    // increment share count
+                    for (let i = 0; i < feedPosts.length; i++) {
+                        if (feedPosts[i].id == shareTargetPost.id) {
+                            feedPosts[i].shares = feedPosts[i].shares + 1;
+                            let shareBtn = document.querySelector('.share-btn[data-id="' + shareTargetPost.id + '"]');
+                            if (shareBtn != null) {
+                                let span = shareBtn.querySelector('span');
+                                if (span == null) {
+                                    span = document.createElement('span');
+                                    shareBtn.appendChild(span);
+                                }
+                                span.textContent = feedPosts[i].shares;
+                            }
+                            break;
+                        }
+                    }
+                    closeModal();
+                    clearCreatePostForm();
+                    showPostToast('posting');
+                    setTimeout(function() {
+                        try { createPost(text || ' ', images); } catch(e) { console.error(e); }
+                        showPostToast('posted');
+                    }, 1200);
+                } else if (hasText || hasImages) {
+                    closeModal();
+                    clearCreatePostForm();
+                    showPostToast('posting');
+                    setTimeout(function() {
+                        try { createPost(text, images); } catch(e) { console.error(e); }
+                        showPostToast('posted');
+                    }, 1200);
+                } else {
+                    console.log("No text or images to post");
+                }
+            } catch(err) {
+                console.error("Post submit error:", err);
             }
-        };
+        });
+        console.log("Post submit handler attached");
+    } else {
+        console.error("createPostSubmit button not found");
     }
 
     // image upload (multiple)
@@ -2088,13 +2126,14 @@ function init() {
         });
     }
 
-    // textarea input
+    // textarea input - enable/disable post button
     let createPostText = document.getElementById('createPostText');
     let postBtn = document.getElementById('createPostSubmit');
     let addThreadText = document.querySelector('.add-thread-text');
     let addThreadAvatar = document.getElementById('addThreadAvatar');
 
     if (createPostText != null && postBtn != null) {
+        console.log("Attaching textarea input handler");
         createPostText.addEventListener('input', function() {
             if (this.value.trim() != '') {
                 postBtn.disabled = false;
@@ -2107,6 +2146,7 @@ function init() {
                 }
             } else {
                 postBtn.disabled = true;
+                postBtn.setAttribute('disabled', '');
                 if (addThreadText != null) {
                     addThreadText.classList.remove('active');
                 }
@@ -2115,6 +2155,18 @@ function init() {
                 }
             }
         });
+        // also listen for keyup as backup for input event
+        createPostText.addEventListener('keyup', function() {
+            if (this.value.trim() != '') {
+                postBtn.disabled = false;
+                postBtn.removeAttribute('disabled');
+            } else {
+                postBtn.disabled = true;
+                postBtn.setAttribute('disabled', '');
+            }
+        });
+    } else {
+        console.error("createPostText or postBtn not found:", createPostText, postBtn);
     }
 
     // feed tabs
