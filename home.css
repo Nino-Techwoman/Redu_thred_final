@@ -1433,6 +1433,37 @@ body {
     color: #f5f5f5;
 }
 
+.create-feed-filter-container {
+    position: relative;
+}
+
+.create-feed-filter-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.create-feed-filter-container .search-filter-dropdown {
+    top: calc(100% + 8px);
+    right: 0;
+}
+
+.create-feed-calendar-container {
+    position: relative;
+    width: 100%;
+}
+
+.create-feed-calendar-container .search-calendar-picker {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+}
+
 .create-feed-search-cancel {
     background: none;
     border: none;

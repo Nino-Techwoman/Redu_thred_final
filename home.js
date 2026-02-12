@@ -1827,6 +1827,15 @@ function init() {
         for (let i = 0; i < createFeedMainElements.length; i++) {
             createFeedMainElements[i].style.display = '';
         }
+        // reset chips, calendar, filter dropdown
+        let cfChips = document.getElementById('createFeedSearchChips');
+        if (cfChips != null) cfChips.innerHTML = '';
+        let cfCal = document.getElementById('createFeedCalendarPicker');
+        if (cfCal != null) cfCal.classList.remove('active');
+        let cfDrop = document.getElementById('createFeedFilterDropdown');
+        if (cfDrop != null) cfDrop.classList.remove('active');
+        let cfInput = document.getElementById('createFeedSearchInput');
+        if (cfInput != null) cfInput.value = '';
     }
 
     if (createFeedSearchCancel != null) {
@@ -1838,6 +1847,176 @@ function init() {
         createFeedSearchBackBtn.onclick = function() {
             hideSearchView();
         };
+    }
+
+    // create feed - filter dropdown + chips + calendar
+    let createFeedFilterBtn = document.getElementById('createFeedFilterBtn');
+    let createFeedFilterDropdown = document.getElementById('createFeedFilterDropdown');
+    let cfSearchChips = document.getElementById('createFeedSearchChips');
+    let cfCalendarPicker = document.getElementById('createFeedCalendarPicker');
+    let cfCalendarGrid = document.getElementById('cfCalendarGrid');
+    let cfCalendarMonthYear = document.getElementById('cfCalendarMonthYear');
+    let cfCalendarPrev = document.getElementById('cfCalendarPrev');
+    let cfCalendarNext = document.getElementById('cfCalendarNext');
+    let cfCalendarMonth = new Date().getMonth();
+    let cfCalendarYear = new Date().getFullYear();
+    let cfCalendarFilterType = null;
+
+    function cfFormatDate(date) {
+        return date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear();
+    }
+
+    function cfAddChip(type, value) {
+        if (cfSearchChips == null) return;
+        let existing = cfSearchChips.querySelector('[data-type="' + type + '"]');
+        if (existing != null) existing.remove();
+
+        let chip = document.createElement('div');
+        chip.className = 'search-chip';
+        chip.dataset.type = type;
+
+        let label = 'From';
+        if (type == 'after') label = 'After';
+        else if (type == 'before') label = 'Before';
+
+        if (type == 'profile') {
+            chip.innerHTML = '<span class="search-chip-label">' + label + '</span>' +
+                '<input class="search-chip-input" type="text" placeholder="Profile" value="">' +
+                '<button class="search-chip-remove"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';
+        } else {
+            chip.innerHTML = '<span class="search-chip-label">' + label + '</span>' +
+                '<span class="search-chip-value">' + sanitize(value) + '</span>' +
+                '<button class="search-chip-remove"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';
+        }
+
+        chip.querySelector('.search-chip-remove').onclick = function(e) {
+            e.stopPropagation();
+            chip.remove();
+            if (cfCalendarPicker != null) cfCalendarPicker.classList.remove('active');
+        };
+
+        if (type == 'after' || type == 'before') {
+            chip.onclick = function(e) {
+                if (e.target.closest('.search-chip-remove')) return;
+                e.stopPropagation();
+                cfShowCalendar(type);
+            };
+        }
+
+        if (type == 'profile') {
+            chip.onclick = function(e) {
+                if (e.target.closest('.search-chip-remove')) return;
+                e.stopPropagation();
+                let inp = chip.querySelector('.search-chip-input');
+                if (inp != null) inp.focus();
+            };
+        }
+
+        cfSearchChips.appendChild(chip);
+    }
+
+    function cfRenderCalendar() {
+        if (cfCalendarGrid == null || cfCalendarMonthYear == null) return;
+        cfCalendarMonthYear.textContent = fullMonths[cfCalendarMonth] + ' ' + cfCalendarYear;
+        cfCalendarGrid.innerHTML = '';
+
+        let firstDay = new Date(cfCalendarYear, cfCalendarMonth, 1).getDay();
+        let daysInMonth = new Date(cfCalendarYear, cfCalendarMonth + 1, 0).getDate();
+        let today = new Date();
+
+        for (let i = 0; i < firstDay; i++) {
+            let empty = document.createElement('div');
+            empty.className = 'calendar-day empty';
+            cfCalendarGrid.appendChild(empty);
+        }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+            let btn = document.createElement('button');
+            btn.className = 'calendar-day';
+            btn.textContent = d;
+            if (d == today.getDate() && cfCalendarMonth == today.getMonth() && cfCalendarYear == today.getFullYear()) {
+                btn.classList.add('today');
+            }
+            btn.dataset.day = d;
+            btn.onclick = function() {
+                let picked = new Date(cfCalendarYear, cfCalendarMonth, parseInt(this.dataset.day));
+                cfAddChip(cfCalendarFilterType, cfFormatDate(picked));
+                cfCalendarPicker.classList.remove('active');
+            };
+            cfCalendarGrid.appendChild(btn);
+        }
+    }
+
+    function cfShowCalendar(type) {
+        if (cfCalendarPicker == null) return;
+        if (cfCalendarPicker.classList.contains('active') && cfCalendarFilterType == type) {
+            cfCalendarPicker.classList.remove('active');
+            return;
+        }
+        cfCalendarFilterType = type;
+        cfCalendarMonth = new Date().getMonth();
+        cfCalendarYear = new Date().getFullYear();
+        cfRenderCalendar();
+        cfCalendarPicker.classList.add('active');
+    }
+
+    if (cfCalendarPrev != null) {
+        cfCalendarPrev.onclick = function(e) {
+            e.stopPropagation();
+            cfCalendarMonth--;
+            if (cfCalendarMonth < 0) { cfCalendarMonth = 11; cfCalendarYear--; }
+            cfRenderCalendar();
+        };
+    }
+    if (cfCalendarNext != null) {
+        cfCalendarNext.onclick = function(e) {
+            e.stopPropagation();
+            cfCalendarMonth++;
+            if (cfCalendarMonth > 11) { cfCalendarMonth = 0; cfCalendarYear++; }
+            cfRenderCalendar();
+        };
+    }
+
+    if (createFeedFilterBtn != null && createFeedFilterDropdown != null) {
+        createFeedFilterBtn.onclick = function(e) {
+            e.stopPropagation();
+            createFeedFilterDropdown.classList.toggle('active');
+            if (cfCalendarPicker != null) cfCalendarPicker.classList.remove('active');
+        };
+
+        let cfFilterItems = createFeedFilterDropdown.querySelectorAll('.search-filter-item');
+        if (cfFilterItems[0] != null) {
+            cfFilterItems[0].onclick = function(e) {
+                e.stopPropagation();
+                createFeedFilterDropdown.classList.remove('active');
+                cfAddChip('after', cfFormatDate(new Date()));
+            };
+        }
+        if (cfFilterItems[1] != null) {
+            cfFilterItems[1].onclick = function(e) {
+                e.stopPropagation();
+                createFeedFilterDropdown.classList.remove('active');
+                cfAddChip('before', cfFormatDate(new Date()));
+            };
+        }
+        if (cfFilterItems[2] != null) {
+            cfFilterItems[2].onclick = function(e) {
+                e.stopPropagation();
+                createFeedFilterDropdown.classList.remove('active');
+                cfAddChip('profile', 'Profile');
+                let cfInput = document.getElementById('createFeedSearchInput');
+                if (cfInput != null) cfInput.focus();
+            };
+        }
+
+        document.addEventListener('click', function(e) {
+            if (createFeedFilterDropdown.contains(e.target) == false && createFeedFilterBtn.contains(e.target) == false) {
+                createFeedFilterDropdown.classList.remove('active');
+            }
+            if (cfCalendarPicker != null && cfCalendarPicker.contains(e.target) == false && createFeedFilterDropdown.contains(e.target) == false && createFeedFilterBtn.contains(e.target) == false && (cfSearchChips == null || cfSearchChips.contains(e.target) == false)) {
+                cfCalendarPicker.classList.remove('active');
+            }
+        });
     }
 
     // clean up old oversized images from storage

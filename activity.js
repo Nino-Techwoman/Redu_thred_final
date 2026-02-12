@@ -23,14 +23,40 @@ function getSampleActivity() {
     let activities = [
         {
             id: 1,
-            type: 'followed',
+            type: 'suggestion',
             username: 'gkurtskhalia',
             avatar: 'images/avatar1.jpg',
-            time: '10w',
+            time: '1d',
             isFollowing: false
         },
         {
             id: 2,
+            type: 'views',
+            username: '',
+            avatar: '',
+            time: '3d',
+            viewCount: 50,
+            postText: '12345'
+        },
+        {
+            id: 3,
+            type: 'suggested_thread',
+            username: 'mikachu2323',
+            avatar: 'images/avatar3.jpg',
+            time: '3d',
+            postText: '\u10E4\u10DD\u10E2\u10DD \u10E7\u10E3\u10E0\u10D0\u10D3\u10E6\u10D4\u10D1\u10D8\u10E1\u10D0\u10D7\u10D5\u10D8\u10E1 \uD83D\uDE01',
+            likes: 3
+        },
+        {
+            id: 4,
+            type: 'suggestion',
+            username: 'gio.patashuri.37',
+            avatar: 'images/avatar4.jpg',
+            time: '4d',
+            isFollowing: false
+        },
+        {
+            id: 5,
             type: 'followed',
             username: 'copurashvili',
             avatar: 'images/avatar2.jpg',
@@ -38,38 +64,14 @@ function getSampleActivity() {
             isFollowing: false
         },
         {
-            id: 3,
-            type: 'followed',
-            username: 'ekaterinebendeliani',
-            avatar: 'images/avatar3.jpg',
-            time: '13w',
-            isFollowing: false
-        },
-        {
-            id: 4,
-            type: 'suggestion',
-            username: 'mamukanacvaladze',
-            avatar: 'images/avatar4.jpg',
-            time: '24w',
-            isFollowing: false
-        },
-        {
-            id: 5,
+            id: 6,
             type: 'suggested_thread',
             username: 'mamukalasareishvili',
             avatar: 'images/avatar5.jpg',
             time: '24w',
-            postText: '@noahaoahoaa მოგესალმებო ლამაზო',
+            postText: '@noahaoahoaa \u10DB\u10DD\u10D2\u10D4\u10E1\u10D0\u10DA\u10DB\u10D4\u10D1\u10DD \u10DA\u10D0\u10DB\u10D0\u10D6\u10DD',
             likes: 4,
             comments: 5
-        },
-        {
-            id: 6,
-            type: 'suggestion',
-            username: 'c0sta884',
-            avatar: 'images/avatar1.jpg',
-            time: '25w',
-            isFollowing: false
         },
         {
             id: 7,
@@ -84,8 +86,8 @@ function getSampleActivity() {
 }
 
 // render activity list
-function renderActivityList() {
-    console.log('rendering activity list');
+function renderActivityList(filter) {
+    console.log('rendering activity list, filter: ' + filter);
     let list = document.getElementById('activityList');
     if (list == null) {
         console.log('list not found');
@@ -95,10 +97,41 @@ function renderActivityList() {
     let activities = getSampleActivity();
     list.innerHTML = '';
 
-    for (let i = 0; i < activities.length; i++) {
-        let activity = activities[i];
-        let item = createActivityItem(activity);
-        list.appendChild(item);
+    // filter activities based on selected tab
+    let filtered = [];
+    if (!filter || filter == 'all') {
+        filtered = activities;
+    } else {
+        for (let i = 0; i < activities.length; i++) {
+            let a = activities[i];
+            if (filter == 'follows' && a.type == 'follow_only') {
+                filtered.push(a);
+            }
+            if (filter == 'replies' && a.type == 'reply') {
+                filtered.push(a);
+            }
+            if (filter == 'mentions' && a.type == 'mention') {
+                filtered.push(a);
+            }
+            if (filter == 'quotes' && a.type == 'quote') {
+                filtered.push(a);
+            }
+            if (filter == 'reposts' && a.type == 'repost') {
+                filtered.push(a);
+            }
+        }
+    }
+
+    if (filtered.length == 0) {
+        let empty = document.createElement('div');
+        empty.className = 'activity-empty';
+        empty.textContent = 'No activity yet.';
+        list.appendChild(empty);
+    } else {
+        for (let i = 0; i < filtered.length; i++) {
+            let item = createActivityItem(filtered[i]);
+            list.appendChild(item);
+        }
     }
     console.log('done rendering');
 }
@@ -123,6 +156,9 @@ function createActivityItem(activity) {
     }
     if (activity.type == 'suggested_thread') {
         typeText = 'Suggested thread';
+    }
+    if (activity.type == 'views') {
+        typeText = '';
     }
 
     // build post preview html
@@ -167,24 +203,45 @@ function createActivityItem(activity) {
 
     // build the main html
     let html = '';
-    html = html + '<div class="activity-avatar-wrapper">';
-    html = html + '<img src="' + activity.avatar + '" alt="' + activity.username + '" class="activity-avatar">';
-    html = html + '<div class="activity-badge">';
-    html = html + '<svg viewBox="0 0 24 24" fill="currentColor">';
-    html = html + '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>';
-    html = html + '</svg>';
-    html = html + '</div>';
-    html = html + '</div>';
-    html = html + '<div class="activity-content">';
-    html = html + '<div class="activity-header-row">';
-    html = html + '<span class="activity-username">' + activity.username + '</span>';
-    html = html + '<span class="activity-time">' + activity.time + '</span>';
-    html = html + '</div>';
-    html = html + '<div class="activity-type">' + typeText + '</div>';
-    html = html + postPreviewHtml;
-    html = html + '</div>';
-    if (actionHtml != '') {
-        html = html + '<div class="activity-action">' + actionHtml + '</div>';
+
+    if (activity.type == 'views') {
+        // Threads logo icon for views notifications
+        html = html + '<div class="activity-avatar-wrapper">';
+        html = html + '<div class="activity-threads-icon">';
+        html = html + '<svg width="24" height="24" viewBox="0 0 192 192" fill="currentColor">';
+        html = html + '<path d="M141.537 88.988C140.71 88.592 139.87 88.21 139.019 87.845C137.537 60.538 122.616 44.905 97.562 44.745C97.448 44.744 97.336 44.744 97.222 44.745C82.236 44.745 69.773 51.141 62.103 62.669L75.202 70.832C80.852 62.302 89.656 58.088 97.222 58.088C97.3 58.088 97.379 58.088 97.458 58.088C105.699 58.138 111.869 60.686 115.832 65.663C118.776 69.399 120.789 74.476 121.834 80.821C114.737 79.539 107.037 79.026 98.785 79.285C74.577 80.032 58.804 93.827 59.802 113.172C60.31 122.965 65.248 131.497 73.7 136.869C80.852 141.388 89.862 143.555 99.226 143.111C111.333 142.536 120.862 138.03 127.529 129.744C132.584 123.475 135.882 115.518 137.515 105.596C143.552 109.146 148.022 113.768 150.601 119.57C154.838 128.943 155.078 143.857 145.084 153.822C136.274 162.606 125.674 166.666 107.759 166.817C87.905 166.652 73.067 160.618 63.363 148.81C54.241 137.698 49.517 121.697 49.329 101.279C49.517 80.86 54.241 64.859 63.363 53.748C73.067 41.94 87.905 35.906 107.759 35.741C127.737 35.907 142.861 41.988 152.853 53.857C157.76 59.686 161.495 66.865 164.02 75.237L176.53 71.808C173.515 61.768 169.03 53.101 163.071 45.937C150.789 31.168 133.174 23.395 107.84 23.2C107.72 23.199 107.601 23.199 107.481 23.2C82.248 23.396 65.023 31.216 53.043 46.156C42.182 59.745 36.539 78.163 36.33 101.218L36.327 101.279L36.33 101.34C36.539 124.395 42.182 142.813 53.043 156.401C65.023 171.342 82.248 179.163 107.481 179.358C107.601 179.358 107.72 179.358 107.84 179.358C129.07 179.178 142.854 173.664 154.168 162.387C169.014 147.597 168.558 128.232 162.947 115.561C158.921 106.424 151.52 99.015 141.537 88.988ZM99.724 130.179C89.796 130.654 72.743 126.269 72.099 113.71C71.635 104.763 78.802 93.033 99.563 92.3C101.91 92.223 104.21 92.185 106.462 92.185C112.441 92.185 118.063 92.731 123.268 93.789C121.378 121.779 108.653 129.751 99.724 130.179Z"/>';
+        html = html + '</svg>';
+        html = html + '</div>';
+        html = html + '</div>';
+        html = html + '<div class="activity-content">';
+        html = html + '<div class="activity-header-row">';
+        html = html + '<span class="activity-username">Your reply got over ' + activity.viewCount + ' views.</span>';
+        html = html + '<span class="activity-time">' + activity.time + '</span>';
+        html = html + '</div>';
+        if (activity.postText) {
+            html = html + '<div class="activity-type">' + activity.postText + '</div>';
+        }
+        html = html + '</div>';
+    } else {
+        html = html + '<div class="activity-avatar-wrapper">';
+        html = html + '<img src="' + activity.avatar + '" alt="' + activity.username + '" class="activity-avatar">';
+        html = html + '<div class="activity-badge">';
+        html = html + '<svg viewBox="0 0 24 24" fill="currentColor">';
+        html = html + '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>';
+        html = html + '</svg>';
+        html = html + '</div>';
+        html = html + '</div>';
+        html = html + '<div class="activity-content">';
+        html = html + '<div class="activity-header-row">';
+        html = html + '<span class="activity-username">' + activity.username + '</span>';
+        html = html + '<span class="activity-time">' + activity.time + '</span>';
+        html = html + '</div>';
+        html = html + '<div class="activity-type">' + typeText + '</div>';
+        html = html + postPreviewHtml;
+        html = html + '</div>';
+        if (actionHtml != '') {
+            html = html + '<div class="activity-action">' + actionHtml + '</div>';
+        }
     }
 
     div.innerHTML = html;
@@ -502,19 +559,49 @@ function init() {
         let filterItems = document.querySelectorAll('.activity-dropdown-item');
         for (let i = 0; i < filterItems.length; i++) {
             filterItems[i].onclick = function(e) {
-                // stop click from closing menu
                 e.stopPropagation();
-                // remove active from all
                 let allItems = document.querySelectorAll('.activity-dropdown-item');
                 for (let j = 0; j < allItems.length; j++) {
                     allItems[j].classList.remove('active');
                 }
-                // add active to clicked
                 this.classList.add('active');
-                // close dropdown
                 activityDropdown.classList.remove('active');
+                // re-render with filter
+                let filter = this.getAttribute('data-filter');
+                renderActivityList(filter);
+                // sync mobile tabs
+                let mobileTabs = document.querySelectorAll('.activity-tab-btn');
+                for (let j = 0; j < mobileTabs.length; j++) {
+                    mobileTabs[j].classList.remove('active');
+                    if (mobileTabs[j].getAttribute('data-filter') == filter) {
+                        mobileTabs[j].classList.add('active');
+                    }
+                }
             };
         }
+    }
+
+    // mobile filter tabs
+    let tabBtns = document.querySelectorAll('.activity-tab-btn');
+    for (let t = 0; t < tabBtns.length; t++) {
+        tabBtns[t].onclick = function(e) {
+            e.stopPropagation();
+            for (let j = 0; j < tabBtns.length; j++) {
+                tabBtns[j].classList.remove('active');
+            }
+            this.classList.add('active');
+            let filter = this.getAttribute('data-filter');
+            // re-render activity list with filter
+            renderActivityList(filter);
+            // also sync with desktop dropdown
+            let dropItems = document.querySelectorAll('.activity-dropdown-item');
+            for (let j = 0; j < dropItems.length; j++) {
+                dropItems[j].classList.remove('active');
+                if (dropItems[j].getAttribute('data-filter') == filter) {
+                    dropItems[j].classList.add('active');
+                }
+            }
+        };
     }
 
     // activity more dropdown
