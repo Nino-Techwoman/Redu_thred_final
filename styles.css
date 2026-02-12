@@ -835,6 +835,7 @@ body {
     cursor: pointer;
     position: absolute;
     right: 0;
+    text-decoration: none;
 }
 
 .login-btn-tablet:hover {
@@ -1945,16 +1946,14 @@ body {
 
     .header {
         justify-content: center;
+        align-items: center;
         position: relative;
-        padding-bottom: 50px;
+        padding: 12px 16px;
     }
 
     .header::before {
         content: "";
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
+        display: block;
         width: 30px;
         height: 34px;
         background-image: url("icons/logo.svg");
@@ -1964,13 +1963,13 @@ body {
     }
 
     .header h1 {
-        display: none;
+        display: none !important;
     }
 
     .login-btn-tablet {
         display: block;
         position: absolute;
-        right: -15px;
+        right: 16px;
         top: 50%;
         transform: translateY(-50%);
     }
@@ -1995,6 +1994,10 @@ body {
 
     .feed {
         gap: 8px;
+    }
+
+    .fab {
+        display: none;
     }
 }
 

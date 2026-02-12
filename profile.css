@@ -1531,6 +1531,36 @@ body {
     .profile-actions {
         flex-direction: column;
     }
+
+    .fab {
+        display: none;
+    }
+
+    .thread-overlay {
+        left: 0;
+    }
+
+    .modal {
+        max-width: 95%;
+        margin: 0 10px;
+    }
+
+    .create-post-header {
+        padding: 12px 16px;
+    }
+
+    .create-post-body {
+        padding: 16px;
+    }
+
+    .create-post-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .create-post-footer {
+        padding: 12px 16px;
+    }
 }
 
 

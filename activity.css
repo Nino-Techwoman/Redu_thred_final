@@ -1475,13 +1475,8 @@ body {
         font-size: 13px;
     }
 
-    /* FAB sits above bottom nav */
     .fab {
-        bottom: 80px;
-        right: 20px;
-        width: 56px;
-        height: 56px;
-        border-radius: 14px;
+        display: none;
     }
 
     /* Search modal full width on mobile */
