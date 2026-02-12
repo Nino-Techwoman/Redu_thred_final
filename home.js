@@ -976,14 +976,15 @@ function toggleLike(postId) {
 let pendingNewPost = null;
 
 // create post
-function createPost(text, images) {
+function createPost(text, images, quote) {
     if (currentUser == null) {
         return;
     }
-    // allow post if there is text or images
+    // allow post if there is text or images or quote
     let hasText = text != null && text.trim() != '';
     let hasImages = images != null && images.length > 0;
-    if (!hasText && !hasImages) {
+    let hasQuote = quote != null;
+    if (!hasText && !hasImages && !hasQuote) {
         return;
     }
     // check rate limit
@@ -1005,6 +1006,7 @@ function createPost(text, images) {
         verified: false,
         text: (text || '').trim(),
         images: images || [],
+        quote: quote || null,
         time: "now",
         likes: 0,
         replies: 0,
@@ -1400,7 +1402,17 @@ function submitReply() {
     let textarea = document.getElementById('replyTextarea');
     if (textarea == null) return;
     let text = textarea.value.trim();
-    if (text == '') return;
+
+    // collect reply image if attached
+    let replyImage = null;
+    let previewImg = document.getElementById('replyPreviewImg');
+    let previewContainer = document.getElementById('replyImagePreview');
+    if (previewContainer != null && previewContainer.style.display != 'none' && previewImg != null && previewImg.src && previewImg.src != '') {
+        replyImage = previewImg.src;
+    }
+
+    // require text or image
+    if (text == '' && replyImage == null) return;
 
     // check rate limit
     let rateCheck = postRateLimiter.check();
@@ -1448,6 +1460,7 @@ function submitReply() {
         repliedBy: currentUser != null ? currentUser.username : 'you',
         repliedAt: Date.now(),
         userText: text,
+        replyImage: replyImage,
         originalPost: {
             id: replyTargetPost.id,
             username: replyTargetPost.username,
@@ -1689,6 +1702,13 @@ function init() {
                 allRepost[i].classList.remove('active');
             }
         }
+        // close thread post more dropdowns
+        if (e.target.closest('.thread-post-more-container') == null) {
+            let allTpDropdowns = document.querySelectorAll('.thread-post-more-dropdown.active');
+            for (let i = 0; i < allTpDropdowns.length; i++) {
+                allTpDropdowns[i].classList.remove('active');
+            }
+        }
     });
 
     // composer click
@@ -1836,11 +1856,17 @@ function init() {
                             break;
                         }
                     }
+                    let quoteData = {
+                        username: shareTargetPost.username,
+                        avatar: shareTargetPost.avatar,
+                        text: shareTargetPost.text || '',
+                        verified: shareTargetPost.verified || false
+                    };
                     closeModal();
                     clearCreatePostForm();
                     showPostToast('posting');
                     setTimeout(function() {
-                        try { createPost(text || ' ', images); } catch(e) { console.log(e); }
+                        try { createPost(text || '', images, quoteData); } catch(e) { console.log(e); }
                         showPostToast('posted');
                     }, 1200);
                 } else if (hasText || hasImages) {
@@ -2028,7 +2054,22 @@ function init() {
                     allHtml += '<img src="' + encodeURI(post.avatar) + '" class="thread-post-avatar" alt="">';
                     allHtml += '<span class="thread-post-username">' + safeUsername + '</span>';
                     allHtml += '<span class="thread-post-time">' + post.time + '</span>';
+                    allHtml += '<div class="thread-post-more-container">';
                     allHtml += '<button class="thread-post-more"><img src="icons/more.svg" width="20" height="20" alt=""></button>';
+                    allHtml += '<div class="thread-post-more-dropdown">';
+                    allHtml += '<button class="thread-post-menu-item"><span>Insights</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="12" width="4" height="9" rx="1"/><rect x="10" y="7" width="4" height="14" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg></button>';
+                    allHtml += '<button class="thread-post-menu-item"><span>Edit</span><span class="thread-post-menu-time">' + (post.time || '') + '</span></button>';
+                    allHtml += '<div class="thread-post-menu-divider"></div>';
+                    allHtml += '<button class="thread-post-menu-item"><span>Save</span><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M3.40039 17.7891V3.94995C3.40039 2.43117 4.6316 1.19995 6.15039 1.19995H13.8448C15.3636 1.19995 16.5948 2.43117 16.5948 3.94995V17.6516C16.5948 18.592 15.4579 19.063 14.7929 18.398L10.6201 14.2252C10.4198 14.0249 10.097 14.0184 9.88889 14.2106L5.17191 18.5647C4.49575 19.1888 3.40039 18.7093 3.40039 17.7891Z"/></svg></button>';
+                    allHtml += '<button class="thread-post-menu-item"><span>Pin to profile</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L12 22"/><path d="M5 9L12 2L19 9"/><circle cx="12" cy="18" r="3"/></svg></button>';
+                    allHtml += '<button class="thread-post-menu-item"><span>Hide like and share count</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>';
+                    allHtml += '<button class="thread-post-menu-item"><span>Reply options</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>';
+                    allHtml += '<div class="thread-post-menu-divider"></div>';
+                    allHtml += '<button class="thread-post-menu-item danger"><span>Delete</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></button>';
+                    allHtml += '<div class="thread-post-menu-divider"></div>';
+                    allHtml += '<button class="thread-post-menu-item"><span>Copy link</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>';
+                    allHtml += '</div>';
+                    allHtml += '</div>';
                     allHtml += '</div>';
                     if (safeText.trim() != '') {
                         allHtml += '<p class="thread-post-text">' + safeText + '</p>';
@@ -2048,6 +2089,26 @@ function init() {
                 }
 
                 threadContent.innerHTML = allHtml;
+                // attach thread post more dropdown handlers
+                let threadPostMoreBtns = threadContent.querySelectorAll('.thread-post-more');
+                for (let tp = 0; tp < threadPostMoreBtns.length; tp++) {
+                    (function(btn) {
+                        btn.onclick = function(e) {
+                            e.stopPropagation();
+                            let dropdown = btn.parentElement.querySelector('.thread-post-more-dropdown');
+                            if (dropdown == null) return;
+                            let isOpen = dropdown.classList.contains('active');
+                            // close all other thread post dropdowns
+                            let allTpDropdowns = document.querySelectorAll('.thread-post-more-dropdown.active');
+                            for (let d = 0; d < allTpDropdowns.length; d++) {
+                                allTpDropdowns[d].classList.remove('active');
+                            }
+                            if (!isOpen) {
+                                dropdown.classList.add('active');
+                            }
+                        };
+                    })(threadPostMoreBtns[tp]);
+                }
                 threadOverlay.classList.add('active');
                 // hide side action button
                 if (sideActionContainer != null) {

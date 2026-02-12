@@ -991,6 +991,9 @@ body {
     filter: invert(0);
 }
 
+[data-theme="dark"] .back-btn {
+    color: #fff;
+}
 
 .theme-toggle {
     display: flex;
