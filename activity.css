@@ -500,7 +500,7 @@ body {
 
 .follow-btn.following {
     background-color: transparent;
-    color: #000000;
+    color: #999999;
     border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
@@ -1009,7 +1009,7 @@ body {
 
 .search-suggestion-follow-btn.following {
     background-color: transparent;
-    color: #000000;
+    color: #999999;
     border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
@@ -1380,7 +1380,7 @@ body {
 }
 
 [data-theme="dark"] .follow-btn.following {
-    color: #f5f5f5;
+    color: #777777;
     border-color: rgba(255, 255, 255, 0.15);
 }
 
@@ -1397,7 +1397,7 @@ body {
 }
 
 [data-theme="dark"] .search-suggestion-follow-btn.following {
-    color: #f5f5f5;
+    color: #777777;
     border-color: rgba(255, 255, 255, 0.15);
 }
 
@@ -1945,7 +1945,7 @@ body {
 }
 
 [data-theme="light"] .sidebar {
-    background-color: #f5f5f5;
+    background-color: #ffffff;
 }
 
 .logo {

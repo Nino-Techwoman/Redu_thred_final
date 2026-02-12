@@ -82,6 +82,20 @@ function getSampleActivity() {
             isFollowing: false
         }
     ];
+    // load follows from localStorage
+    let savedFollows = JSON.parse(localStorage.getItem('threads_follows') || '[]');
+    for (let i = 0; i < savedFollows.length; i++) {
+        let f = savedFollows[i];
+        activities.unshift({
+            id: 1000 + f.id,
+            type: 'follow_only',
+            username: f.username,
+            avatar: f.avatar,
+            time: f.time,
+            isFollowing: true
+        });
+    }
+
     return activities;
 }
 
@@ -153,6 +167,10 @@ function createActivityItem(activity) {
     if (activity.type == 'suggestion') {
         typeText = 'Follow suggestion';
         actionHtml = '<button class="follow-btn" data-id="' + activity.id + '">Follow</button>';
+    }
+    if (activity.type == 'follow_only') {
+        typeText = 'You followed';
+        actionHtml = '<button class="follow-btn following" data-id="' + activity.id + '">Following</button>';
     }
     if (activity.type == 'suggested_thread') {
         typeText = 'Suggested thread';
@@ -258,9 +276,28 @@ function createActivityItem(activity) {
                 } else {
                     this.textContent = 'Follow';
                 }
+                // remove from saved follows
+                let saved = JSON.parse(localStorage.getItem('threads_follows') || '[]');
+                saved = saved.filter(function(f) { return f.username !== activity.username; });
+                localStorage.setItem('threads_follows', JSON.stringify(saved));
             } else {
                 this.classList.add('following');
                 this.textContent = 'Following';
+                // save follow to localStorage
+                let saved = JSON.parse(localStorage.getItem('threads_follows') || '[]');
+                let exists = false;
+                for (let j = 0; j < saved.length; j++) {
+                    if (saved[j].username === activity.username) { exists = true; break; }
+                }
+                if (!exists) {
+                    saved.push({
+                        id: activity.id,
+                        username: activity.username,
+                        avatar: activity.avatar,
+                        time: 'now'
+                    });
+                    localStorage.setItem('threads_follows', JSON.stringify(saved));
+                }
             }
         };
     }

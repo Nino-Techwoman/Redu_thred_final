@@ -798,10 +798,7 @@ body {
 /* Feed Container */
 
 .feed-container {
-    background-color: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 16px;
-    overflow: hidden;
+    background-color: transparent;
     margin-bottom: 60px;
 }
 
@@ -841,7 +838,9 @@ body {
     gap: 12px;
     padding: 16px 20px;
     background-color: #ffffff;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 16px;
+    margin-bottom: 6px;
     cursor: pointer;
 }
 
@@ -898,11 +897,9 @@ body {
     gap: 12px;
     padding: 16px 20px;
     background-color: #ffffff;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-}
-
-.post:last-child {
-    border-bottom: none;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 16px;
+    margin-bottom: 6px;
 }
 
 .post-avatar-container {
@@ -1681,7 +1678,7 @@ body {
 /* Side Action Button */
 .side-action-container {
     position: fixed;
-    right: 210px;
+    right: 100px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 100;
@@ -3431,8 +3428,7 @@ body {
 }
 
 [data-theme="dark"] .feed-container {
-    background-color: #181818;
-    border-color: rgba(255, 255, 255, 0.15);
+    background-color: transparent;
 }
 
 [data-theme="dark"] .feed-update-bar {
@@ -3464,7 +3460,7 @@ body {
 
 [data-theme="dark"] .post {
     background-color: #181818;
-    border-bottom-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 [data-theme="dark"] .post-username {
@@ -4262,7 +4258,7 @@ body {
 
 .search-suggestion-follow-btn.following {
     background-color: transparent;
-    color: #000000;
+    color: #999999;
     border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
@@ -4299,6 +4295,12 @@ body {
 
 [data-theme="dark"] .search-suggestion-follow-btn:hover {
     background-color: #e0e0e0;
+}
+
+[data-theme="dark"] .search-suggestion-follow-btn.following {
+    background-color: transparent;
+    color: #777777;
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 [data-theme="dark"] .search-modal-header h2 {
@@ -4833,10 +4835,17 @@ body {
         padding: 10px 16px;
     }
 
-    /* Search modal full width on mobile */
+    /* Search modal full width on mobile, above bottom nav */
     #searchModalOverlay {
         left: 0;
         width: 100%;
+        bottom: 60px;
+        height: auto;
+        top: 0;
+    }
+
+    .search-page-wrapper {
+        height: 100%;
     }
 
     /* Suggested section mobile */
@@ -5070,7 +5079,7 @@ body {
 }
 
 [data-theme="light"] .feed {
-    background-color: #f5f5f5;
+    background-color: transparent;
 }
 
 /* Posts */

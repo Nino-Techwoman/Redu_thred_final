@@ -1599,9 +1599,28 @@ function renderSearchSuggestions() {
             if (this.classList.contains('following')) {
                 this.classList.remove('following');
                 this.textContent = 'Follow';
+                // remove from saved follows
+                let saved = JSON.parse(localStorage.getItem('threads_follows') || '[]');
+                saved = saved.filter(function(f) { return f.id !== user.id; });
+                localStorage.setItem('threads_follows', JSON.stringify(saved));
             } else {
                 this.classList.add('following');
                 this.textContent = 'Following';
+                // save follow to localStorage for activity page
+                let saved = JSON.parse(localStorage.getItem('threads_follows') || '[]');
+                let exists = false;
+                for (let j = 0; j < saved.length; j++) {
+                    if (saved[j].id === user.id) { exists = true; break; }
+                }
+                if (!exists) {
+                    saved.push({
+                        id: user.id,
+                        username: user.username,
+                        avatar: user.avatar,
+                        time: 'now'
+                    });
+                    localStorage.setItem('threads_follows', JSON.stringify(saved));
+                }
             }
         };
 
