@@ -1878,7 +1878,7 @@ body {
     display: flex;
     flex-direction: column;
     max-height: 85vh;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .create-post-header {
@@ -1949,12 +1949,11 @@ body {
     right: 0;
     margin-bottom: 8px;
     background-color: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 16px;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-    min-width: 220px;
-    z-index: 100;
-    overflow: hidden;
+    min-width: 240px;
+    padding: 8px;
+    z-index: 2000;
 }
 
 .more-menu-dropdown.active {
@@ -1966,22 +1965,18 @@ body {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 16px 20px;
+    padding: 14px 16px;
     background: none;
     border: none;
+    border-radius: 12px;
     cursor: pointer;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 21px;
     text-align: start;
     color: #000000;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: break-word;
     -webkit-font-smoothing: antialiased;
-    -webkit-user-select: none;
-    user-select: none;
 }
 
 .more-menu-item:hover {
@@ -1994,7 +1989,8 @@ body {
 
 .more-menu-divider {
     height: 1px;
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: rgba(0, 0, 0, 0.1);
+    margin: 4px 0;
 }
 
 .create-post-body {
@@ -2232,7 +2228,7 @@ body {
     border-radius: 16px;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
     min-width: 280px;
-    z-index: 1001;
+    z-index: 2000;
     overflow: hidden;
 }
 
@@ -2335,36 +2331,32 @@ body {
     transform: translateX(18px);
 }
 
-.create-post-submit {
-    padding: 10px 20px;
+.post-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline-start: 16px;
+    padding-inline-end: 16px;
+    height: 34px;
     background-color: #000;
     color: #fff;
     border: none;
     border-radius: 10px;
     font-size: 15px;
     font-weight: 600;
+    line-height: 21px;
     cursor: pointer;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
 }
 
-.create-post-submit:hover {
-    opacity: 0.85;
-}
-
-.create-post-submit:disabled {
-    opacity: 0.3;
+.post-btn:disabled {
+    opacity: 0.5;
     cursor: not-allowed;
 }
 
-.create-post-submit:disabled:hover {
-    opacity: 0.3;
-}
-
-[data-theme="dark"] .create-post-submit:disabled {
-    opacity: 0.3;
-}
-
-[data-theme="light"] .create-post-submit:disabled {
-    opacity: 0.3;
+.post-btn:not(:disabled):hover {
+    background-color: #262626;
 }
 
 /* Repost Wrapper (reposted posts in feed) */
@@ -3191,9 +3183,13 @@ body {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-[data-theme="dark"] .create-post-submit {
-    background-color: #f5f5f5;
+[data-theme="dark"] .post-btn {
+    background-color: #fff;
     color: #000;
+}
+
+[data-theme="dark"] .post-btn:not(:disabled):hover {
+    background-color: #e0e0e0;
 }
 
 [data-theme="dark"] .create-post-line {
@@ -4102,8 +4098,7 @@ body {
 }
 
 [data-theme="dark"] .more-menu-dropdown {
-    background-color: #262626;
-    border-color: rgba(255, 255, 255, 0.15);
+    background: #262626;
 }
 
 
@@ -4120,7 +4115,7 @@ body {
 }
 
 [data-theme="dark"] .more-menu-divider {
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 [data-theme="dark"] .drafts-back-btn {

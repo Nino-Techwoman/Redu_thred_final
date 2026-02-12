@@ -2066,19 +2066,41 @@ body {
     color: #000;
 }
 
-.create-post-submit {
-    background: #fff;
-    color: #000;
+.post-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline-start: 16px;
+    padding-inline-end: 16px;
+    height: 34px;
+    background-color: #000;
+    color: #fff;
     border: none;
-    padding: 8px 20px;
-    border-radius: 20px;
-    font-size: 14px;
+    border-radius: 10px;
+    font-size: 15px;
     font-weight: 600;
+    line-height: 21px;
     cursor: pointer;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
 }
 
-.create-post-submit:hover {
-    background: #e0e0e0;
+.post-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.post-btn:not(:disabled):hover {
+    background-color: #262626;
+}
+
+[data-theme="dark"] .post-btn {
+    background-color: #fff;
+    color: #000;
+}
+
+[data-theme="dark"] .post-btn:not(:disabled):hover {
+    background-color: #e0e0e0;
 }
 
 .create-post-body {

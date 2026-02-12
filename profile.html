@@ -850,10 +850,38 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 52px;
         }
 
         .edit-done-btn:hover {
             background: #333;
+        }
+
+        .edit-done-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .edit-done-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2.5px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: edit-spin 0.6s linear infinite;
+        }
+
+        @keyframes edit-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        [data-theme="dark"] .edit-done-spinner {
+            border-color: rgba(0, 0, 0, 0.3);
+            border-top-color: #000;
         }
 
         [data-theme="dark"] .edit-profile-modal {
@@ -1121,7 +1149,6 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
             z-index: 3000;
             align-items: center;
             justify-content: center;
@@ -1134,8 +1161,9 @@
         .links-modal {
             background: #fff;
             border-radius: 16px;
-            width: 100%;
+            width: 90%;
             max-width: 500px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
         }
 
         .links-modal-header {
@@ -1167,78 +1195,149 @@
         }
 
         .links-modal-content {
-            padding: 20px;
-        }
-
-        .links-input-container {
-            position: relative;
-        }
-
-        .links-input {
-            width: 100%;
             padding: 16px;
+        }
+
+        .links-list-view {
+            display: block;
+        }
+
+        .links-add-view {
+            display: none;
+        }
+
+        .links-add-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
             border: 1px solid rgba(0, 0, 0, 0.15);
             border-radius: 12px;
+            cursor: pointer;
+            background: none;
+            width: 100%;
+            font-family: inherit;
+        }
+
+        .links-add-row:hover {
+            background-color: #f5f5f5;
+        }
+
+        .links-add-row-icon {
+            color: #000000;
+            flex-shrink: 0;
+        }
+
+        .links-add-row-text {
+            font-size: 15px;
+            font-weight: 500;
+            color: #000000;
+        }
+
+        .links-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+
+        .links-card-icon {
+            color: #000000;
+            flex-shrink: 0;
+        }
+
+        .links-card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .links-card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #000000;
+            line-height: 1.3;
+        }
+
+        .links-card-url {
+            font-size: 13px;
+            color: #999999;
+            line-height: 1.3;
+            margin-top: 1px;
+        }
+
+        .links-card-remove {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999999;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .links-card-remove:hover {
+            color: #000000;
+        }
+
+        .links-done-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #000000;
+            padding: 4px;
+        }
+
+        .links-add-form {
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .links-add-form-field {
+            padding: 14px 16px;
+        }
+
+        .links-add-form-field:first-child {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        .links-add-form-input {
+            width: 100%;
+            border: none;
             font-size: 15px;
             font-family: inherit;
             background: transparent;
             color: #000000;
             outline: none;
+            padding: 0;
         }
 
-        .links-input::placeholder {
+        .links-add-form-input::placeholder {
             color: #999999;
         }
 
-        .links-input:focus {
-            border-color: #000000;
+        .links-done-btn.disabled {
+            color: #cccccc;
+            pointer-events: none;
         }
 
-        .links-suggestions {
+        .links-error {
             display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: #fff;
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            border-top: none;
-            border-radius: 0 0 12px 12px;
-            max-height: 300px;
-            overflow-y: auto;
-            z-index: 10;
+            font-size: 14px;
+            color: #ff3b30;
+            margin-top: 12px;
+            text-align: center;
         }
 
-        .links-suggestions.active {
+        .links-error.show {
             display: block;
-        }
-
-        .links-suggestion-item {
-            display: flex;
-            flex-direction: column;
-            padding: 12px 16px;
-            cursor: pointer;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-        }
-
-        .links-suggestion-item:last-child {
-            border-bottom: none;
-        }
-
-        .links-suggestion-item:hover {
-            background-color: #f5f5f5;
-        }
-
-        .links-suggestion-name {
-            font-size: 15px;
-            font-weight: 600;
-            color: #000000;
-        }
-
-        .links-suggestion-url {
-            font-size: 13px;
-            color: #999999;
-            margin-top: 2px;
         }
 
         .links-hint {
@@ -1248,88 +1347,256 @@
             text-align: center;
         }
 
+        .links-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000000;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .links-toast.show {
+            opacity: 1;
+        }
+
         [data-theme="dark"] .links-modal {
             background: #181818;
         }
 
-        [data-theme="dark"] .links-suggestions {
-            background: #181818;
-            border-color: rgba(255, 255, 255, 0.15);
-        }
-
-        [data-theme="dark"] .links-input {
+        [data-theme="dark"] .links-back-btn {
             color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .links-modal-title {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .links-modal-header {
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="dark"] .links-add-row {
             border-color: rgba(255, 255, 255, 0.15);
         }
 
-        [data-theme="dark"] .links-input:focus {
-            border-color: #f5f5f5;
-        }
-
-        [data-theme="dark"] .links-suggestion-item {
-            border-bottom-color: rgba(255, 255, 255, 0.15);
-        }
-
-        [data-theme="dark"] .links-suggestion-item:hover {
+        [data-theme="dark"] .links-add-row:hover {
             background-color: #262626;
         }
 
-        [data-theme="dark"] .links-suggestion-name {
+        [data-theme="dark"] .links-add-row-icon {
             color: #f5f5f5;
         }
 
-        [data-theme="dark"] .links-selected-item {
+        [data-theme="dark"] .links-add-row-text {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .links-card {
             border-color: rgba(255, 255, 255, 0.15);
         }
 
-        [data-theme="dark"] .links-selected-name {
+        [data-theme="dark"] .links-card-icon {
             color: #f5f5f5;
         }
 
-        [data-theme="dark"] .links-remove-btn:hover {
+        [data-theme="dark"] .links-card-title {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .links-card-remove:hover {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .links-done-btn {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .links-done-btn.disabled {
+            color: #555555;
+        }
+
+        [data-theme="dark"] .links-add-form {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        [data-theme="dark"] .links-add-form-field:first-child {
+            border-bottom-color: rgba(255, 255, 255, 0.15);
+        }
+
+        [data-theme="dark"] .links-add-form-input {
             color: #f5f5f5;
         }
 
         .links-display {
-            font-size: 14px;
+            font-size: 16px;
             color: #999999;
-            display: block;
-            margin-top: 4px;
         }
 
         .links-selected-list {
-            margin-top: 16px;
-        }
-
-        .links-selected-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px;
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            border-radius: 12px;
             margin-bottom: 8px;
         }
 
-        .links-selected-name {
-            font-size: 15px;
-            font-weight: 500;
-            color: #000000;
+        /* Podcast Modal */
+        .podcast-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
         }
 
-        .links-remove-btn {
+        .podcast-modal-overlay.active {
+            display: flex;
+        }
+
+        .podcast-modal {
+            background: #fff;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .podcast-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        .podcast-back-btn {
             background: none;
             border: none;
             cursor: pointer;
-            color: #999999;
+            color: #000000;
             padding: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .links-remove-btn:hover {
+        .podcast-modal-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .podcast-done-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
             color: #000000;
+            padding: 4px;
+        }
+
+        .podcast-done-btn.disabled {
+            color: #cccccc;
+            pointer-events: none;
+        }
+
+        .podcast-modal-content {
+            padding: 16px;
+        }
+
+        .podcast-description {
+            font-size: 15px;
+            color: #999999;
+            margin-bottom: 16px;
+        }
+
+        .podcast-form {
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .podcast-form-field {
+            padding: 14px 16px;
+        }
+
+        .podcast-form-input {
+            width: 100%;
+            border: none;
+            font-size: 15px;
+            font-family: inherit;
+            background: transparent;
+            color: #000000;
+            outline: none;
+            padding: 0;
+        }
+
+        .podcast-form-input::placeholder {
+            color: #999999;
+        }
+
+        .podcast-error {
+            display: none;
+            font-size: 14px;
+            color: #ff3b30;
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .podcast-error.show {
+            display: block;
+        }
+
+        .podcast-hint {
+            font-size: 14px;
+            color: #999999;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .podcast-display {
+            font-size: 16px;
+            color: #999999;
+        }
+
+        [data-theme="dark"] .podcast-modal {
+            background: #181818;
+        }
+
+        [data-theme="dark"] .podcast-back-btn {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .podcast-modal-title {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .podcast-modal-header {
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="dark"] .podcast-done-btn {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .podcast-done-btn.disabled {
+            color: #555555;
+        }
+
+        [data-theme="dark"] .podcast-form {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        [data-theme="dark"] .podcast-form-input {
+            color: #f5f5f5;
         }
 
         /* Reply Thread Layout */
@@ -1851,7 +2118,7 @@
                             <span>Reply options</span>
                         </button>
                     </div>
-                    <button type="button" class="create-post-submit" id="postBtn" disabled>Post</button>
+                    <button type="button" class="post-btn" id="postBtn" disabled>Post</button>
                 </div>
             </div>
             <!-- Drafts view (inside same modal) -->
@@ -1916,18 +2183,23 @@
 
             <div class="edit-profile-section">
                 <div class="edit-row-link" id="linksBtn">
-                    <div>
-                        <label class="edit-label" style="margin-bottom:0">Links</label>
+                    <span class="edit-label" style="margin-bottom:0">Links</span>
+                    <div class="edit-row-right">
                         <span class="links-display" id="linksDisplay"></span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 4 16 12 8 20"/></svg>
                     </div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 4 16 12 8 20"/></svg>
                 </div>
             </div>
             <div class="edit-divider"></div>
 
             <div class="edit-profile-section">
-                <label class="edit-label">Podcast</label>
-                <span class="edit-placeholder">+ Link to your podcast</span>
+                <div class="edit-row-link" id="podcastBtn">
+                    <span class="edit-label" style="margin-bottom:0">Podcast</span>
+                    <div class="edit-row-right">
+                        <span class="podcast-display" id="podcastDisplay"></span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 4 16 12 8 20"/></svg>
+                    </div>
+                </div>
             </div>
             <div class="edit-divider"></div>
 
@@ -1957,29 +2229,87 @@
             <div class="edit-profile-footer">
                 <button class="edit-done-btn" id="editDoneBtn">Done</button>
             </div>
-        </div>
-    </div>
 
-    <!-- Links Modal -->
-    <div class="links-modal-overlay" id="linksModalOverlay">
-        <div class="links-modal">
-            <div class="links-modal-header">
-                <button class="links-back-btn" id="linksBackBtn">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M19 12H5"/>
-                        <polyline points="12 19 5 12 12 5"/>
-                    </svg>
-                </button>
-                <span class="links-modal-title">Edit</span>
-                <div class="links-header-spacer"></div>
-            </div>
-            <div class="links-modal-content">
-                <div class="links-input-container">
-                    <input type="text" class="links-input" placeholder="Add a link" id="linksInput" autocomplete="off">
-                    <div class="links-suggestions" id="linksSuggestions"></div>
+            <!-- Links Modal (inside edit profile) -->
+            <div class="links-modal-overlay" id="linksModalOverlay">
+                <div class="links-modal">
+                    <!-- View 1: Links List -->
+                    <div class="links-list-view" id="linksListView">
+                        <div class="links-modal-header">
+                            <button class="links-back-btn" id="linksBackBtn">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 12H5"/>
+                                    <polyline points="12 19 5 12 12 5"/>
+                                </svg>
+                            </button>
+                            <span class="links-modal-title">Links</span>
+                            <div class="links-header-spacer"></div>
+                        </div>
+                        <div class="links-modal-content">
+                            <div class="links-selected-list" id="linksSelectedList"></div>
+                            <button class="links-add-row" id="linksAddRowBtn">
+                                <svg class="links-add-row-icon" width="20" height="20" viewBox="2 2 16 16" fill="none" stroke="currentColor">
+                                    <path d="M8.39992 5.44993L9.50669 4.34316C11.2046 2.64524 13.9575 2.64524 15.6554 4.34316V4.34316V4.34316C17.3533 6.04108 17.3533 8.79396 15.6554 10.4919L14.5486 11.5987" stroke="currentColor" stroke-linecap="round" stroke-width="1.65"/>
+                                    <path d="M5.44773 8.40114L4.34096 9.50791C2.64304 11.2058 2.64304 13.9587 4.34096 15.6566V15.6566V15.6566C6.03889 17.3546 8.79176 17.3546 10.4897 15.6566L11.5965 14.5499" stroke="currentColor" stroke-linecap="round" stroke-width="1.65"/>
+                                    <path d="M12.7051 7.29565L7.2942 12.7065" stroke="currentColor" stroke-linecap="round" stroke-width="1.65"/>
+                                </svg>
+                                <span class="links-add-row-text">Add Link</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- View 2: Add Link Form -->
+                    <div class="links-add-view" id="linksAddView">
+                        <div class="links-modal-header">
+                            <button class="links-back-btn" id="linksAddBackBtn">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 12H5"/>
+                                    <polyline points="12 19 5 12 12 5"/>
+                                </svg>
+                            </button>
+                            <span class="links-modal-title">Add Link</span>
+                            <button class="links-done-btn" id="linksDoneBtn">Done</button>
+                        </div>
+                        <div class="links-modal-content">
+                            <div class="links-add-form">
+                                <div class="links-add-form-field" id="linksUrlField">
+                                    <input type="text" class="links-add-form-input" id="linksUrlInput" placeholder="URL">
+                                </div>
+                                <div class="links-add-form-field" id="linksTitleField">
+                                    <input type="text" class="links-add-form-input" id="linksTitleInput" placeholder="Title (optional)">
+                                </div>
+                            </div>
+                            <p class="links-error" id="linksError">Invalid link</p>
+                            <p class="links-hint">You can also add two-way links to your profile. <strong>Learn more</strong></p>
+                        </div>
+                    </div>
                 </div>
-                <div class="links-selected-list" id="linksSelectedList"></div>
-                <p class="links-hint">Your links are public.</p>
+            </div>
+
+            <!-- Podcast Modal (inside edit profile) -->
+            <div class="podcast-modal-overlay" id="podcastModalOverlay">
+                <div class="podcast-modal">
+                    <div class="podcast-modal-header">
+                        <button class="podcast-back-btn" id="podcastBackBtn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 12H5"/>
+                                <polyline points="12 19 5 12 12 5"/>
+                            </svg>
+                        </button>
+                        <span class="podcast-modal-title">Add podcast</span>
+                        <button class="podcast-done-btn" id="podcastDoneBtn">Done</button>
+                    </div>
+                    <div class="podcast-modal-content">
+                        <p class="podcast-description">Add a link to your Spotify, Apple or iHeart podcast</p>
+                        <div class="podcast-form">
+                            <div class="podcast-form-field" id="podcastUrlField">
+                                <input type="text" class="podcast-form-input" id="podcastUrlInput" placeholder="URL">
+                            </div>
+                        </div>
+                        <p class="podcast-error" id="podcastError">Invalid link</p>
+                        <p class="podcast-hint">Your podcast link is public.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -3526,17 +3856,33 @@
         // close / save edit profile
         if (editDoneBtn) {
             editDoneBtn.onclick = function() {
-                let newBio = editBio.value.trim();
-                if (newBio) {
-                    localStorage.setItem('threads_profile_bio', newBio);
-                    document.getElementById('profileBio').textContent = newBio;
-                }
-                let badgeValue = 'false';
-                if (igBadgeToggle.classList.contains('active')) {
-                    badgeValue = 'true';
-                }
-                localStorage.setItem('threads_ig_badge', badgeValue);
-                editProfileOverlay.classList.remove('active');
+                // Show loading spinner
+                editDoneBtn.disabled = true;
+                editDoneBtn.innerHTML = '<span class="edit-done-spinner"></span>';
+
+                setTimeout(function() {
+                    // Save data
+                    let newBio = editBio.value.trim();
+                    if (newBio) {
+                        localStorage.setItem('threads_profile_bio', newBio);
+                        document.getElementById('profileBio').textContent = newBio;
+                    }
+                    let badgeValue = 'false';
+                    if (igBadgeToggle.classList.contains('active')) {
+                        badgeValue = 'true';
+                    }
+                    localStorage.setItem('threads_ig_badge', badgeValue);
+
+                    // Show checkmark
+                    editDoneBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+                    setTimeout(function() {
+                        editProfileOverlay.classList.remove('active');
+                        // Reset button
+                        editDoneBtn.disabled = false;
+                        editDoneBtn.innerHTML = 'Done';
+                    }, 600);
+                }, 800);
             };
         }
 
@@ -3568,38 +3914,66 @@
         let linksBtn = document.getElementById('linksBtn');
         let linksModalOverlay = document.getElementById('linksModalOverlay');
         let linksBackBtn = document.getElementById('linksBackBtn');
-        let linksInput = document.getElementById('linksInput');
-        let linksSuggestions = document.getElementById('linksSuggestions');
         let linksSelectedList = document.getElementById('linksSelectedList');
         let linksDisplay = document.getElementById('linksDisplay');
-        let selectedLinks = [];
+        let linksListView = document.getElementById('linksListView');
+        let linksAddView = document.getElementById('linksAddView');
+        let linksAddRowBtn = document.getElementById('linksAddRowBtn');
+        let linksAddBackBtn = document.getElementById('linksAddBackBtn');
+        let linksDoneBtn = document.getElementById('linksDoneBtn');
+        let linksUrlInput = document.getElementById('linksUrlInput');
+        let linksTitleInput = document.getElementById('linksTitleInput');
+        let selectedLinks = []; // Array of { title, url }
 
-        // Load saved links
+        // Load saved links (with backward compat for old string arrays)
         try {
             let saved = localStorage.getItem('threads_links');
             if (saved) {
-                selectedLinks = JSON.parse(saved) || [];
+                let parsed = JSON.parse(saved) || [];
+                selectedLinks = parsed.map(function(item) {
+                    if (typeof item === 'string') {
+                        return { title: item, url: item };
+                    }
+                    return item;
+                }).filter(function(item) {
+                    return item && item.url && !item.url.includes('<') && !item.url.includes('>');
+                });
+                // Re-save clean data
+                localStorage.setItem('threads_links', JSON.stringify(selectedLinks));
             }
-        } catch(e) {}
+        } catch(e) {
+            localStorage.removeItem('threads_links');
+        }
 
         function updateLinksDisplay() {
             if (!linksDisplay) return;
             if (selectedLinks.length == 0) {
                 linksDisplay.textContent = '';
             } else {
-                linksDisplay.textContent = selectedLinks.join(', ');
+                linksDisplay.textContent = selectedLinks.length;
             }
-            // Save to localStorage
             localStorage.setItem('threads_links', JSON.stringify(selectedLinks));
         }
+
+        var chainIconSvg = '<svg width="20" height="20" viewBox="2 2 16 16" fill="none" stroke="currentColor">' +
+            '<path d="M8.39992 5.44993L9.50669 4.34316C11.2046 2.64524 13.9575 2.64524 15.6554 4.34316V4.34316V4.34316C17.3533 6.04108 17.3533 8.79396 15.6554 10.4919L14.5486 11.5987" stroke="currentColor" stroke-linecap="round" stroke-width="1.65"/>' +
+            '<path d="M5.44773 8.40114L4.34096 9.50791C2.64304 11.2058 2.64304 13.9587 4.34096 15.6566V15.6566V15.6566C6.03889 17.3546 8.79176 17.3546 10.4897 15.6566L11.5965 14.5499" stroke="currentColor" stroke-linecap="round" stroke-width="1.65"/>' +
+            '<path d="M12.7051 7.29565L7.2942 12.7065" stroke="currentColor" stroke-linecap="round" stroke-width="1.65"/>' +
+            '</svg>';
 
         function renderSelectedLinks() {
             if (!linksSelectedList) return;
             let html = '';
             for (let i = 0; i < selectedLinks.length; i++) {
-                html += '<div class="links-selected-item">';
-                html += '<span class="links-selected-name">' + selectedLinks[i] + '</span>';
-                html += '<button class="links-remove-btn" data-index="' + i + '">';
+                var link = selectedLinks[i];
+                var displayTitle = link.title || link.url;
+                html += '<div class="links-card">';
+                html += '<span class="links-card-icon">' + chainIconSvg + '</span>';
+                html += '<div class="links-card-info">';
+                html += '<div class="links-card-title">' + displayTitle + '</div>';
+                html += '<div class="links-card-url">' + link.url + '</div>';
+                html += '</div>';
+                html += '<button class="links-card-remove" data-index="' + i + '">';
                 html += '<svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8.25" stroke="currentColor" stroke-width="1.5"></circle><path d="M13.5985 9.82813H6.39855" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"></path></svg>';
                 html += '</button>';
                 html += '</div>';
@@ -3607,7 +3981,7 @@
             linksSelectedList.innerHTML = html;
 
             // Add remove handlers
-            let removeBtns = linksSelectedList.querySelectorAll('.links-remove-btn');
+            let removeBtns = linksSelectedList.querySelectorAll('.links-card-remove');
             for (let i = 0; i < removeBtns.length; i++) {
                 removeBtns[i].addEventListener('click', function() {
                     let index = parseInt(this.getAttribute('data-index'));
@@ -3618,46 +3992,85 @@
             }
         }
 
+        function showLinksListView() {
+            linksListView.style.display = 'block';
+            linksAddView.style.display = 'none';
+            renderSelectedLinks();
+        }
+
+        function updateDoneBtn() {
+            if (!linksDoneBtn) return;
+            if (linksUrlInput.value.trim().length > 0) {
+                linksDoneBtn.classList.remove('disabled');
+            } else {
+                linksDoneBtn.classList.add('disabled');
+            }
+        }
+
+        function showLinksAddView() {
+            linksListView.style.display = 'none';
+            linksAddView.style.display = 'block';
+            var linksError = document.getElementById('linksError');
+            if (linksError) linksError.classList.remove('show');
+
+            // Destroy and recreate inputs to prevent browser autofill
+            var urlParent = linksUrlInput.parentNode;
+            var titleParent = linksTitleInput.parentNode;
+            linksUrlInput.remove();
+            linksTitleInput.remove();
+
+            var newUrl = document.createElement('input');
+            newUrl.type = 'text';
+            newUrl.className = 'links-add-form-input';
+            newUrl.id = 'linksUrlInput';
+            newUrl.name = 'links_url_' + Date.now();
+            newUrl.placeholder = 'URL';
+            newUrl.setAttribute('autocomplete', 'off');
+            urlParent.appendChild(newUrl);
+
+            var newTitle = document.createElement('input');
+            newTitle.type = 'text';
+            newTitle.className = 'links-add-form-input';
+            newTitle.id = 'linksTitleInput';
+            newTitle.name = 'links_title_' + Date.now();
+            newTitle.placeholder = 'Title (optional)';
+            newTitle.setAttribute('autocomplete', 'off');
+            titleParent.appendChild(newTitle);
+
+            linksUrlInput = newUrl;
+            linksTitleInput = newTitle;
+
+            // Re-attach input listener
+            linksUrlInput.addEventListener('input', function() {
+                updateDoneBtn();
+                var err = document.getElementById('linksError');
+                if (err) err.classList.remove('show');
+            });
+
+            updateDoneBtn();
+            linksUrlInput.focus();
+        }
+
         // Initial display update
         updateLinksDisplay();
 
-        // Sample links data
-        let linksData = [
-            { name: 'Instagram', url: 'instagram.com' },
-            { name: 'Twitter', url: 'twitter.com' },
-            { name: 'YouTube', url: 'youtube.com' },
-            { name: 'TikTok', url: 'tiktok.com' },
-            { name: 'LinkedIn', url: 'linkedin.com' },
-            { name: 'Facebook', url: 'facebook.com' },
-            { name: 'Pinterest', url: 'pinterest.com' },
-            { name: 'Snapchat', url: 'snapchat.com' },
-            { name: 'Spotify', url: 'spotify.com' },
-            { name: 'SoundCloud', url: 'soundcloud.com' },
-            { name: 'Twitch', url: 'twitch.tv' },
-            { name: 'Discord', url: 'discord.com' },
-            { name: 'GitHub', url: 'github.com' },
-            { name: 'Dribbble', url: 'dribbble.com' },
-            { name: 'Behance', url: 'behance.net' },
-            { name: 'Medium', url: 'medium.com' },
-            { name: 'Substack', url: 'substack.com' },
-            { name: 'Patreon', url: 'patreon.com' },
-            { name: 'Ko-fi', url: 'ko-fi.com' },
-            { name: 'Linktree', url: 'linktr.ee' }
-        ];
-
+        // Open links modal
         if (linksBtn && linksModalOverlay) {
             linksBtn.onclick = function() {
+                showLinksListView();
                 renderSelectedLinks();
                 linksModalOverlay.classList.add('active');
             };
         }
 
+        // Close links modal (back button on list view)
         if (linksBackBtn && linksModalOverlay) {
             linksBackBtn.onclick = function() {
                 linksModalOverlay.classList.remove('active');
             };
         }
 
+        // Close on overlay click
         if (linksModalOverlay) {
             linksModalOverlay.addEventListener('click', function(e) {
                 if (e.target == linksModalOverlay) {
@@ -3666,63 +4079,182 @@
             });
         }
 
-        // Links autocomplete
-        if (linksInput && linksSuggestions) {
-            linksInput.addEventListener('input', function() {
-                let query = this.value.trim().toLowerCase();
-                if (query.length == 0) {
-                    linksSuggestions.classList.remove('active');
-                    linksSuggestions.innerHTML = '';
+        // "Add Link" row -> show add form
+        if (linksAddRowBtn) {
+            linksAddRowBtn.onclick = function() {
+                showLinksAddView();
+            };
+        }
+
+        // Back from add form -> list view
+        if (linksAddBackBtn) {
+            linksAddBackBtn.onclick = function() {
+                showLinksListView();
+            };
+        }
+
+        // Input listeners are attached dynamically in showLinksAddView()
+
+        function isValidUrl(str) {
+            try {
+                var u = new URL(str);
+                return u.protocol === 'http:' || u.protocol === 'https:';
+            } catch(e) {
+                return false;
+            }
+        }
+
+        function showLinksToast(msg) {
+            var existing = document.querySelector('.links-toast');
+            if (existing) existing.remove();
+            var toast = document.createElement('div');
+            toast.className = 'links-toast';
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(function() { toast.classList.add('show'); }, 10);
+            setTimeout(function() {
+                toast.classList.remove('show');
+                setTimeout(function() { toast.remove(); }, 300);
+            }, 2500);
+        }
+
+        // Done button -> validate and save link
+        if (linksDoneBtn) {
+            linksDoneBtn.onclick = function() {
+                var url = linksUrlInput.value.trim();
+                if (url.length == 0) {
+                    showLinksListView();
                     return;
                 }
-
-                let matches = [];
-                for (let i = 0; i < linksData.length; i++) {
-                    // Don't show already selected links
-                    if (selectedLinks.indexOf(linksData[i].url) == -1 && (linksData[i].name.toLowerCase().includes(query) || linksData[i].url.toLowerCase().includes(query))) {
-                        matches.push(linksData[i]);
+                if (!isValidUrl(url)) {
+                    var linksError = document.getElementById('linksError');
+                    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                    if (isDark) {
+                        if (linksError) linksError.classList.add('show');
+                    } else {
+                        showLinksToast('Please enter a valid URL.');
                     }
-                }
-
-                if (matches.length == 0) {
-                    linksSuggestions.classList.remove('active');
-                    linksSuggestions.innerHTML = '';
                     return;
                 }
+                var title = linksTitleInput.value.trim();
+                selectedLinks.push({ title: title || '', url: url });
+                renderSelectedLinks();
+                updateLinksDisplay();
+                showLinksListView();
+            };
+        }
 
-                let html = '';
-                for (let i = 0; i < matches.length; i++) {
-                    html += '<div class="links-suggestion-item" data-url="' + matches[i].url + '">';
-                    html += '<span class="links-suggestion-name">' + matches[i].name + '</span>';
-                    html += '<span class="links-suggestion-url">' + matches[i].url + '</span>';
-                    html += '</div>';
-                }
-                linksSuggestions.innerHTML = html;
-                linksSuggestions.classList.add('active');
+        // Podcast modal
+        let podcastBtn = document.getElementById('podcastBtn');
+        let podcastModalOverlay = document.getElementById('podcastModalOverlay');
+        let podcastBackBtn = document.getElementById('podcastBackBtn');
+        let podcastDoneBtn = document.getElementById('podcastDoneBtn');
+        let podcastUrlInput = document.getElementById('podcastUrlInput');
+        let podcastDisplay = document.getElementById('podcastDisplay');
+        let savedPodcast = '';
 
-                // Add click handlers to suggestions
-                let items = linksSuggestions.querySelectorAll('.links-suggestion-item');
-                for (let i = 0; i < items.length; i++) {
-                    items[i].addEventListener('click', function() {
-                        let url = this.getAttribute('data-url');
-                        if (selectedLinks.indexOf(url) == -1) {
-                            selectedLinks.push(url);
-                            renderSelectedLinks();
-                            updateLinksDisplay();
-                        }
-                        linksInput.value = '';
-                        linksSuggestions.classList.remove('active');
-                        linksSuggestions.innerHTML = '';
-                    });
+        // Load saved podcast
+        try {
+            savedPodcast = localStorage.getItem('threads_podcast') || '';
+        } catch(e) {}
+
+        function updatePodcastDisplay() {
+            if (!podcastDisplay) return;
+            if (savedPodcast) {
+                podcastDisplay.textContent = '1';
+            } else {
+                podcastDisplay.textContent = '';
+            }
+        }
+
+        function updatePodcastDoneBtn() {
+            if (!podcastDoneBtn) return;
+            if (podcastUrlInput && podcastUrlInput.value.trim().length > 0) {
+                podcastDoneBtn.classList.remove('disabled');
+            } else {
+                podcastDoneBtn.classList.add('disabled');
+            }
+        }
+
+        updatePodcastDisplay();
+
+        // Open podcast modal
+        if (podcastBtn && podcastModalOverlay) {
+            podcastBtn.onclick = function() {
+                podcastModalOverlay.classList.add('active');
+                // Recreate input to prevent autofill
+                var urlField = document.getElementById('podcastUrlField');
+                var oldInput = document.getElementById('podcastUrlInput');
+                if (oldInput) oldInput.remove();
+                var newInput = document.createElement('input');
+                newInput.type = 'text';
+                newInput.className = 'podcast-form-input';
+                newInput.id = 'podcastUrlInput';
+                newInput.name = 'podcast_url_' + Date.now();
+                newInput.placeholder = 'URL';
+                newInput.value = savedPodcast;
+                urlField.appendChild(newInput);
+                podcastUrlInput = newInput;
+                podcastUrlInput.addEventListener('input', function() {
+                    updatePodcastDoneBtn();
+                    var err = document.getElementById('podcastError');
+                    if (err) err.classList.remove('show');
+                });
+                updatePodcastDoneBtn();
+                var err = document.getElementById('podcastError');
+                if (err) err.classList.remove('show');
+            };
+        }
+
+        // Close podcast modal
+        if (podcastBackBtn && podcastModalOverlay) {
+            podcastBackBtn.onclick = function() {
+                podcastModalOverlay.classList.remove('active');
+            };
+        }
+
+        if (podcastModalOverlay) {
+            podcastModalOverlay.addEventListener('click', function(e) {
+                if (e.target == podcastModalOverlay) {
+                    podcastModalOverlay.classList.remove('active');
                 }
             });
+        }
 
-            // Hide suggestions when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!linksInput.contains(e.target) && !linksSuggestions.contains(e.target)) {
-                    linksSuggestions.classList.remove('active');
+        function isValidPodcastUrl(str) {
+            if (!isValidUrl(str)) return false;
+            try {
+                var u = new URL(str);
+                var host = u.hostname.toLowerCase();
+                return host.includes('spotify.com') || host.includes('apple.com') || host.includes('iheart.com');
+            } catch(e) {
+                return false;
+            }
+        }
+
+        // Done button - validate and save
+        if (podcastDoneBtn) {
+            podcastDoneBtn.onclick = function() {
+                var url = podcastUrlInput ? podcastUrlInput.value.trim() : '';
+                if (url.length == 0) {
+                    podcastModalOverlay.classList.remove('active');
+                    return;
                 }
-            });
+                if (!isValidPodcastUrl(url)) {
+                    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                    var podcastError = document.getElementById('podcastError');
+                    if (isDark) {
+                        if (podcastError) podcastError.classList.add('show');
+                    } else {
+                        showLinksToast('Invalid link');
+                    }
+                    return;
+                }
+                savedPodcast = url;
+                localStorage.setItem('threads_podcast', savedPodcast);
+                updatePodcastDisplay();
+                podcastModalOverlay.classList.remove('active');
+            };
         }
 
         // Interests modal
