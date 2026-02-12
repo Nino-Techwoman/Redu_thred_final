@@ -458,8 +458,29 @@ body {
     fill: #f5f5f5;
 }
 
+@media (max-width: 700px) {
+    .su-page {
+        padding: 0 24px;
+    }
+
+    .su-title {
+        font-size: 24px;
+    }
+
+    .su-tooltip {
+        width: calc(100vw - 80px);
+    }
+
+    .su-input,
+    .su-select {
+        font-size: 14px;
+        max-width: 370px;
+        height: 55px;
+    }
+}
+
 @media (max-width: 600px) {
     .su-page {
-        padding: 0 20px;
+        padding: 0 16px;
     }
 }

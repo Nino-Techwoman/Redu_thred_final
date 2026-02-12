@@ -416,6 +416,23 @@ function addPostButtonListeners() {
             alert("Share coming soon!");
         };
     }
+    // post menu overlay (for mobile bottom sheet)
+    let postMenuOverlay = document.createElement("div");
+    postMenuOverlay.className = "post-menu-overlay";
+    document.body.appendChild(postMenuOverlay);
+
+    function closeAllPostMenus() {
+        let allDropdowns = document.querySelectorAll(".post-menu-dropdown");
+        for (let j = 0; j < allDropdowns.length; j++) {
+            allDropdowns[j].classList.remove("active");
+        }
+        postMenuOverlay.classList.remove("active");
+    }
+
+    postMenuOverlay.onclick = function() {
+        closeAllPostMenus();
+    };
+
     // menu buttons
     let menuButtons = document.querySelectorAll(".post-menu");
     for (let i = 0; i < menuButtons.length; i++) {
@@ -423,12 +440,12 @@ function addPostButtonListeners() {
             event.stopPropagation();
             let dropdown = this.nextElementSibling;
             let isOpen = dropdown.classList.contains("active");
-            let allDropdowns = document.querySelectorAll(".post-menu-dropdown");
-            for (let j = 0; j < allDropdowns.length; j++) {
-                allDropdowns[j].classList.remove("active");
-            }
+            closeAllPostMenus();
             if (isOpen == false) {
                 dropdown.classList.add("active");
+                if (window.innerWidth <= 700) {
+                    postMenuOverlay.classList.add("active");
+                }
             }
         };
     }
@@ -439,10 +456,7 @@ function addPostButtonListeners() {
             event.stopPropagation();
             let link = window.location.href;
             navigator.clipboard.writeText(link);
-            let dropdown = this.closest(".post-menu-dropdown");
-            if (dropdown != null) {
-                dropdown.classList.remove("active");
-            }
+            closeAllPostMenus();
             showToast("Copied");
         };
     }
@@ -812,6 +826,13 @@ function setupEventListeners() {
             }
         };
     }
+    let modalCloseBtn = document.getElementById("modalCloseBtn");
+    if (modalCloseBtn != null) {
+        modalCloseBtn.onclick = function(event) {
+            event.stopPropagation();
+            closeModal();
+        };
+    }
     let showLoginBtn = document.getElementById("showLoginBtn");
     if (showLoginBtn != null) {
         showLoginBtn.onclick = function() {
@@ -873,7 +894,7 @@ function setupEventListeners() {
     }
     let tabletLoginBtn = document.getElementById("tabletLoginBtn");
     if (tabletLoginBtn != null) {
-        tabletLoginBtn.onclick = function() { openModal("login"); };
+        tabletLoginBtn.onclick = function() { window.location.href = 'login.html'; };
     }
     let formInputs = document.querySelectorAll(".form-input");
     for (let i = 0; i < formInputs.length; i++) {
@@ -974,12 +995,18 @@ function setupEventListeners() {
                 dropdownMenu.classList.remove("active");
             }
             let postMenuDropdowns = document.querySelectorAll(".post-menu-dropdown");
+            let anyOpen = false;
             for (let i = 0; i < postMenuDropdowns.length; i++) {
                 let dropdown = postMenuDropdowns[i];
                 let wrapper = dropdown.closest(".post-menu-wrapper");
                 if (wrapper != null && wrapper.contains(event.target) == false) {
                     dropdown.classList.remove("active");
+                } else if (dropdown.classList.contains("active")) {
+                    anyOpen = true;
                 }
+            }
+            if (!anyOpen) {
+                postMenuOverlay.classList.remove("active");
             }
         };
         let appearanceBtn = document.getElementById("appearanceBtn");

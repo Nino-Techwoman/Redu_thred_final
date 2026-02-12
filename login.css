@@ -355,14 +355,51 @@ h1 {
 
 /* Mobile */
 
-@media (max-width: 768px) {
+@media (max-width: 700px) {
     .login-page {
-        padding: 16px;
+        justify-content: flex-start;
+        padding: 60px 16px 16px;
     }
 
     .login-container {
         padding-left: 0;
         padding-right: 0;
+    }
+
+    .form-input {
+        font-size: 14px;
+        max-width: 370px;
+        height: 55px;
+        border-radius: 20px;
+        padding: 0 24px;
+    }
+
+    .login-btn {
+        max-width: 370px;
+        height: 55px;
+        border-radius: 20px;
+        font-size: 16px;
+    }
+
+    .form-group {
+        margin-bottom: 10px;
+    }
+
+    .divider {
+        max-width: 370px;
+    }
+
+    .instagram-btn {
+        max-width: 370px;
+    }
+
+    .footer {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        transform: none;
+        margin-top: auto;
+        padding-top: 40px;
     }
 }
 

@@ -1056,6 +1056,408 @@ body {
     color: #ff3b30;
 }
 
+.post-menu-group {
+    display: contents;
+}
+
+.post-menu-main {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-menu-sub {
+    display: none;
+    flex-direction: column;
+}
+
+.post-menu-sub-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #f5f5f5;
+}
+
+.post-menu-sub-header span {
+    flex: 1;
+    text-align: center;
+    padding-right: 24px;
+}
+
+.post-menu-back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #f5f5f5;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+[data-theme="light"] .post-menu-sub-header {
+    color: #000;
+}
+
+[data-theme="light"] .post-menu-back-btn {
+    color: #000;
+}
+
+.post-menu-overlay {
+    display: none;
+}
+
+/* Create Feed Panel */
+.create-feed-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.create-feed-overlay.active {
+    display: flex;
+}
+
+.create-feed-panel {
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background-color: #fff;
+    border-radius: 20px 20px 0 0;
+    padding: 24px 24px 32px;
+    animation: menuSlideUp 0.3s ease;
+}
+
+[data-theme="dark"] .create-feed-panel {
+    background-color: #1a1a1a;
+}
+
+.create-feed-title {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 24px;
+}
+
+[data-theme="dark"] .create-feed-title {
+    color: #f5f5f5;
+}
+
+.create-feed-section {
+    padding: 8px 0;
+}
+
+.create-feed-name {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 22px;
+    color: #000;
+    background: transparent;
+    padding: 0;
+    margin-bottom: 4px;
+}
+
+.create-feed-name::placeholder {
+    color: #ccc;
+}
+
+[data-theme="dark"] .create-feed-name {
+    color: #f5f5f5;
+}
+
+.create-feed-profile-count {
+    font-size: 15px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 8px;
+}
+
+[data-theme="dark"] .create-feed-profile-count {
+    color: #f5f5f5;
+}
+
+.create-feed-desc {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    color: #000;
+    background: transparent;
+    padding: 0;
+}
+
+.create-feed-desc::placeholder {
+    color: #aaa;
+}
+
+[data-theme="dark"] .create-feed-desc {
+    color: #f5f5f5;
+}
+
+.create-feed-divider {
+    height: 0.5px;
+    background-color: rgba(0, 0, 0, 0.1);
+    margin: 16px 0;
+}
+
+[data-theme="dark"] .create-feed-divider {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.create-feed-toggle-section {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.create-feed-toggle-text {
+    flex: 1;
+}
+
+.create-feed-label {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 4px;
+}
+
+[data-theme="dark"] .create-feed-label {
+    color: #f5f5f5;
+}
+
+.create-feed-sublabel {
+    font-size: 14px;
+    color: #999;
+    line-height: 1.4;
+}
+
+.create-feed-switch {
+    position: relative;
+    width: 48px;
+    height: 28px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.create-feed-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.create-feed-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ddd;
+    border-radius: 28px;
+    transition: 0.3s;
+}
+
+.create-feed-slider::before {
+    content: "";
+    position: absolute;
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.create-feed-switch input:checked + .create-feed-slider {
+    background-color: #000;
+}
+
+.create-feed-switch input:checked + .create-feed-slider::before {
+    transform: translateX(20px);
+}
+
+.create-feed-add-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
+    width: 100%;
+}
+
+.create-feed-add-btn svg {
+    color: #000;
+}
+
+[data-theme="dark"] .create-feed-add-btn {
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .create-feed-add-btn svg {
+    color: #f5f5f5;
+}
+
+.create-feed-profiles {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 8px 0;
+}
+
+.create-feed-profile-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.create-feed-profile-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.create-feed-profile-info {
+    flex: 1;
+}
+
+.create-feed-profile-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #000;
+}
+
+[data-theme="dark"] .create-feed-profile-name {
+    color: #f5f5f5;
+}
+
+.create-feed-profile-handle {
+    font-size: 14px;
+    color: #999;
+}
+
+.create-feed-remove-btn {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 8px 20px;
+    font-size: 14px;
+    color: #000;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+[data-theme="dark"] .create-feed-remove-btn {
+    color: #f5f5f5;
+    border-color: #444;
+}
+
+.create-feed-done-btn {
+    width: 100%;
+    height: 50px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 16px;
+}
+
+[data-theme="dark"] .create-feed-done-btn {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Create Feed Search View */
+.create-feed-search-view {
+    flex-direction: column;
+    flex: 1;
+    min-height: 75vh;
+}
+
+.create-feed-search-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.create-feed-search-input-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 24px;
+    padding: 16px 20px;
+}
+
+[data-theme="dark"] .create-feed-search-input-wrap {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.create-feed-search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    color: #000;
+}
+
+.create-feed-search-input::placeholder {
+    color: #999;
+}
+
+[data-theme="dark"] .create-feed-search-input {
+    color: #f5f5f5;
+}
+
+.create-feed-search-cancel {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: #000;
+    white-space: nowrap;
+}
+
+[data-theme="dark"] .create-feed-search-cancel {
+    color: #f5f5f5;
+}
+
+.create-feed-search-hint {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 15px;
+    color: #999;
+    padding: 0 20px;
+}
+
 .post-text {
     font-size: 15px;
     line-height: 1.5;
@@ -4420,6 +4822,140 @@ body {
     .thread-overlay {
         left: 0;
     }
+
+    .markup-toast {
+        bottom: 80px;
+    }
+
+    .post-menu-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    .post-menu-overlay.active {
+        display: block;
+    }
+
+    .post-menu-dropdown {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        width: 100%;
+        min-width: auto;
+        border-radius: 20px 20px 0 0;
+        border: none;
+        margin-top: 0;
+        z-index: 1001;
+        padding: 16px 12px;
+        gap: 8px;
+        background-color: #fff;
+        box-shadow: none;
+        max-height: 85vh;
+        overflow-y: auto;
+        animation: menuSlideUp 0.3s ease;
+    }
+
+    [data-theme="dark"] .post-menu-dropdown {
+        background-color: #1a1a1a;
+    }
+
+    @keyframes menuSlideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+    }
+
+    .post-menu-group {
+        display: flex;
+        flex-direction: column;
+        background-color: #f5f5f5;
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    [data-theme="dark"] .post-menu-group {
+        background-color: #262626;
+    }
+
+    .post-menu-item {
+        padding: 16px 20px;
+        font-size: 16px;
+        color: #000;
+        background: none;
+    }
+
+    [data-theme="dark"] .post-menu-item {
+        color: #f5f5f5;
+    }
+
+    .post-menu-item:hover {
+        background-color: transparent;
+    }
+
+    .post-menu-group .post-menu-item + .post-menu-item {
+        border-top: 0.5px solid rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="dark"] .post-menu-group .post-menu-item + .post-menu-item {
+        border-top-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .post-menu-item svg {
+        color: #000;
+        flex-shrink: 0;
+    }
+
+    [data-theme="dark"] .post-menu-item svg {
+        color: #f5f5f5;
+    }
+
+    .post-menu-item.danger {
+        color: #ff3b30;
+    }
+
+    .post-menu-item.danger svg {
+        color: #ff3b30;
+    }
+
+    .post-menu-main {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .post-menu-sub {
+        flex-direction: column;
+        gap: 8px;
+        background-color: #fff;
+    }
+
+    [data-theme="dark"] .post-menu-sub {
+        background-color: #1a1a1a;
+    }
+
+    .post-menu-sub-header {
+        padding: 12px 16px;
+        color: #000;
+    }
+
+    .post-menu-back-btn {
+        color: #000;
+    }
+
+    [data-theme="dark"] .post-menu-sub-header {
+        color: #f5f5f5;
+    }
+
+    [data-theme="dark"] .post-menu-back-btn {
+        color: #f5f5f5;
+    }
 }
 
 /* Small Mobile */
@@ -4715,6 +5251,16 @@ body {
 [data-theme="light"] .post-menu-dropdown {
     background-color: #fff;
     border-color: #e0e0e0;
+}
+
+@media (max-width: 700px) {
+    .post-menu-dropdown {
+        background-color: #fff;
+    }
+
+    [data-theme="dark"] .post-menu-dropdown {
+        background-color: #1a1a1a;
+    }
 }
 
 .post-menu-item {

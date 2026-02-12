@@ -388,14 +388,33 @@ function createPostElement(post) {
     html = html + '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="1.5"/><circle cx="6" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/></svg>';
     html = html + '</button>';
     html = html + '<div class="post-menu-dropdown">';
-    html = html + '<button class="post-menu-item"><span>Add to feed</span></button>';
-    html = html + '<button class="post-menu-item"><span>Save</span></button>';
-    html = html + '<button class="post-menu-item"><span>Not interested</span></button>';
-    html = html + '<button class="post-menu-item"><span>Mute</span></button>';
-    html = html + '<button class="post-menu-item"><span>Restrict</span></button>';
-    html = html + '<button class="post-menu-item danger"><span>Block</span></button>';
-    html = html + '<button class="post-menu-item danger"><span>Report</span></button>';
-    html = html + '<button class="post-menu-item"><span>Copy link</span></button>';
+    html = html + '<div class="post-menu-main">';
+    html = html + '<div class="post-menu-group">';
+    html = html + '<button class="post-menu-item post-menu-add-to-feed"><span>Add to feed</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>';
+    html = html + '</div>';
+    html = html + '<div class="post-menu-group">';
+    html = html + '<button class="post-menu-item"><span>Save</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>';
+    html = html + '<button class="post-menu-item"><span>Not interested</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>';
+    html = html + '</div>';
+    html = html + '<div class="post-menu-group">';
+    html = html + '<button class="post-menu-item"><span>Mute</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></button>';
+    html = html + '<button class="post-menu-item"><span>Restrict</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></button>';
+    html = html + '<button class="post-menu-item danger"><span>Block</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="18" y1="8" x2="23" y2="13"/><line x1="23" y1="8" x2="18" y2="13"/></svg></button>';
+    html = html + '<button class="post-menu-item danger"><span>Report</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>';
+    html = html + '</div>';
+    html = html + '<div class="post-menu-group">';
+    html = html + '<button class="post-menu-item"><span>Copy link</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>';
+    html = html + '</div>';
+    html = html + '</div>';
+    html = html + '<div class="post-menu-sub" style="display:none;">';
+    html = html + '<div class="post-menu-sub-header">';
+    html = html + '<button class="post-menu-back-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg></button>';
+    html = html + '<span>Add to feed</span>';
+    html = html + '</div>';
+    html = html + '<div class="post-menu-group">';
+    html = html + '<button class="post-menu-item"><span>Create new feed</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></button>';
+    html = html + '</div>';
+    html = html + '</div>';
     html = html + '</div>';
     html = html + '</div>';
     html = html + '</div>';
@@ -532,7 +551,43 @@ function createPostElement(post) {
             }
             if (isOpen == false) {
                 postMenuDropdown.classList.add('active');
+                if (window.innerWidth <= 700) {
+                    let overlay = document.getElementById('postMenuOverlay');
+                    if (overlay != null) {
+                        overlay.classList.add('active');
+                    }
+                }
             }
+        };
+    }
+
+    // add to feed sub-menu
+    let addToFeedBtn = div.querySelector('.post-menu-add-to-feed');
+    let menuMain = div.querySelector('.post-menu-main');
+    let menuSub = div.querySelector('.post-menu-sub');
+    let backBtn = div.querySelector('.post-menu-back-btn');
+    if (addToFeedBtn != null && menuMain != null && menuSub != null) {
+        addToFeedBtn.onclick = function(e) {
+            e.stopPropagation();
+            menuMain.style.display = 'none';
+            menuSub.style.display = 'flex';
+        };
+    }
+    if (backBtn != null && menuMain != null && menuSub != null) {
+        backBtn.onclick = function(e) {
+            e.stopPropagation();
+            menuSub.style.display = 'none';
+            menuMain.style.display = 'flex';
+        };
+    }
+
+    // create new feed button
+    let createNewFeedBtn = div.querySelector('.post-menu-sub .post-menu-item');
+    if (createNewFeedBtn != null) {
+        createNewFeedBtn.onclick = function(e) {
+            e.stopPropagation();
+            closeAllPostMenus();
+            openCreateFeedPanel(post);
         };
     }
 
@@ -1655,8 +1710,135 @@ function cleanupOldPosts() {
     }
 }
 
+function openCreateFeedPanel(post) {
+    let overlay = document.getElementById('createFeedOverlay');
+    let profiles = document.getElementById('createFeedProfiles');
+    let nameInput = document.getElementById('createFeedName');
+    let descInput = document.getElementById('createFeedDesc');
+    let countEl = document.getElementById('createFeedProfileCount');
+    if (overlay == null) return;
+
+    // reset
+    if (nameInput != null) nameInput.value = '';
+    if (descInput != null) descInput.value = '';
+    if (countEl != null) countEl.textContent = '1 profile';
+
+    // add post author as profile
+    if (profiles != null && post != null) {
+        let safeUsername = post.username || '';
+        let safeAvatar = post.avatar || '';
+        profiles.innerHTML = '<div class="create-feed-profile-row">' +
+            '<img src="' + encodeURI(safeAvatar) + '" class="create-feed-profile-avatar" alt="">' +
+            '<div class="create-feed-profile-info">' +
+            '<p class="create-feed-profile-name">' + safeUsername + '</p>' +
+            '<p class="create-feed-profile-handle">' + safeUsername + '</p>' +
+            '</div>' +
+            '<button class="create-feed-remove-btn">Remove</button>' +
+            '</div>';
+    }
+
+    // remove button handler
+    let removeBtn = profiles.querySelector('.create-feed-remove-btn');
+    if (removeBtn != null) {
+        removeBtn.onclick = function() {
+            profiles.innerHTML = '';
+            if (countEl != null) countEl.style.display = 'none';
+        };
+    }
+
+    overlay.classList.add('active');
+}
+
+function closeCreateFeedPanel() {
+    let overlay = document.getElementById('createFeedOverlay');
+    if (overlay != null) {
+        overlay.classList.remove('active');
+    }
+}
+
+function closeAllPostMenus() {
+    let allDropdowns = document.querySelectorAll('.post-menu-dropdown.active');
+    for (let i = 0; i < allDropdowns.length; i++) {
+        allDropdowns[i].classList.remove('active');
+        // reset sub-menus
+        let main = allDropdowns[i].querySelector('.post-menu-main');
+        let sub = allDropdowns[i].querySelector('.post-menu-sub');
+        if (main != null) main.style.display = '';
+        if (sub != null) sub.style.display = 'none';
+    }
+    let overlay = document.getElementById('postMenuOverlay');
+    if (overlay != null) {
+        overlay.classList.remove('active');
+    }
+}
+
 function init() {
     console.log("init starting");
+
+    // create post menu overlay for mobile
+    if (document.getElementById('postMenuOverlay') == null) {
+        let overlay = document.createElement('div');
+        overlay.className = 'post-menu-overlay';
+        overlay.id = 'postMenuOverlay';
+        overlay.onclick = function() {
+            closeAllPostMenus();
+        };
+        document.body.appendChild(overlay);
+    }
+
+    // create feed panel events
+    let createFeedOverlay = document.getElementById('createFeedOverlay');
+    let createFeedDoneBtn = document.getElementById('createFeedDoneBtn');
+    if (createFeedOverlay != null) {
+        createFeedOverlay.onclick = function(e) {
+            if (e.target === createFeedOverlay) {
+                closeCreateFeedPanel();
+            }
+        };
+    }
+    if (createFeedDoneBtn != null) {
+        createFeedDoneBtn.onclick = function() {
+            closeCreateFeedPanel();
+        };
+    }
+
+    // create feed - add topics/profiles search view
+    let createFeedAddBtn = document.getElementById('createFeedAddBtn');
+    let createFeedSearchView = document.getElementById('createFeedSearchView');
+    let createFeedSearchCancel = document.getElementById('createFeedSearchCancel');
+    let createFeedSearchBackBtn = document.getElementById('createFeedSearchBackBtn');
+
+    // elements to hide when search view is shown
+    let createFeedMainElements = document.querySelectorAll('.create-feed-section, .create-feed-divider, .create-feed-add-btn, .create-feed-profiles, #createFeedDoneBtn');
+
+    if (createFeedAddBtn != null && createFeedSearchView != null) {
+        createFeedAddBtn.onclick = function() {
+            for (let i = 0; i < createFeedMainElements.length; i++) {
+                createFeedMainElements[i].style.display = 'none';
+            }
+            createFeedSearchView.style.display = 'flex';
+        };
+    }
+
+    function hideSearchView() {
+        if (createFeedSearchView != null) {
+            createFeedSearchView.style.display = 'none';
+        }
+        for (let i = 0; i < createFeedMainElements.length; i++) {
+            createFeedMainElements[i].style.display = '';
+        }
+    }
+
+    if (createFeedSearchCancel != null) {
+        createFeedSearchCancel.onclick = function() {
+            hideSearchView();
+        };
+    }
+    if (createFeedSearchBackBtn != null) {
+        createFeedSearchBackBtn.onclick = function() {
+            hideSearchView();
+        };
+    }
 
     // clean up old oversized images from storage
     cleanupOldPosts();
@@ -1677,6 +1859,12 @@ function init() {
         composerAvatar.src = currentUser.avatar;
     }
 
+    // show loading spinner
+    let updateBar = document.getElementById('feedUpdateBar');
+    if (updateBar != null) {
+        updateBar.classList.add('active');
+    }
+
     // load posts - only other users posts, not my own
     let samplePosts = getSamplePosts();
     feedPosts = [];
@@ -1684,16 +1872,18 @@ function init() {
         feedPosts.push(samplePosts[i]);
     }
 
-    try { renderFeed(); } catch(e) { console.log("renderFeed error:", e); }
+    setTimeout(function() {
+        try { renderFeed(); } catch(e) { console.log("renderFeed error:", e); }
+        if (updateBar != null) {
+            updateBar.classList.remove('active');
+        }
+    }, 1200);
 
     // close dropdowns when clicking outside
     document.addEventListener('click', function(e) {
         // close post menu dropdowns
         if (e.target.closest('.post-menu-container') == null) {
-            let allDropdowns = document.querySelectorAll('.post-menu-dropdown.active');
-            for (let i = 0; i < allDropdowns.length; i++) {
-                allDropdowns[i].classList.remove('active');
-            }
+            closeAllPostMenus();
         }
         // close repost dropdowns
         if (e.target.closest('.repost-container') == null) {
@@ -2914,6 +3104,15 @@ function init() {
 document.addEventListener('DOMContentLoaded', function() {
     init();
     initSessionTimeout();
+
+    // header logo -> index.html
+    let headerLogoLink = document.querySelector('.header-logo-link');
+    if (headerLogoLink != null) {
+        headerLogoLink.onclick = function(e) {
+            e.preventDefault();
+            window.location.href = 'index.html';
+        };
+    }
 
     // check if coming from another page with #create hash
     if (window.location.hash == '#create') {

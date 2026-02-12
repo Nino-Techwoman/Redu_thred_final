@@ -853,4 +853,15 @@ function init() {
 }
 
 // wait for page to load
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', function() {
+    init();
+
+    // header logo -> index.html
+    let headerLogoLink = document.querySelector('.header-logo-link');
+    if (headerLogoLink != null) {
+        headerLogoLink.onclick = function(e) {
+            e.preventDefault();
+            window.location.href = 'index.html';
+        };
+    }
+});

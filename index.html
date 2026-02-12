@@ -121,6 +121,9 @@
             <div class="content-wrapper">
                 <!-- Header -->
                 <header class="header">
+                    <a href="index.html" class="header-logo-link">
+                        <img src="icons/logo.svg" width="32" height="32" alt="Threads" class="header-logo">
+                    </a>
                     <h1 id="headerTitle">Home</h1>
                     <div class="feed-selector" id="feedSelector" style="display: none;">
                         <button class="feed-selector-btn" id="feedSelectorBtn">
@@ -238,6 +241,12 @@
         <!-- Login Modal -->
         <div class="modal-overlay" id="modalOverlay">
             <div class="modal">
+                <button class="modal-close-btn" id="modalCloseBtn">
+                    <svg aria-label="Close button" role="img" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="21" x2="3" y1="3" y2="21"></line>
+                        <line x1="21" x2="3" y1="21" y2="3"></line>
+                    </svg>
+                </button>
                 <!-- Action Prompt -->
                 <div class="modal-content" id="actionPrompt">
                     <div class="gradient-heart">
