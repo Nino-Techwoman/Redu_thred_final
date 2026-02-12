@@ -936,6 +936,110 @@ function init() {
         });
     }
 
+    // Mobile menu dropdown
+    let mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    let mobileMenuDropdown = document.getElementById('mobileMenuDropdown');
+    let mobileMenuMain = document.getElementById('mobileMenuMain');
+    let mobileAppearanceSubmenu = document.getElementById('mobileAppearanceSubmenu');
+    let mobileFeedsSubmenu = document.getElementById('mobileFeedsSubmenu');
+
+    if (mobileMenuBtn != null && mobileMenuDropdown != null) {
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (mobileMenuMain != null) mobileMenuMain.style.display = '';
+            if (mobileAppearanceSubmenu != null) mobileAppearanceSubmenu.classList.remove('active');
+            if (mobileFeedsSubmenu != null) mobileFeedsSubmenu.classList.remove('active');
+            mobileMenuDropdown.classList.toggle('active');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (mobileMenuDropdown.contains(e.target) == false && mobileMenuBtn.contains(e.target) == false) {
+                mobileMenuDropdown.classList.remove('active');
+                if (mobileMenuMain != null) mobileMenuMain.style.display = '';
+                if (mobileAppearanceSubmenu != null) mobileAppearanceSubmenu.classList.remove('active');
+                if (mobileFeedsSubmenu != null) mobileFeedsSubmenu.classList.remove('active');
+            }
+        });
+
+        // Appearance submenu
+        let mobileAppearanceBtn = document.getElementById('mobileAppearanceBtn');
+        let mobileAppearanceBackBtn = document.getElementById('mobileAppearanceBackBtn');
+
+        if (mobileAppearanceBtn != null) {
+            mobileAppearanceBtn.onclick = function(e) {
+                e.stopPropagation();
+                mobileMenuMain.style.display = 'none';
+                mobileAppearanceSubmenu.classList.add('active');
+            };
+        }
+
+        if (mobileAppearanceBackBtn != null) {
+            mobileAppearanceBackBtn.onclick = function(e) {
+                e.stopPropagation();
+                mobileAppearanceSubmenu.classList.remove('active');
+                mobileMenuMain.style.display = '';
+            };
+        }
+
+        // Appearance theme options
+        let mobileAppearanceOptions = mobileMenuDropdown.querySelectorAll('.appearance-option');
+        for (let i = 0; i < mobileAppearanceOptions.length; i++) {
+            mobileAppearanceOptions[i].onclick = function(e) {
+                e.stopPropagation();
+                let theme = this.getAttribute('data-theme');
+                for (let j = 0; j < mobileAppearanceOptions.length; j++) {
+                    mobileAppearanceOptions[j].classList.remove('active');
+                }
+                this.classList.add('active');
+                if (theme == 'light') {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('threads_theme', JSON.stringify('light'));
+                } else if (theme == 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('threads_theme', JSON.stringify('dark'));
+                } else {
+                    localStorage.setItem('threads_theme', JSON.stringify('auto'));
+                    if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        document.documentElement.setAttribute('data-theme', 'light');
+                    } else {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    }
+                }
+            };
+        }
+
+        // Feeds submenu
+        let mobileFeedsBtn = document.getElementById('mobileFeedsBtn');
+        let mobileFeedsBackBtn = document.getElementById('mobileFeedsBackBtn');
+
+        if (mobileFeedsBtn != null) {
+            mobileFeedsBtn.onclick = function(e) {
+                e.stopPropagation();
+                mobileMenuMain.style.display = 'none';
+                mobileFeedsSubmenu.classList.add('active');
+            };
+        }
+
+        if (mobileFeedsBackBtn != null) {
+            mobileFeedsBackBtn.onclick = function(e) {
+                e.stopPropagation();
+                mobileFeedsSubmenu.classList.remove('active');
+                mobileMenuMain.style.display = '';
+            };
+        }
+
+        // Logout
+        let mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
+        if (mobileLogoutBtn != null) {
+            mobileLogoutBtn.onclick = function() {
+                localStorage.removeItem('threads_is_logged_in');
+                localStorage.removeItem('threads_user');
+                window.location.href = 'login.html';
+            };
+        }
+    }
+
     console.log('init done');
 }
 
