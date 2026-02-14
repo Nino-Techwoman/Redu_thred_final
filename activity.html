@@ -29,7 +29,7 @@
         <!-- Left Sidebar Navigation -->
         <nav class="sidebar">
             <div class="sidebar-top">
-                <a href="#" class="logo-link">
+                <a href="index.html" class="logo-link">
                     <img src="icons/logo.svg" width="30" height="34" alt="Threads" class="logo">
                 </a>
             </div>
@@ -56,92 +56,192 @@
                 <button class="nav-btn" id="pinBtn" title="Pin">
                     <img src="icons/pin.svg" width="26" height="26" alt="Pin">
                 </button>
-                <div class="menu-wrapper">
+                <div class="menu-btn-container">
                     <button class="nav-btn" id="menuBtn" title="Menu">
                         <img src="icons/menu.svg" width="26" height="26" alt="Menu">
                     </button>
-                </div>
-            </div>
-        </nav>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="content-wrapper">
-                <!-- Mobile Top Bar -->
-                <div class="mobile-top-bar">
-                    <div class="mobile-top-spacer"></div>
-                    <a href="index.html" class="mobile-top-logo">
-                        <img src="icons/logo.svg" width="28" height="32" alt="Threads">
-                    </a>
-                    <div class="mobile-menu-container">
-                        <button class="mobile-top-menu" id="mobileMenuBtn">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                <rect rx="1.25" x="3" y="7" width="18" height="2.5"></rect>
-                                <rect rx="1.25" x="10" y="15" width="11" height="2.5"></rect>
-                            </svg>
-                        </button>
-                        <div class="menu-dropdown" id="mobileMenuDropdown">
-                            <div class="menu-main" id="mobileMenuMain">
-                                <div class="menu-section">
-                                    <button class="menu-item has-arrow" id="mobileAppearanceBtn">
-                                        Appearance
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                                    </button>
-                                    <button class="menu-item" onclick="window.location.href='insights.html'">Insights</button>
-                                    <button class="menu-item">Settings</button>
-                                </div>
-                                <div class="menu-divider"></div>
-                                <div class="menu-section">
-                                    <button class="menu-item has-arrow" id="mobileFeedsBtn">
-                                        Feeds
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                                    </button>
-                                    <button class="menu-item">Saved</button>
-                                    <button class="menu-item">Liked</button>
-                                </div>
-                                <div class="menu-divider"></div>
-                                <div class="menu-section">
-                                    <button class="menu-item">Report a problem</button>
-                                    <button class="menu-item logout" id="mobileLogoutBtn">Log out</button>
-                                </div>
+                    <div class="menu-dropdown" id="menuDropdown">
+                        <!-- Main Menu -->
+                        <div class="menu-main" id="menuMain">
+                            <div class="menu-section">
+                                <button class="menu-item has-arrow" id="appearanceBtn">
+                                    Appearance
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
+                                </button>
+                                <button class="menu-item">Insights</button>
+                                <button class="menu-item">Settings</button>
                             </div>
-                            <div class="menu-submenu" id="mobileAppearanceSubmenu">
-                                <div class="submenu-header">
-                                    <button class="submenu-back" id="mobileAppearanceBackBtn">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                                    </button>
-                                    <span class="submenu-title">Appearance</span>
-                                    <div class="submenu-spacer"></div>
-                                </div>
-                                <div class="appearance-options">
-                                    <button class="appearance-option active" data-theme="light">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="2" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                                    </button>
-                                    <button class="appearance-option" data-theme="dark">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                                    </button>
-                                    <button class="appearance-option" data-theme="auto">Auto</button>
-                                </div>
+                            <div class="menu-divider"></div>
+                            <div class="menu-section">
+                                <button class="menu-item has-arrow" id="menuFeedsBtn">
+                                    Feeds
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
+                                </button>
+                                <button class="menu-item">Saved</button>
+                                <button class="menu-item">Liked</button>
                             </div>
-                            <div class="menu-submenu" id="mobileFeedsSubmenu">
-                                <div class="submenu-header">
-                                    <button class="submenu-back" id="mobileFeedsBackBtn">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                                    </button>
-                                    <span class="submenu-title">Feeds</span>
-                                    <button class="submenu-add">
-                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"></circle><line x1="10" y1="6.5" x2="10" y2="13.5"></line><line x1="6.5" y1="10" x2="13.5" y2="10"></line></svg>
-                                    </button>
-                                </div>
-                                <div class="menu-feeds-list">
-                                    <button class="menu-item" data-feed="foryou">For you</button>
-                                    <button class="menu-item" data-feed="following">Following</button>
-                                </div>
+                            <div class="menu-divider"></div>
+                            <div class="menu-section">
+                                <button class="menu-item">Report a problem</button>
+                                <button class="menu-item logout" id="logoutBtn">Log out</button>
+                            </div>
+                        </div>
+                        <!-- Appearance Submenu -->
+                        <div class="menu-submenu" id="menuAppearanceSubmenu">
+                            <div class="submenu-header">
+                                <button class="submenu-back" id="appearanceBackBtn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="15 18 9 12 15 6"/>
+                                    </svg>
+                                </button>
+                                <span class="submenu-title">Appearance</span>
+                                <div class="submenu-spacer"></div>
+                            </div>
+                            <div class="appearance-options">
+                                <button class="appearance-option active" data-theme="light">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <circle cx="12" cy="12" r="4"/>
+                                        <line x1="12" y1="2" x2="12" y2="4"/>
+                                        <line x1="12" y1="20" x2="12" y2="22"/>
+                                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                                        <line x1="2" y1="12" x2="4" y2="12"/>
+                                        <line x1="20" y1="12" x2="22" y2="12"/>
+                                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                                    </svg>
+                                </button>
+                                <button class="appearance-option" data-theme="dark">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                                    </svg>
+                                </button>
+                                <button class="appearance-option" data-theme="auto">
+                                    Auto
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Feeds Submenu -->
+                        <div class="menu-submenu" id="menuFeedsSubmenu">
+                            <div class="submenu-header">
+                                <button class="submenu-back" id="menuFeedsBackBtn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="15 18 9 12 15 6"/>
+                                    </svg>
+                                </button>
+                                <span class="submenu-title">Feeds</span>
+                                <button class="submenu-add">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <circle cx="10" cy="10" r="7.5"/>
+                                        <line x1="10" y1="6.5" x2="10" y2="13.5"/>
+                                        <line x1="6.5" y1="10" x2="13.5" y2="10"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="menu-feeds-list">
+                                <button class="menu-item" data-feed="foryou">For you</button>
+                                <button class="menu-item" data-feed="following">Following</button>
+                                <button class="menu-item" data-feed="ghost">
+                                    Ghost posts
+                                    <svg width="20" height="20" viewBox="0 0 20 19" fill="currentColor">
+                                        <path d="M4.60249 16.4045C4.86284 16.0252 5.38193 15.9287 5.76134 16.1888C6.1495 16.4552 6.56424 16.6861 6.99995 16.8765C7.4757 17.0843 7.97782 17.2443 8.49897 17.3501C8.94984 17.4417 9.24062 17.8823 9.1492 18.3332C9.0575 18.784 8.61788 19.0757 8.16694 18.9842C7.52911 18.8547 6.9149 18.6584 6.33263 18.404C5.79943 18.171 5.29237 17.8888 4.81814 17.5633C4.43901 17.3028 4.34214 16.7838 4.60249 16.4045Z"></path>
+                                        <path d="M14.2379 16.1888C14.6172 15.9285 15.1362 16.0253 15.3968 16.4045C15.6572 16.7839 15.5606 17.3029 15.1811 17.5633C14.7068 17.8888 14.1999 18.171 13.6666 18.404C13.0843 18.6584 12.4702 18.8547 11.8323 18.9842C11.3814 19.0756 10.9408 18.784 10.8492 18.3332C10.7579 17.8824 11.0496 17.4418 11.5003 17.3501C12.0215 17.2443 12.5235 17.0843 12.9993 16.8765C13.4351 16.686 13.8497 16.4553 14.2379 16.1888Z"></path>
+                                        <path d="M1.6671 10.8503C2.11797 10.7587 2.55758 11.0506 2.64936 11.5013C2.75515 12.0225 2.91515 12.5246 3.12299 13.0003C3.31653 13.4433 3.55247 13.8647 3.82449 14.2585C4.08586 14.6371 3.99064 15.1558 3.61209 15.4173C3.23352 15.6786 2.71482 15.5841 2.45323 15.2057C2.12096 14.7248 1.83313 14.2096 1.5963 13.6676C1.34194 13.0854 1.14555 12.4711 1.01606 11.8333C0.924746 11.3825 1.21638 10.942 1.6671 10.8503Z"></path>
+                                        <path d="M9.99962 0.833984C15.0621 0.833995 19.1661 4.93817 19.1663 10.0007C19.1663 10.6273 19.1035 11.2407 18.9832 11.8333C18.8537 12.4712 18.6574 13.0853 18.4029 13.6676C18.1661 14.2098 17.8784 14.7247 17.546 15.2057C17.2844 15.5842 16.7657 15.6787 16.3872 15.4173C16.0089 15.1557 15.9135 14.637 16.1748 14.2585C16.4469 13.8646 16.6827 13.4434 16.8762 13.0003C17.0841 12.5245 17.2441 12.0226 17.3499 11.5013C17.4481 11.0172 17.4996 10.5153 17.4996 10.0007C17.4995 5.85864 14.1417 2.50066 9.99962 2.50065C8.8214 2.50071 7.70832 2.77171 6.71837 3.25423L6.5963 3.30225C6.4708 3.34043 6.33684 3.34834 6.20649 3.32503L2.70307 2.69922L3.33865 6.17334C3.3709 6.34936 3.34609 6.53119 3.26704 6.69173C2.93406 7.3678 2.69972 8.10131 2.58344 8.87354C2.51495 9.32865 2.09048 9.64271 1.63536 9.57422C1.18062 9.50551 0.867211 9.08097 0.935494 8.62614C1.06319 7.77778 1.30818 6.96719 1.65164 6.21159L0.846789 1.81706C0.797783 1.54853 0.882883 1.27241 1.07547 1.07894C1.26812 0.885461 1.54399 0.799138 1.81277 0.847005L6.24148 1.63883C7.38929 1.12218 8.66189 0.834039 9.99962 0.833984Z"></path>
+                                        <path d="M13.1572 10.974C13.4826 10.6486 14.0101 10.6485 14.3356 10.974C14.6608 11.2994 14.6609 11.8269 14.3356 12.1523C13.7273 12.7606 12.87 13.0214 12.0797 13.0215C11.2894 13.0215 10.4321 12.7606 9.82384 12.1523C9.4984 11.8269 9.4984 11.2994 9.82384 10.974C10.1493 10.6486 10.6768 10.6485 11.0022 10.974C11.2273 11.1989 11.6202 11.3548 12.0797 11.3548C12.5392 11.3548 12.9322 11.1989 13.1572 10.974Z"></path>
+                                        <path d="M14.7913 7.81966C15.3664 7.82039 15.8318 8.28705 15.8313 8.86214C15.8306 9.43723 15.364 9.90285 14.7888 9.90218C14.2137 9.9016 13.7482 9.43482 13.7488 8.8597C13.7494 8.28458 14.2162 7.8191 14.7913 7.81966Z"></path>
+                                        <path d="M9.37543 7.81315C9.95079 7.81371 10.4169 8.28038 10.4163 8.85563C10.4157 9.43071 9.94895 9.89624 9.37381 9.89567C8.79875 9.89509 8.33245 9.42827 8.33295 8.85319C8.33372 8.27828 8.80075 7.81275 9.37543 7.81315Z"></path>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </nav>
 
+        <!-- Mobile Top Bar -->
+        <div class="mobile-top-bar">
+            <div class="mobile-top-spacer"></div>
+            <a href="index.html" class="mobile-top-logo">
+                <img src="icons/logo.svg" width="28" height="32" alt="Threads">
+            </a>
+            <div class="mobile-menu-container">
+                <button class="mobile-top-menu" id="mobileMenuBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <rect rx="1.25" x="3" y="7" width="18" height="2.5"></rect>
+                        <rect rx="1.25" x="10" y="15" width="11" height="2.5"></rect>
+                    </svg>
+                </button>
+                <div class="menu-dropdown" id="mobileMenuDropdown">
+                    <div class="menu-main" id="mobileMenuMain">
+                        <div class="menu-section">
+                            <button class="menu-item has-arrow" id="mobileAppearanceBtn">
+                                Appearance
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </button>
+                            <button class="menu-item" onclick="window.location.href='insights.html'">Insights</button>
+                            <button class="menu-item">Settings</button>
+                        </div>
+                        <div class="menu-divider"></div>
+                        <div class="menu-section">
+                            <button class="menu-item has-arrow" id="mobileFeedsBtn">
+                                Feeds
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </button>
+                            <button class="menu-item">Saved</button>
+                            <button class="menu-item">Liked</button>
+                        </div>
+                        <div class="menu-divider"></div>
+                        <div class="menu-section">
+                            <button class="menu-item">Report a problem</button>
+                            <button class="menu-item logout" id="mobileLogoutBtn">Log out</button>
+                        </div>
+                    </div>
+                    <div class="menu-submenu" id="mobileAppearanceSubmenu">
+                        <div class="submenu-header">
+                            <button class="submenu-back" id="mobileAppearanceBackBtn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            </button>
+                            <span class="submenu-title">Appearance</span>
+                            <div class="submenu-spacer"></div>
+                        </div>
+                        <div class="appearance-options">
+                            <button class="appearance-option active" data-theme="light">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="2" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                            </button>
+                            <button class="appearance-option" data-theme="dark">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                            </button>
+                            <button class="appearance-option" data-theme="auto">Auto</button>
+                        </div>
+                    </div>
+                    <div class="menu-submenu" id="mobileFeedsSubmenu">
+                        <div class="submenu-header">
+                            <button class="submenu-back" id="mobileFeedsBackBtn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            </button>
+                            <span class="submenu-title">Feeds</span>
+                            <button class="submenu-add">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"></circle><line x1="10" y1="6.5" x2="10" y2="13.5"></line><line x1="6.5" y1="10" x2="13.5" y2="10"></line></svg>
+                            </button>
+                        </div>
+                        <div class="menu-feeds-list">
+                            <button class="menu-item" data-feed="foryou">For you</button>
+                            <button class="menu-item" data-feed="following">Following</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-wrapper">
                 <!-- Mobile Filter Tabs -->
                 <div class="activity-tabs-mobile">
                     <button class="activity-tab-btn active" data-filter="all">All</button>

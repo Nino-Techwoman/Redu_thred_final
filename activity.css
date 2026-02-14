@@ -1,5 +1,9 @@
 /* Activity Page Styles */
 
+:root {
+    --threads-mobile-nav-height: 68px;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -1631,6 +1635,10 @@ body {
 /* Mobile */
 
 @media (max-width: 700px) {
+    .app {
+        flex-direction: column;
+    }
+
     /* Sidebar becomes bottom navigation */
     .sidebar {
         position: fixed;
@@ -1645,7 +1653,7 @@ body {
         border-top: 1px solid rgba(0, 0, 0, 0.15);
         padding: 0;
         justify-content: center;
-        z-index: 100;
+        z-index: 1001;
         background-color: #fff;
     }
 
@@ -1686,6 +1694,8 @@ body {
         align-items: center;
         justify-content: space-between;
         padding: var(--threads-mobile-padding) 16px;
+        margin-top: 20px;
+        margin-bottom: 20px;
         position: sticky;
         top: 0;
         z-index: 50;
@@ -1805,8 +1815,8 @@ body {
 
     .content-wrapper {
         border-radius: 0;
-        max-width: var(--threads-content-medium-max-width);
-        margin: 0 auto;
+        max-width: 100%;
+        margin: 0;
     }
 
     /* Remove container border on mobile */
@@ -1890,7 +1900,16 @@ body {
 
 @media (max-width: 480px) {
     .main-content {
-        padding: 0 var(--threads-mobile-padding);
+        padding: 0;
+    }
+
+    .content-wrapper {
+        max-width: 100%;
+        border-radius: 0;
+    }
+
+    .activity-container {
+        border-radius: 0;
     }
 
     .activity-item {
@@ -1906,13 +1925,27 @@ body {
         font-size: 14px;
     }
 
+    .activity-avatar {
+        width: 40px;
+        height: 40px;
+    }
+
     .activity-action-btn {
         padding: 6px 8px;
         font-size: 13px;
     }
 
+    .follow-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+
     .nav-btn {
         padding: 14px 16px;
+    }
+
+    .activity-post-preview {
+        font-size: 14px;
     }
 }
 

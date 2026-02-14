@@ -484,13 +484,59 @@ body {
         font-size: 24px;
     }
 
+    .su-subtitle {
+        font-size: 15px;
+    }
+
     .su-tooltip {
         width: calc(100vw - 80px);
+        left: 0;
     }
 
     .su-input,
     .su-select {
         font-size: 14px;
         width: 100%;
+    }
+
+    .su-input-wrapper {
+        min-height: 56px;
+    }
+
+    .su-select-wrapper {
+        min-height: 56px;
+    }
+
+    .su-dob-row {
+        gap: 6px;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .su-page {
+        padding: 0 10px;
+    }
+
+    .su-main {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .su-title {
+        font-size: 22px;
+    }
+
+    .su-label {
+        font-size: 15px;
+    }
+
+    .su-tooltip {
+        width: calc(100vw - 40px);
+        font-size: 14px;
+    }
+
+    .su-footer-links {
+        gap: 6px 12px;
     }
 }
