@@ -1,5 +1,9 @@
 /* Login Page Styles */
 
+:root {
+  --threads-mobile-padding: 12px;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -358,7 +362,7 @@ h1 {
 @media (max-width: 700px) {
     .login-page {
         justify-content: flex-start;
-        padding: 60px 16px 16px;
+        padding: 60px var(--threads-mobile-padding) var(--threads-mobile-padding);
     }
 
     .login-container {
@@ -368,6 +372,7 @@ h1 {
 
     .form-input {
         font-size: 14px;
+        width: 100%;
         max-width: 370px;
         height: 55px;
         border-radius: 20px;
@@ -375,6 +380,7 @@ h1 {
     }
 
     .login-btn {
+        width: 100%;
         max-width: 370px;
         height: 55px;
         border-radius: 20px;
@@ -390,6 +396,7 @@ h1 {
     }
 
     .instagram-btn {
+        width: 100%;
         max-width: 370px;
     }
 
@@ -408,7 +415,7 @@ h1 {
 
 @media (max-width: 480px) {
     .login-page {
-        padding: 12px;
+        padding: var(--threads-mobile-padding);
     }
 
     .divider::before,

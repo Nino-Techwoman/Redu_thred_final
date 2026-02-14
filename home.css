@@ -4572,7 +4572,8 @@ body {
     }
 
     .content-wrapper {
-        max-width: 100%;
+        max-width: var(--threads-content-medium-max-width);
+        margin: 0 auto;
     }
 }
 
@@ -4588,7 +4589,7 @@ body {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 12px 16px;
+        padding: var(--threads-mobile-padding) 16px;
         position: sticky;
         top: 0;
         z-index: 50;
@@ -4667,12 +4668,16 @@ body {
         left: 0;
         right: 0;
         width: 100%;
-        height: 60px;
+        height: var(--threads-mobile-nav-height);
         flex-direction: row;
         border-right: none;
         border-top: 1px solid rgba(0, 0, 0, 0.15);
         padding: 0;
         justify-content: center;
+    }
+
+    [data-theme="dark"] .sidebar {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .sidebar-top {
@@ -4702,8 +4707,13 @@ body {
     /* Main content adjustments */
     .main-content {
         padding: 0;
-        margin-bottom: 60px;
+        margin-bottom: var(--threads-mobile-nav-height);
         margin-left: 0;
+    }
+
+    .content-wrapper {
+        max-width: 100%;
+        margin: 0 auto;
     }
 
     /* Header */
@@ -4771,7 +4781,18 @@ body {
     }
 
     .post {
-        padding: 12px 16px;
+        padding: var(--threads-post-padding) 16px;
+        background-color: transparent;
+        border: none;
+        border-radius: 0;
+        margin-bottom: 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="dark"] .post {
+        background-color: transparent;
+        border-color: transparent;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .post-avatar {
@@ -4839,7 +4860,7 @@ body {
     #searchModalOverlay {
         left: 0;
         width: 100%;
-        bottom: 60px;
+        bottom: var(--threads-mobile-nav-height);
         height: auto;
         top: 0;
     }
@@ -5001,7 +5022,7 @@ body {
 /* Small Mobile */
 @media (max-width: 480px) {
     .main-content {
-        padding: 0 8px;
+        padding: 0 var(--threads-mobile-padding);
     }
 
     .feed-tab {

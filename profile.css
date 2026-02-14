@@ -1462,7 +1462,8 @@ body {
     }
 
     .content-wrapper {
-        max-width: 100%;
+        max-width: var(--threads-content-medium-max-width);
+        margin: 0 auto;
     }
 }
 
@@ -1477,7 +1478,7 @@ body {
         left: 0;
         right: 0;
         width: 100%;
-        height: 60px;
+        height: var(--threads-mobile-nav-height);
         flex-direction: row;
         border-right: none;
         border-top: 1px solid rgba(0, 0, 0, 0.15);
@@ -1511,12 +1512,13 @@ body {
     }
 
     .main-content {
-        margin-bottom: 60px;
-        padding: 16px;
+        margin-bottom: var(--threads-mobile-nav-height);
+        padding: var(--threads-mobile-padding);
     }
 
     .content-wrapper {
-        max-width: 100%;
+        max-width: var(--threads-content-medium-max-width);
+        margin: 0 auto;
     }
 
     .profile-avatar {

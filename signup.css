@@ -1,3 +1,7 @@
+:root {
+  --threads-mobile-padding: 12px;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -17,7 +21,18 @@ body {
     min-height: 100vh;
     max-width: 700px;
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 20px;
+    flex-grow: 1;
+}
+
+@media (max-width: 999px) {
+    .su-page {
+        max-width: 680px;
+        width: 100%;
+        box-sizing: border-box;
+        margin-inline-start: auto;
+        margin-inline-end: auto;
+    }
 }
 
 /* Back */
@@ -49,6 +64,8 @@ body {
 .su-main {
     flex: 1;
     padding-top: 16px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .su-meta {
@@ -377,7 +394,7 @@ body {
 
 /* Dark mode */
 [data-theme="dark"] body {
-    background-color: #000;
+    background-color: #0d1b2a;
     color: #f5f5f5;
 }
 
@@ -413,7 +430,7 @@ body {
 
 [data-theme="dark"] .su-input-wrapper {
     border-color: #363636;
-    background-color: #000;
+    background-color: #0d1b2a;
 }
 
 [data-theme="dark"] .su-input {
@@ -430,7 +447,7 @@ body {
 
 [data-theme="dark"] .su-select-wrapper {
     border-color: #363636;
-    background-color: #000;
+    background-color: #0d1b2a;
 }
 
 [data-theme="dark"] .su-select {
@@ -454,13 +471,13 @@ body {
     background-color: #1a1a1a;
 }
 
-[data-theme="dark"] .su-meta-logo path:last-child {
+[data-theme="dark"] .su-meta-logo path[fill="#1C2B33"] {
     fill: #f5f5f5;
 }
 
 @media (max-width: 700px) {
     .su-page {
-        padding: 0 24px;
+        padding: 0 var(--threads-mobile-padding);
     }
 
     .su-title {
@@ -474,13 +491,6 @@ body {
     .su-input,
     .su-select {
         font-size: 14px;
-        max-width: 370px;
-        height: 55px;
-    }
-}
-
-@media (max-width: 600px) {
-    .su-page {
-        padding: 0 16px;
+        width: 100%;
     }
 }

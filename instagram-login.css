@@ -1,5 +1,9 @@
 /* Instagram Login Page Styles */
 
+:root {
+  --threads-mobile-padding: 12px;
+}
+
 @font-face {
     font-display: swap;
     font-family: "Instagram Sans Regular";
@@ -23,6 +27,15 @@ body {
     color: #000;
 }
 
+
+/* Mobile Header (hidden on desktop) */
+.ig-mobile-header {
+    display: none;
+}
+
+.ig-mobile-gradient-line {
+    display: none;
+}
 
 /* Page Layout */
 
@@ -160,7 +173,8 @@ body {
 
 .ig-input {
     width: 100%;
-    min-height: 64px;
+    max-width: 540px;
+    min-height: 60px;
     padding: 0 16px;
     border: 1px solid #dbdbdb;
     border-radius: 16px;
@@ -231,7 +245,7 @@ body {
     margin-top: 20px;
     border: none;
     border-radius: 22px;
-    background: linear-gradient(135deg, #6a89cc, #8fa4d4, #a8b8de);
+    background: linear-gradient(135deg, #3a6db5, #5581c4, #6a8ecc);
     color: #fff;
     font-size: 14px;
     font-weight: 600;
@@ -387,27 +401,98 @@ body {
     }
 
     .ig-right {
-        padding: 30px 20px;
+        padding: 30px var(--threads-mobile-padding);
     }
 
     .ig-input {
         font-size: 14px;
-        max-width: 370px;
-        height: 55px;
+        width: 100%;
+        max-width: 540px;
+        min-height: 60px;
     }
 }
 
 @media (max-width: 600px) {
+    .ig-login-page {
+        flex-direction: column;
+    }
+
     .ig-left {
         display: none;
     }
 
+    .ig-mobile-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px 36px;
+        background-color: #f0f0f0;
+    }
+
+    .ig-mobile-logo {
+        display: block;
+    }
+
+    .ig-mobile-logo-svg {
+        width: 72px;
+        height: 72px;
+    }
+
+    .ig-mobile-gradient-line {
+        display: block;
+        height: 2px;
+        background: #dbdbdb;
+    }
+
     .ig-right {
-        padding: 60px 20px 40px;
+        flex: 1;
+        padding: 40px 24px 40px;
+        align-items: flex-start;
     }
 
     .ig-form-container {
         max-width: 100%;
+        width: 100%;
+    }
+
+    .ig-form-title {
+        font-size: 18px;
+        margin-bottom: 24px;
+    }
+
+    .ig-input {
+        min-height: 60px;
+        border-radius: 14px;
+        font-size: 14px;
+        max-width: 540px;
+    }
+
+    .ig-login-btn {
+        height: 48px;
+        border-radius: 24px;
+        font-size: 15px;
+        margin-top: 16px;
+    }
+
+    .ig-forgot-link {
+        font-size: 14px;
+        margin-top: 8px;
+    }
+
+    .ig-create-btn {
+        margin-top: 32px;
+        height: 48px;
+        border-radius: 24px;
+        font-size: 14px;
+    }
+
+    .ig-meta {
+        margin-top: 28px;
+        align-self: center;
+    }
+
+    .ig-footer {
+        padding: 16px 20px 24px;
     }
 }
 
@@ -459,6 +544,10 @@ body {
     background-color: rgba(0, 149, 246, 0.1);
 }
 
+[data-theme="dark"] .ig-meta-logo path[fill="#1C2B33"] {
+    fill: #f5f5f5;
+}
+
 [data-theme="dark"] .ig-footer {
     border-top-color: #262626;
 }
@@ -468,4 +557,16 @@ body {
         border-right: none;
         border-bottom-color: #262626;
     }
+}
+
+[data-theme="dark"] .ig-mobile-header {
+    background-color: #0a0a14;
+}
+
+[data-theme="dark"] .ig-mobile-gradient-line {
+    background: #262626;
+}
+
+[data-theme="light"] .ig-mobile-header {
+    background-color: #f0f0f0;
 }
