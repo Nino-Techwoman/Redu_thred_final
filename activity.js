@@ -30,15 +30,6 @@ function getSampleActivity() {
             isFollowing: false
         },
         {
-            id: 2,
-            type: 'views',
-            username: '',
-            avatar: '',
-            time: '3d',
-            viewCount: 50,
-            postText: '12345'
-        },
-        {
             id: 3,
             type: 'suggested_thread',
             username: 'mikachu2323',
@@ -194,25 +185,23 @@ function createActivityItem(activity) {
             }
             postPreviewHtml = postPreviewHtml + '</button>';
             postPreviewHtml = postPreviewHtml + '<button class="activity-action-btn">';
-            postPreviewHtml = postPreviewHtml + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">';
-            postPreviewHtml = postPreviewHtml + '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>';
+            postPreviewHtml = postPreviewHtml + '<svg aria-label="Reply" role="img" viewBox="0 0 18 18" fill="none" stroke="currentColor" width="20" height="20">';
+            postPreviewHtml = postPreviewHtml + '<path d="M15.376 13.2177L16.2861 16.7955L12.7106 15.8848C12.6781 15.8848 12.6131 15.8848 12.5806 15.8848C11.3779 16.5678 9.94767 16.8931 8.41995 16.7955C4.94194 16.5353 2.08152 13.7381 1.72397 10.2578C1.2689 5.63919 5.13697 1.76863 9.75264 2.22399C13.2307 2.58177 16.0261 5.41151 16.2861 8.92429C16.4161 10.453 16.0586 11.8841 15.376 13.0876C15.376 13.1526 15.376 13.1852 15.376 13.2177Z" stroke-linejoin="round" stroke-width="1.25"/>';
             postPreviewHtml = postPreviewHtml + '</svg>';
             if (activity.comments) {
                 postPreviewHtml = postPreviewHtml + activity.comments;
             }
             postPreviewHtml = postPreviewHtml + '</button>';
             postPreviewHtml = postPreviewHtml + '<button class="activity-action-btn">';
-            postPreviewHtml = postPreviewHtml + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">';
-            postPreviewHtml = postPreviewHtml + '<path d="M17 1l4 4-4 4"/>';
-            postPreviewHtml = postPreviewHtml + '<path d="M3 11V9a4 4 0 0 1 4-4h14"/>';
-            postPreviewHtml = postPreviewHtml + '<path d="M7 23l-4-4 4-4"/>';
-            postPreviewHtml = postPreviewHtml + '<path d="M21 13v2a4 4 0 0 1-4 4H3"/>';
+            postPreviewHtml = postPreviewHtml + '<svg aria-label="Repost" role="img" viewBox="0 0 18 18" fill="currentColor" width="20" height="20">';
+            postPreviewHtml = postPreviewHtml + '<path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"/>';
+            postPreviewHtml = postPreviewHtml + '<path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"/>';
             postPreviewHtml = postPreviewHtml + '</svg>';
             postPreviewHtml = postPreviewHtml + '</button>';
             postPreviewHtml = postPreviewHtml + '<button class="activity-action-btn">';
-            postPreviewHtml = postPreviewHtml + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">';
-            postPreviewHtml = postPreviewHtml + '<line x1="22" y1="2" x2="11" y2="13"/>';
-            postPreviewHtml = postPreviewHtml + '<polygon points="22 2 15 22 11 13 2 9 22 2"/>';
+            postPreviewHtml = postPreviewHtml + '<svg aria-label="Share" role="img" viewBox="0 0 18 18" fill="none" stroke="currentColor" width="20" height="20">';
+            postPreviewHtml = postPreviewHtml + '<path d="M15.6097 4.09082L6.65039 9.11104" stroke-linejoin="round" stroke-width="1.25"/>';
+            postPreviewHtml = postPreviewHtml + '<path d="M7.79128 14.439C8.00463 15.3275 8.11131 15.7718 8.33426 15.932C8.52764 16.071 8.77617 16.1081 9.00173 16.0318C9.26179 15.9438 9.49373 15.5501 9.95761 14.7628L15.5444 5.2809C15.8883 4.69727 16.0603 4.40546 16.0365 4.16566C16.0159 3.95653 15.9071 3.76612 15.7374 3.64215C15.5428 3.5 15.2041 3.5 14.5267 3.5H3.71404C2.81451 3.5 2.36474 3.5 2.15744 3.67754C1.97758 3.83158 1.88253 4.06254 1.90186 4.29856C1.92415 4.57059 2.24363 4.88716 2.88259 5.52032L6.11593 8.7243C6.26394 8.87097 6.33795 8.94431 6.39784 9.02755C6.451 9.10144 6.4958 9.18101 6.53142 9.26479C6.57153 9.35916 6.59586 9.46047 6.64451 9.66309L7.79128 14.439Z" stroke-linejoin="round" stroke-width="1.25"/>';
             postPreviewHtml = postPreviewHtml + '</svg>';
             postPreviewHtml = postPreviewHtml + '</button>';
             postPreviewHtml = postPreviewHtml + '</div>';
@@ -1090,6 +1079,172 @@ document.addEventListener('DOMContentLoaded', function() {
         headerLogoLink.onclick = function(e) {
             e.preventDefault();
             window.location.href = 'index.html';
+        };
+    }
+
+    // heart button toggle on activity items
+    document.addEventListener('click', function(e) {
+        let btn = e.target.closest('.activity-action-btn');
+        if (btn == null) return;
+        let svg = btn.querySelector('svg path');
+        if (svg == null) return;
+        let path = svg.getAttribute('d');
+        if (path.indexOf('20.84') == -1) return; // only heart buttons
+        if (btn.classList.contains('liked')) {
+            btn.classList.remove('liked');
+            let count = parseInt(btn.textContent);
+            if (!isNaN(count) && count > 0) btn.lastChild.textContent = count - 1;
+        } else {
+            btn.classList.add('liked');
+            let count = parseInt(btn.textContent);
+            if (!isNaN(count)) btn.lastChild.textContent = count + 1;
+        }
+    });
+
+    // comment button -> open reply modal
+    document.addEventListener('click', function(e) {
+        let btn = e.target.closest('.activity-action-btn');
+        if (btn == null) return;
+        let svg = btn.querySelector('svg path');
+        if (svg == null) return;
+        let path = svg.getAttribute('d');
+        // comment icon path starts with "M15.376"
+        if (path.indexOf('M15.376') == -1) return;
+
+        // find the parent activity item
+        let activityItem = btn.closest('.activity-item');
+        if (activityItem == null) return;
+
+        // get post data from the activity item
+        let avatar = activityItem.querySelector('.activity-avatar');
+        let username = activityItem.querySelector('.activity-username');
+        let text = activityItem.querySelector('.activity-text');
+        let image = activityItem.querySelector('.activity-post-image');
+
+        // build original post content
+        let originalPost = document.getElementById('replyOriginalPost');
+        if (originalPost == null) return;
+
+        let html = '';
+        if (avatar != null) {
+            html += '<img src="' + avatar.src + '" class="reply-original-avatar">';
+        }
+        html += '<div class="reply-original-content">';
+        if (username != null) {
+            html += '<span class="reply-original-username">' + username.textContent + '</span>';
+        }
+        if (text != null) {
+            html += '<p class="reply-original-text">' + text.textContent + '</p>';
+        }
+        if (image != null) {
+            html += '<img src="' + image.src + '" class="reply-original-image">';
+        }
+        html += '</div>';
+        originalPost.innerHTML = html;
+
+        // set user info
+        let user = null;
+        try { user = JSON.parse(localStorage.getItem('threads_user')); } catch(e) {}
+        if (user != null) {
+            let replyAvatar = document.getElementById('replyUserAvatar');
+            let replyUsername = document.getElementById('replyUsername');
+            let replyAddAvatar = document.getElementById('replyAddThreadAvatar');
+            if (replyAvatar != null) replyAvatar.src = user.avatar;
+            if (replyUsername != null) replyUsername.textContent = user.username;
+            if (replyAddAvatar != null) replyAddAvatar.src = user.avatar;
+        }
+
+        // set placeholder
+        let textarea = document.getElementById('replyTextarea');
+        if (textarea != null && username != null) {
+            textarea.placeholder = 'Reply to ' + username.textContent + '...';
+            textarea.value = '';
+        }
+
+        // open modal
+        let overlay = document.getElementById('replyModalOverlay');
+        if (overlay != null) {
+            overlay.classList.add('active');
+            if (textarea != null) setTimeout(function() { textarea.focus(); }, 100);
+        }
+    });
+
+    // close reply modal
+    let replyClose = document.getElementById('replyPostClose');
+    if (replyClose != null) {
+        replyClose.onclick = function() {
+            let overlay = document.getElementById('replyModalOverlay');
+            if (overlay != null) overlay.classList.remove('active');
+        };
+    }
+
+    // close reply modal on overlay click
+    let replyOverlay = document.getElementById('replyModalOverlay');
+    if (replyOverlay != null) {
+        replyOverlay.onclick = function(e) {
+            if (e.target == replyOverlay) {
+                replyOverlay.classList.remove('active');
+            }
+        };
+    }
+
+    // reply post button enable/disable
+    let replyTextarea = document.getElementById('replyTextarea');
+    let replyPostBtn = document.getElementById('replyPostBtn');
+    if (replyTextarea != null && replyPostBtn != null) {
+        replyTextarea.oninput = function() {
+            if (replyTextarea.value.trim() != '') {
+                replyPostBtn.disabled = false;
+            } else {
+                replyPostBtn.disabled = true;
+            }
+        };
+        replyPostBtn.onclick = function() {
+            let overlay = document.getElementById('replyModalOverlay');
+            if (overlay != null) overlay.classList.remove('active');
+            replyTextarea.value = '';
+            replyPostBtn.disabled = true;
+        };
+    }
+
+    // repost button -> open repost bottom sheet
+    document.addEventListener('click', function(e) {
+        let btn = e.target.closest('.activity-action-btn');
+        if (btn == null) return;
+        let svg = btn.querySelector('svg');
+        if (svg == null) return;
+        let label = svg.getAttribute('aria-label');
+        if (label != 'Repost') return;
+
+        let overlay = document.getElementById('repostSheetOverlay');
+        if (overlay != null) {
+            overlay.classList.add('active');
+        }
+    });
+
+    // close repost sheet on overlay click
+    let repostOverlay = document.getElementById('repostSheetOverlay');
+    if (repostOverlay != null) {
+        repostOverlay.onclick = function(e) {
+            if (e.target == repostOverlay) {
+                repostOverlay.classList.remove('active');
+            }
+        };
+    }
+
+    // repost sheet item clicks
+    let repostBtn = document.getElementById('repostBtn');
+    if (repostBtn != null) {
+        repostBtn.onclick = function() {
+            let overlay = document.getElementById('repostSheetOverlay');
+            if (overlay != null) overlay.classList.remove('active');
+        };
+    }
+    let quoteBtn = document.getElementById('quoteBtn');
+    if (quoteBtn != null) {
+        quoteBtn.onclick = function() {
+            let overlay = document.getElementById('repostSheetOverlay');
+            if (overlay != null) overlay.classList.remove('active');
         };
     }
 });
