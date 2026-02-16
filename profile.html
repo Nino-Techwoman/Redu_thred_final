@@ -2694,6 +2694,23 @@
                     menuDropdown.classList.toggle('active');
                 });
 
+                // attach delete handler to the Delete button in the dropdown
+                let delBtn = menuDropdown.querySelector('.post-menu-item.delete');
+                if (delBtn) {
+                    (function(postDiv, postId) {
+                        delBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            menuDropdown.classList.remove('active');
+                            let deleteOverlay = document.getElementById('deletePostOverlay');
+                            if (deleteOverlay) {
+                                deleteOverlay.classList.add('active');
+                                deleteOverlay._profilePostElement = postDiv;
+                                deleteOverlay._deletedPostId = postId;
+                            }
+                        });
+                    })(div, post.id);
+                }
+
                 headerDiv.appendChild(menuContainer);
 
                 contentDiv.appendChild(headerDiv);
@@ -2900,6 +2917,23 @@
                     }
                     menuDropdown.classList.toggle('active');
                 });
+
+                // attach delete handler
+                let delBtn = menuDropdown.querySelector('.post-menu-item.delete');
+                if (delBtn) {
+                    (function(postDiv, postId) {
+                        delBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            menuDropdown.classList.remove('active');
+                            let deleteOverlay = document.getElementById('deletePostOverlay');
+                            if (deleteOverlay) {
+                                deleteOverlay.classList.add('active');
+                                deleteOverlay._profilePostElement = postDiv;
+                                deleteOverlay._deletedPostId = postId;
+                            }
+                        });
+                    })(div, post.id);
+                }
 
                 headerDiv.appendChild(menuContainer);
                 contentDiv.appendChild(headerDiv);
@@ -4873,19 +4907,20 @@
                 deletePostOverlay.classList.remove('active');
                 deletePostOverlay._postElement = null;
                 deletePostOverlay._profilePostElement = null;
+                deletePostOverlay._deletedPostId = null;
             };
 
             deletePostConfirm.onclick = function() {
                 let postEl = deletePostOverlay._postElement;
                 let profilePostEl = deletePostOverlay._profilePostElement;
-                let deletedPostId = null;
+                let deletedPostId = deletePostOverlay._deletedPostId || null;
 
                 if (postEl) {
-                    deletedPostId = postEl.getAttribute('data-id');
+                    if (!deletedPostId) deletedPostId = postEl.getAttribute('data-id');
                     postEl.remove();
                 }
                 if (profilePostEl) {
-                    deletedPostId = profilePostEl.getAttribute('data-id');
+                    if (!deletedPostId) deletedPostId = profilePostEl.getAttribute('data-id');
                     profilePostEl.remove();
                 }
 
@@ -4900,6 +4935,7 @@
                 deletePostOverlay.classList.remove('active');
                 deletePostOverlay._postElement = null;
                 deletePostOverlay._profilePostElement = null;
+                deletePostOverlay._deletedPostId = null;
 
                 // close thread overlay
                 let threadOverlay = document.getElementById('threadOverlay');
@@ -4924,6 +4960,7 @@
                     deletePostOverlay.classList.remove('active');
                     deletePostOverlay._postElement = null;
                     deletePostOverlay._profilePostElement = null;
+                    deletePostOverlay._deletedPostId = null;
                 }
             };
         }
