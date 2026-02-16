@@ -2592,32 +2592,7 @@
             let feed = document.getElementById('profileFeed');
             if (!feed || !currentUser) return;
 
-            let userPosts = getUserPosts();
-            let rawSamples = getSamplePosts();
-            let samplePosts = [];
-            for (let i = 0; i < rawSamples.length; i++) {
-                let p = rawSamples[i];
-                let imageVal = null;
-                if (p.image) {
-                    imageVal = p.image;
-                }
-                samplePosts.push({
-                    username: currentUser.username,
-                    avatar: currentUser.avatar,
-                    text: p.text,
-                    time: p.time,
-                    image: imageVal,
-                    likes: Math.floor(Math.random() * 120) + 1,
-                    comments: Math.floor(Math.random() * 30)
-                });
-            }
-            let posts = [];
-            for (let i = 0; i < userPosts.length; i++) {
-                posts.push(userPosts[i]);
-            }
-            for (let i = 0; i < samplePosts.length; i++) {
-                posts.push(samplePosts[i]);
-            }
+            let posts = getUserPosts();
             feed.innerHTML = '';
 
             if (posts.length == 0) {
@@ -2697,18 +2672,13 @@
                 // attach delete handler to the Delete button in the dropdown
                 let delBtn = menuDropdown.querySelector('.post-menu-item.delete');
                 if (delBtn) {
-                    (function(postDiv, postId) {
+                    (function(pid) {
                         delBtn.addEventListener('click', function(e) {
                             e.stopPropagation();
                             menuDropdown.classList.remove('active');
-                            let deleteOverlay = document.getElementById('deletePostOverlay');
-                            if (deleteOverlay) {
-                                deleteOverlay.classList.add('active');
-                                deleteOverlay._profilePostElement = postDiv;
-                                deleteOverlay._deletedPostId = postId;
-                            }
+                            showDeleteConfirm(pid);
                         });
-                    })(div, post.id);
+                    })(post.id);
                 }
 
                 headerDiv.appendChild(menuContainer);
@@ -2799,19 +2769,6 @@
             if (!feed || !currentUser) return;
 
             let userPosts = getUserPosts();
-            let mediaImages = [
-                'images/post1.jpg',
-                'images/post2.jpg',
-                'images/post3.jpg',
-                'images/post4.jpg'
-            ];
-            let mediaDates = [
-                '06/12/2025', '28/11/2025', '15/11/2025', '02/11/2025',
-                '20/10/2025', '08/10/2025', '25/09/2025', '12/09/2025',
-                '30/08/2025', '18/08/2025', '05/08/2025', '22/07/2025'
-            ];
-
-            // user posts with images first
             let mediaPosts = [];
             for (let i = 0; i < userPosts.length; i++) {
                 let hasImage = false;
@@ -2823,29 +2780,6 @@
                 if (hasImage) {
                     mediaPosts.push(userPosts[i]);
                 }
-            }
-
-            // add sample media posts with shuffled images
-            let shuffled = [];
-            for (let i = 0; i < mediaImages.length; i++) {
-                shuffled.push(mediaImages[i]);
-            }
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                let j = Math.floor(Math.random() * (i + 1));
-                let temp = shuffled[i];
-                shuffled[i] = shuffled[j];
-                shuffled[j] = temp;
-            }
-
-            for (let i = 0; i < mediaDates.length; i++) {
-                mediaPosts.push({
-                    username: currentUser.username,
-                    avatar: currentUser.avatar,
-                    image: shuffled[i % shuffled.length],
-                    time: mediaDates[i],
-                    likes: Math.floor(Math.random() * 120) + 1,
-                    comments: Math.floor(Math.random() * 30)
-                });
             }
 
             feed.innerHTML = '';
@@ -2921,18 +2855,13 @@
                 // attach delete handler
                 let delBtn = menuDropdown.querySelector('.post-menu-item.delete');
                 if (delBtn) {
-                    (function(postDiv, postId) {
+                    (function(pid) {
                         delBtn.addEventListener('click', function(e) {
                             e.stopPropagation();
                             menuDropdown.classList.remove('active');
-                            let deleteOverlay = document.getElementById('deletePostOverlay');
-                            if (deleteOverlay) {
-                                deleteOverlay.classList.add('active');
-                                deleteOverlay._profilePostElement = postDiv;
-                                deleteOverlay._deletedPostId = postId;
-                            }
+                            showDeleteConfirm(pid);
                         });
-                    })(div, post.id);
+                    })(post.id);
                 }
 
                 headerDiv.appendChild(menuContainer);
@@ -3842,11 +3771,9 @@
                             e.stopPropagation();
                             let dropdown = delBtn.closest('.thread-post-more-dropdown');
                             if (dropdown) dropdown.classList.remove('active');
-                            let deleteOverlay = document.getElementById('deletePostOverlay');
-                            if (deleteOverlay) {
-                                deleteOverlay.classList.add('active');
-                                deleteOverlay._postElement = delBtn.closest('.thread-post');
-                            }
+                            let threadPost = delBtn.closest('.thread-post');
+                            let pid = threadPost ? threadPost.getAttribute('data-id') : null;
+                            if (pid) showDeleteConfirm(pid);
                         };
                     })(threadDeleteBtns[db]);
                 }
@@ -4897,90 +4824,66 @@
             }
         });
 
-        // Delete post confirmation modal
-        let deletePostOverlay = document.getElementById('deletePostOverlay');
-        let deletePostCancel = document.getElementById('deletePostCancel');
-        let deletePostConfirm = document.getElementById('deletePostConfirm');
+        // Global variable to store ID of post being deleted
+        var pendingDeletePostId = null;
 
-        if (deletePostOverlay) {
-            deletePostCancel.onclick = function() {
-                deletePostOverlay.classList.remove('active');
-                deletePostOverlay._postElement = null;
-                deletePostOverlay._profilePostElement = null;
-                deletePostOverlay._deletedPostId = null;
-            };
-
-            deletePostConfirm.onclick = function() {
-                let postEl = deletePostOverlay._postElement;
-                let profilePostEl = deletePostOverlay._profilePostElement;
-                let deletedPostId = deletePostOverlay._deletedPostId || null;
-
-                if (postEl) {
-                    if (!deletedPostId) deletedPostId = postEl.getAttribute('data-id');
-                    postEl.remove();
-                }
-                if (profilePostEl) {
-                    if (!deletedPostId) deletedPostId = profilePostEl.getAttribute('data-id');
-                    profilePostEl.remove();
-                }
-
-                // remove from localStorage
-                if (deletedPostId) {
-                    let raw = localStorage.getItem('threads_user_posts');
-                    let userPosts = raw ? JSON.parse(raw) : [];
-                    userPosts = userPosts.filter(function(p) { return p.id != deletedPostId; });
-                    localStorage.setItem('threads_user_posts', JSON.stringify(userPosts));
-                }
-
-                deletePostOverlay.classList.remove('active');
-                deletePostOverlay._postElement = null;
-                deletePostOverlay._profilePostElement = null;
-                deletePostOverlay._deletedPostId = null;
-
-                // close thread overlay
-                let threadOverlay = document.getElementById('threadOverlay');
-                if (threadOverlay) {
-                    threadOverlay.classList.remove('active');
-                }
-
-                // re-render the active profile tab so deleted post disappears
-                let activeTab = document.querySelector('.profile-tab.active');
-                let activeTabName = activeTab ? activeTab.getAttribute('data-tab') : 'threads';
-                if (activeTabName == 'threads') {
-                    renderPosts();
-                } else if (activeTabName == 'media') {
-                    renderMedia();
-                } else if (activeTabName == 'reposts') {
-                    renderReposts();
-                }
-            };
-
-            deletePostOverlay.onclick = function(e) {
-                if (e.target === deletePostOverlay) {
-                    deletePostOverlay.classList.remove('active');
-                    deletePostOverlay._postElement = null;
-                    deletePostOverlay._profilePostElement = null;
-                    deletePostOverlay._deletedPostId = null;
-                }
-            };
+        // Delete post: show confirmation
+        function showDeleteConfirm(postId) {
+            pendingDeletePostId = postId;
+            var overlay = document.getElementById('deletePostOverlay');
+            if (overlay) overlay.classList.add('active');
         }
 
-        // Attach delete handler for profile post menu Delete buttons
-        document.addEventListener('click', function(e) {
-            let deleteItem = e.target.closest('.post-menu-item.delete');
-            if (deleteItem) {
-                e.stopPropagation();
-                let profilePost = deleteItem.closest('.profile-post');
-                let deleteOverlay = document.getElementById('deletePostOverlay');
-                if (deleteOverlay && profilePost) {
-                    // close dropdown
-                    let dropdown = deleteItem.closest('.post-menu-dropdown');
-                    if (dropdown) dropdown.classList.remove('active');
-                    deleteOverlay.classList.add('active');
-                    deleteOverlay._profilePostElement = profilePost;
+        // Delete post: cancel
+        function hideDeleteConfirm() {
+            pendingDeletePostId = null;
+            var overlay = document.getElementById('deletePostOverlay');
+            if (overlay) overlay.classList.remove('active');
+        }
+
+        // Delete post: confirm and remove everywhere
+        function confirmDeletePost() {
+            if (pendingDeletePostId != null) {
+                // remove from localStorage
+                var raw = localStorage.getItem('threads_user_posts');
+                var userPosts = raw ? JSON.parse(raw) : [];
+                var newPosts = [];
+                for (var i = 0; i < userPosts.length; i++) {
+                    if (userPosts[i].id != pendingDeletePostId) {
+                        newPosts.push(userPosts[i]);
+                    }
                 }
+                localStorage.setItem('threads_user_posts', JSON.stringify(newPosts));
             }
-        });
+
+            pendingDeletePostId = null;
+
+            // close overlay
+            var overlay = document.getElementById('deletePostOverlay');
+            if (overlay) overlay.classList.remove('active');
+
+            // close thread overlay if open
+            var threadOverlay = document.getElementById('threadOverlay');
+            if (threadOverlay) threadOverlay.classList.remove('active');
+
+            // re-render the active profile tab
+            var activeTabEl = document.querySelector('.profile-tab.active');
+            var tabName = activeTabEl ? activeTabEl.getAttribute('data-tab') : 'threads';
+            if (tabName == 'threads') {
+                renderPosts();
+            } else if (tabName == 'media') {
+                renderMedia();
+            } else if (tabName == 'reposts') {
+                renderReposts();
+            }
+        }
+
+        // Wire up the modal buttons
+        document.getElementById('deletePostCancel').onclick = hideDeleteConfirm;
+        document.getElementById('deletePostConfirm').onclick = confirmDeletePost;
+        document.getElementById('deletePostOverlay').onclick = function(e) {
+            if (e.target === this) hideDeleteConfirm();
+        };
 
         init();
         initSessionTimeout();
