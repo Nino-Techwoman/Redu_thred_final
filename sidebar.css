@@ -380,10 +380,19 @@
     filter: invert(1);
 }
 
+/* Main content offset for fixed sidebar */
+.main-content {
+    margin-left: 76px;
+}
+
 /* Tablet */
 @media (max-width: 768px) {
     .sidebar {
         width: 60px;
+    }
+
+    .main-content {
+        margin-left: 60px;
     }
 
     .nav-btn {
@@ -430,6 +439,11 @@
         justify-content: space-around;
         padding: 0;
         gap: 0;
+    }
+
+    .main-content {
+        margin-left: 0;
+        margin-bottom: 56px;
     }
 
     .nav-btn {
