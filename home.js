@@ -425,7 +425,7 @@ function createPostElement(post) {
     html = html + likesHtml;
     html = html + '</button>';
     html = html + '<button class="action-btn comment-btn" data-id="' + post.id + '">';
-    html = html + '<svg aria-label="Comment" role="img" viewBox="0 0 18 18" width="20" height="20" fill="currentColor"><title>Comment</title><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg>';
+    html = html + '<svg aria-label="Comment" role="img" viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><title>Comment</title><path d="M16.5 10C16.5 13.5899 13.5899 16.5 10 16.5C9.11599 16.5 8.27304 16.3235 7.50008 16.0023L3.5 17L4.49769 13.0001C4.17655 12.2271 4 11.3841 4 10.5C3.5 6.91015 6.41015 3.5 10 3.5C13.5899 3.5 16.5 6.41015 16.5 10Z" stroke-linejoin="round"/></svg>';
     html = html + repliesHtml;
     html = html + '</button>';
     html = html + '<div class="repost-container">';
@@ -2434,7 +2434,7 @@ function init() {
                         }
                     }
 
-                    allHtml += '<div class="thread-post">';
+                    allHtml += '<div class="thread-post" data-id="' + post.id + '">';
                     allHtml += '<div class="thread-post-header">';
                     allHtml += '<img src="' + encodeURI(post.avatar) + '" class="thread-post-avatar" alt="">';
                     allHtml += '<span class="thread-post-username">' + safeUsername + '</span>';
@@ -2493,6 +2493,24 @@ function init() {
                             }
                         };
                     })(threadPostMoreBtns[tp]);
+                }
+                // attach delete button handlers
+                let threadDeleteBtns = threadContent.querySelectorAll('.thread-post-menu-item.danger');
+                for (let db = 0; db < threadDeleteBtns.length; db++) {
+                    (function(delBtn) {
+                        delBtn.onclick = function(e) {
+                            e.stopPropagation();
+                            // close the dropdown
+                            let dropdown = delBtn.closest('.thread-post-more-dropdown');
+                            if (dropdown) dropdown.classList.remove('active');
+                            // show delete confirmation modal
+                            let deleteOverlay = document.getElementById('deletePostOverlay');
+                            if (deleteOverlay) {
+                                deleteOverlay.classList.add('active');
+                                deleteOverlay._postElement = delBtn.closest('.thread-post');
+                            }
+                        };
+                    })(threadDeleteBtns[db]);
                 }
                 threadOverlay.classList.add('active');
                 // hide side action button
@@ -3044,6 +3062,25 @@ function init() {
         });
     }
 
+    // reply more menu dropdown
+    let replyMoreMenuBtn = document.getElementById('replyMoreMenuBtn');
+    let replyMoreMenuDropdown = document.getElementById('replyMoreMenuDropdown');
+    if (replyMoreMenuBtn != null && replyMoreMenuDropdown != null) {
+        replyMoreMenuBtn.onclick = function(e) {
+            e.stopPropagation();
+            if (replyMoreMenuDropdown.classList.contains('active')) {
+                replyMoreMenuDropdown.classList.remove('active');
+            } else {
+                replyMoreMenuDropdown.classList.add('active');
+            }
+        };
+        document.addEventListener('click', function(e) {
+            if (replyMoreMenuDropdown.contains(e.target) == false && replyMoreMenuBtn.contains(e.target) == false) {
+                replyMoreMenuDropdown.classList.remove('active');
+            }
+        });
+    }
+
     // drafts view toggle
     let draftsBtn = document.getElementById('draftsBtn');
     let draftsView = document.getElementById('draftsView');
@@ -3306,6 +3343,69 @@ document.addEventListener('DOMContentLoaded', function() {
         headerLogoLink.onclick = function(e) {
             e.preventDefault();
             window.location.href = 'index.html';
+        };
+    }
+
+    // Delete post confirmation modal
+    let deletePostOverlay = document.getElementById('deletePostOverlay');
+    let deletePostCancel = document.getElementById('deletePostCancel');
+    let deletePostConfirm = document.getElementById('deletePostConfirm');
+
+    if (deletePostOverlay) {
+        deletePostCancel.onclick = function() {
+            deletePostOverlay.classList.remove('active');
+            deletePostOverlay._postElement = null;
+        };
+
+        deletePostConfirm.onclick = function() {
+            let postEl = deletePostOverlay._postElement;
+            let deletedPostId = null;
+            if (postEl) {
+                deletedPostId = postEl.getAttribute('data-id');
+                postEl.remove();
+            }
+            // remove from localStorage
+            if (deletedPostId) {
+                let userPosts = loadFromStorage('threads_user_posts');
+                if (userPosts != null) {
+                    userPosts = userPosts.filter(function(p) { return p.id != deletedPostId; });
+                    saveToStorage('threads_user_posts', userPosts);
+                }
+                // also remove from main feed
+                let feedPost = document.querySelector('.post[data-id="' + deletedPostId + '"]');
+                if (feedPost) feedPost.remove();
+            }
+            deletePostOverlay.classList.remove('active');
+            deletePostOverlay._postElement = null;
+            // close thread overlay and return to feed
+            let threadOverlay = document.getElementById('threadOverlay');
+            if (threadOverlay) {
+                threadOverlay.classList.remove('active');
+            }
+            // show side action button again
+            let sideActionContainer = document.querySelector('.side-action-container');
+            if (sideActionContainer) {
+                sideActionContainer.style.display = '';
+            }
+            // clear pending post if it matches
+            if (pendingNewPost != null && deletedPostId != null && pendingNewPost.id == deletedPostId) {
+                pendingNewPost = null;
+            }
+            // show "Deleted" toast
+            let deletedToast = document.getElementById('deletedToast');
+            if (deletedToast) {
+                deletedToast.classList.add('active');
+                setTimeout(function() {
+                    deletedToast.classList.remove('active');
+                }, 3000);
+            }
+        };
+
+        deletePostOverlay.onclick = function(e) {
+            if (e.target === deletePostOverlay) {
+                deletePostOverlay.classList.remove('active');
+                deletePostOverlay._postElement = null;
+            }
         };
     }
 

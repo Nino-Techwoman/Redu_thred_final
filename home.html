@@ -300,6 +300,12 @@
 
                 <!-- Feed Container -->
                 <div class="feed-container">
+                    <!-- Composer Bar -->
+                    <div class="composer" id="composer">
+                        <img src="images/default-avatar.jpg" class="composer-avatar" id="composerAvatar" alt="">
+                        <input type="text" class="composer-input" placeholder="What's new?" readonly>
+                        <button class="composer-post-btn" id="composerPostBtn">Post</button>
+                    </div>
                     <!-- update indicator -->
                     <div class="feed-update-bar" id="feedUpdateBar">
                         <svg class="feed-update-spinner" width="20" height="20" viewBox="0 0 20 20">
@@ -323,6 +329,10 @@
         </main>
 
         <!-- Markup Toast -->
+        <div class="deleted-toast" id="deletedToast">
+            <span>Deleted</span>
+        </div>
+
         <div class="markup-toast" id="markupToast">
             <span id="markupToastText">Markup by username.</span>
         </div>
@@ -843,6 +853,10 @@
                                     <path d="M16.5 13.5C15.6716 13.5 15 12.8284 15 12C15 11.1716 15.6716 10.5 16.5 10.5C17.3284 10.5 18 11.1716 18 12C18 12.8284 17.3284 13.5 16.5 13.5Z"/>
                                 </svg>
                             </button>
+                            <div class="more-menu-dropdown" id="replyMoreMenuDropdown">
+                                <button class="more-menu-item">Add AI label</button>
+                                <button class="more-menu-item">Mark as paid partnership</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1046,6 +1060,20 @@
                 </div>
                 <p class="create-feed-search-hint">Search for keywords or profiles to add to your new feed.</p>
                 <button class="create-feed-done-btn" id="createFeedSearchBackBtn">Back</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Post Confirmation Modal -->
+    <div class="delete-post-overlay" id="deletePostOverlay">
+        <div class="delete-post-modal">
+            <div class="delete-post-modal-body">
+                <h3 class="delete-post-modal-title">Delete post?</h3>
+                <p class="delete-post-modal-text">If you delete this post, you won't be able to restore it.</p>
+            </div>
+            <div class="delete-post-modal-actions">
+                <button class="delete-post-modal-btn cancel" id="deletePostCancel">Cancel</button>
+                <button class="delete-post-modal-btn confirm" id="deletePostConfirm">Delete</button>
             </div>
         </div>
     </div>

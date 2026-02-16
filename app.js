@@ -981,7 +981,7 @@ function setupEventListeners() {
         }
     };
     let menuBtn = document.getElementById("menuBtn");
-    let dropdownMenu = document.getElementById("dropdownMenu");
+    let dropdownMenu = document.getElementById("menuDropdown");
     if (menuBtn != null && dropdownMenu != null) {
         menuBtn.onclick = function(event) {
             event.stopPropagation();
@@ -990,9 +990,11 @@ function setupEventListeners() {
             } else {
                 // Always show main menu when opening
                 let menuMain = document.getElementById("menuMain");
-                let menuAppearance = document.getElementById("menuAppearance");
+                let menuAppearance = document.getElementById("menuAppearanceSubmenu");
+                let menuFeeds = document.getElementById("menuFeedsSubmenu");
                 if (menuMain) menuMain.style.display = "block";
-                if (menuAppearance) menuAppearance.style.display = "none";
+                if (menuAppearance) menuAppearance.classList.remove("active");
+                if (menuFeeds) menuFeeds.classList.remove("active");
                 dropdownMenu.classList.add("active");
             }
         };
@@ -1020,21 +1022,36 @@ function setupEventListeners() {
         };
         let appearanceBtn = document.getElementById("appearanceBtn");
         let menuMain = document.getElementById("menuMain");
-        let menuAppearance = document.getElementById("menuAppearance");
+        let menuAppearance = document.getElementById("menuAppearanceSubmenu");
+        let menuFeedsSubmenu = document.getElementById("menuFeedsSubmenu");
         if (appearanceBtn != null && menuMain != null && menuAppearance != null) {
             appearanceBtn.onclick = function() {
                 menuMain.style.display = "none";
-                menuAppearance.style.display = "block";
+                menuAppearance.classList.add("active");
             };
         }
-        let backBtn = document.getElementById("backBtn");
+        let backBtn = document.getElementById("appearanceBackBtn");
         if (backBtn != null && menuMain != null && menuAppearance != null) {
             backBtn.onclick = function() {
-                menuAppearance.style.display = "none";
+                menuAppearance.classList.remove("active");
                 menuMain.style.display = "block";
             };
         }
-        let themeButtons = document.querySelectorAll(".theme-btn");
+        let menuFeedsBtn = document.getElementById("menuFeedsBtn");
+        if (menuFeedsBtn != null && menuMain != null && menuFeedsSubmenu != null) {
+            menuFeedsBtn.onclick = function() {
+                menuMain.style.display = "none";
+                menuFeedsSubmenu.classList.add("active");
+            };
+        }
+        let menuFeedsBackBtn = document.getElementById("menuFeedsBackBtn");
+        if (menuFeedsBackBtn != null && menuMain != null && menuFeedsSubmenu != null) {
+            menuFeedsBackBtn.onclick = function() {
+                menuFeedsSubmenu.classList.remove("active");
+                menuMain.style.display = "block";
+            };
+        }
+        let themeButtons = dropdownMenu.querySelectorAll(".appearance-option");
         for (let i = 0; i < themeButtons.length; i++) {
             themeButtons[i].onclick = function(event) {
                 let button = event.currentTarget;

@@ -2511,6 +2511,20 @@
         </div>
     </div>
 
+    <!-- Delete Post Confirmation Modal -->
+    <div class="delete-post-overlay" id="deletePostOverlay">
+        <div class="delete-post-modal">
+            <div class="delete-post-modal-body">
+                <h3 class="delete-post-modal-title">Delete post?</h3>
+                <p class="delete-post-modal-text">If you delete this post, you won't be able to restore it.</p>
+            </div>
+            <div class="delete-post-modal-actions">
+                <button class="delete-post-modal-btn cancel" id="deletePostCancel">Cancel</button>
+                <button class="delete-post-modal-btn confirm" id="deletePostConfirm">Delete</button>
+            </div>
+        </div>
+    </div>
+
     <script src="security.js"></script>
     <script>
         // load saved theme
@@ -2620,6 +2634,7 @@
                 let post = posts[i];
                 let div = document.createElement('div');
                 div.className = 'profile-post';
+                if (post.id) div.setAttribute('data-id', post.id);
 
                 // avatar
                 let avatarImg = document.createElement('img');
@@ -2833,6 +2848,7 @@
                 let post = mediaPosts[i];
                 let div = document.createElement('div');
                 div.className = 'profile-post';
+                div.setAttribute('data-id', post.id);
 
                 let avatarImg = document.createElement('img');
                 avatarImg.className = 'profile-post-avatar';
@@ -3725,7 +3741,7 @@
                         imageHtml = '<img src="' + post.image + '" alt="Post image" class="thread-post-image">';
                     }
 
-                    allHtml += '<div class="thread-post">';
+                    allHtml += '<div class="thread-post" data-id="' + post.id + '">';
                     allHtml += '<div class="thread-post-header">';
                     allHtml += '<img src="' + encodeURI(post.avatar || 'images/avatar1.jpg') + '" class="thread-post-avatar" alt="">';
                     allHtml += '<span class="thread-post-username">' + safeUsername + '</span>';
@@ -3783,6 +3799,22 @@
                             }
                         };
                     })(threadPostMoreBtns[tp]);
+                }
+                // attach delete button handlers
+                let threadDeleteBtns = threadContent.querySelectorAll('.thread-post-menu-item.danger');
+                for (let db = 0; db < threadDeleteBtns.length; db++) {
+                    (function(delBtn) {
+                        delBtn.onclick = function(e) {
+                            e.stopPropagation();
+                            let dropdown = delBtn.closest('.thread-post-more-dropdown');
+                            if (dropdown) dropdown.classList.remove('active');
+                            let deleteOverlay = document.getElementById('deletePostOverlay');
+                            if (deleteOverlay) {
+                                deleteOverlay.classList.add('active');
+                                deleteOverlay._postElement = delBtn.closest('.thread-post');
+                            }
+                        };
+                    })(threadDeleteBtns[db]);
                 }
                 threadOverlay.classList.add('active');
                 hidePostToast();
@@ -3860,6 +3892,7 @@
         let menuDropdown = document.getElementById('menuDropdown');
         let menuMain = document.getElementById('menuMain');
         let menuAppearanceSubmenu = document.getElementById('menuAppearanceSubmenu');
+        let menuFeedsSubmenu = document.getElementById('menuFeedsSubmenu');
         let appearanceBtn = document.getElementById('appearanceBtn');
         let appearanceBackBtn = document.getElementById('appearanceBackBtn');
         let logoutBtn = document.getElementById('logoutBtn');
@@ -3870,6 +3903,7 @@
                 e.stopPropagation();
                 if (menuMain) menuMain.style.display = 'block';
                 if (menuAppearanceSubmenu) menuAppearanceSubmenu.classList.remove('active');
+                if (menuFeedsSubmenu) menuFeedsSubmenu.classList.remove('active');
                 if (menuDropdown.classList.contains('active')) {
                     menuDropdown.classList.remove('active');
                 } else {
@@ -3882,6 +3916,7 @@
                     menuDropdown.classList.remove('active');
                     if (menuMain) menuMain.style.display = 'block';
                     if (menuAppearanceSubmenu) menuAppearanceSubmenu.classList.remove('active');
+                    if (menuFeedsSubmenu) menuFeedsSubmenu.classList.remove('active');
                 }
             });
         }
@@ -3902,16 +3937,35 @@
             };
         }
 
+        // Feeds submenu
+        let menuFeedsBtn = document.getElementById('menuFeedsBtn');
+        let menuFeedsBackBtn = document.getElementById('menuFeedsBackBtn');
+
+        if (menuFeedsBtn && menuMain && menuFeedsSubmenu) {
+            menuFeedsBtn.onclick = function(e) {
+                e.stopPropagation();
+                menuMain.style.display = 'none';
+                menuFeedsSubmenu.classList.add('active');
+            };
+        }
+
+        if (menuFeedsBackBtn && menuMain && menuFeedsSubmenu) {
+            menuFeedsBackBtn.onclick = function(e) {
+                e.stopPropagation();
+                menuFeedsSubmenu.classList.remove('active');
+                menuMain.style.display = 'block';
+            };
+        }
+
         // appearance options
-        let appearanceOptions = document.querySelectorAll('.appearance-option');
+        let appearanceOptions = menuDropdown ? menuDropdown.querySelectorAll('.appearance-option') : [];
         for (let i = 0; i < appearanceOptions.length; i++) {
             let btn = appearanceOptions[i];
             btn.onclick = function(e) {
                 e.stopPropagation();
                 let theme = this.getAttribute('data-theme');
-                let allOptions = document.querySelectorAll('.appearance-option');
-                for (let j = 0; j < allOptions.length; j++) {
-                    allOptions[j].classList.remove('active');
+                for (let j = 0; j < appearanceOptions.length; j++) {
+                    appearanceOptions[j].classList.remove('active');
                 }
                 this.classList.add('active');
                 if (theme == 'dark') {
@@ -3938,6 +3992,110 @@
                 localStorage.removeItem('threads_user');
                 window.location.href = 'login.html';
             };
+        }
+
+        // Mobile menu dropdown
+        let mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        let mobileMenuDropdown = document.getElementById('mobileMenuDropdown');
+        let mobileMenuMain = document.getElementById('mobileMenuMain');
+        let mobileAppearanceSubmenu = document.getElementById('mobileAppearanceSubmenu');
+        let mobileFeedsSubmenu = document.getElementById('mobileFeedsSubmenu');
+
+        if (mobileMenuBtn != null && mobileMenuDropdown != null) {
+            mobileMenuBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (mobileMenuMain) mobileMenuMain.style.display = '';
+                if (mobileAppearanceSubmenu) mobileAppearanceSubmenu.classList.remove('active');
+                if (mobileFeedsSubmenu) mobileFeedsSubmenu.classList.remove('active');
+                mobileMenuDropdown.classList.toggle('active');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!mobileMenuDropdown.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    mobileMenuDropdown.classList.remove('active');
+                    if (mobileMenuMain) mobileMenuMain.style.display = '';
+                    if (mobileAppearanceSubmenu) mobileAppearanceSubmenu.classList.remove('active');
+                    if (mobileFeedsSubmenu) mobileFeedsSubmenu.classList.remove('active');
+                }
+            });
+
+            // Mobile Appearance submenu
+            let mobileAppearanceBtn = document.getElementById('mobileAppearanceBtn');
+            let mobileAppearanceBackBtn = document.getElementById('mobileAppearanceBackBtn');
+
+            if (mobileAppearanceBtn) {
+                mobileAppearanceBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    mobileMenuMain.style.display = 'none';
+                    mobileAppearanceSubmenu.classList.add('active');
+                };
+            }
+
+            if (mobileAppearanceBackBtn) {
+                mobileAppearanceBackBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    mobileAppearanceSubmenu.classList.remove('active');
+                    mobileMenuMain.style.display = '';
+                };
+            }
+
+            // Mobile Appearance theme options
+            let mobileAppearanceOptions = mobileMenuDropdown.querySelectorAll('.appearance-option');
+            for (let i = 0; i < mobileAppearanceOptions.length; i++) {
+                mobileAppearanceOptions[i].onclick = function(e) {
+                    e.stopPropagation();
+                    let theme = this.getAttribute('data-theme');
+                    for (let j = 0; j < mobileAppearanceOptions.length; j++) {
+                        mobileAppearanceOptions[j].classList.remove('active');
+                    }
+                    this.classList.add('active');
+                    if (theme == 'light') {
+                        document.documentElement.setAttribute('data-theme', 'light');
+                        localStorage.setItem('threads_theme', JSON.stringify('light'));
+                    } else if (theme == 'dark') {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                        localStorage.setItem('threads_theme', JSON.stringify('dark'));
+                    } else {
+                        localStorage.setItem('threads_theme', JSON.stringify('auto'));
+                        if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                            document.documentElement.setAttribute('data-theme', 'light');
+                        } else {
+                            document.documentElement.setAttribute('data-theme', 'dark');
+                        }
+                    }
+                };
+            }
+
+            // Mobile Feeds submenu
+            let mobileFeedsBtn = document.getElementById('mobileFeedsBtn');
+            let mobileFeedsBackBtn = document.getElementById('mobileFeedsBackBtn');
+
+            if (mobileFeedsBtn) {
+                mobileFeedsBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    mobileMenuMain.style.display = 'none';
+                    mobileFeedsSubmenu.classList.add('active');
+                };
+            }
+
+            if (mobileFeedsBackBtn) {
+                mobileFeedsBackBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    mobileFeedsSubmenu.classList.remove('active');
+                    mobileMenuMain.style.display = '';
+                };
+            }
+
+            // Mobile Logout
+            let mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
+            if (mobileLogoutBtn) {
+                mobileLogoutBtn.onclick = function() {
+                    localStorage.removeItem('threads_is_logged_in');
+                    localStorage.removeItem('threads_user');
+                    window.location.href = 'login.html';
+                };
+            }
         }
 
         // Edit Profile Modal
@@ -4701,6 +4859,88 @@
                 let allDropdowns = document.querySelectorAll('.post-menu-dropdown.active');
                 for (let i = 0; i < allDropdowns.length; i++) {
                     allDropdowns[i].classList.remove('active');
+                }
+            }
+        });
+
+        // Delete post confirmation modal
+        let deletePostOverlay = document.getElementById('deletePostOverlay');
+        let deletePostCancel = document.getElementById('deletePostCancel');
+        let deletePostConfirm = document.getElementById('deletePostConfirm');
+
+        if (deletePostOverlay) {
+            deletePostCancel.onclick = function() {
+                deletePostOverlay.classList.remove('active');
+                deletePostOverlay._postElement = null;
+                deletePostOverlay._profilePostElement = null;
+            };
+
+            deletePostConfirm.onclick = function() {
+                let postEl = deletePostOverlay._postElement;
+                let profilePostEl = deletePostOverlay._profilePostElement;
+                let deletedPostId = null;
+
+                if (postEl) {
+                    deletedPostId = postEl.getAttribute('data-id');
+                    postEl.remove();
+                }
+                if (profilePostEl) {
+                    deletedPostId = profilePostEl.getAttribute('data-id');
+                    profilePostEl.remove();
+                }
+
+                // remove from localStorage
+                if (deletedPostId) {
+                    let raw = localStorage.getItem('threads_user_posts');
+                    let userPosts = raw ? JSON.parse(raw) : [];
+                    userPosts = userPosts.filter(function(p) { return p.id != deletedPostId; });
+                    localStorage.setItem('threads_user_posts', JSON.stringify(userPosts));
+                }
+
+                deletePostOverlay.classList.remove('active');
+                deletePostOverlay._postElement = null;
+                deletePostOverlay._profilePostElement = null;
+
+                // close thread overlay
+                let threadOverlay = document.getElementById('threadOverlay');
+                if (threadOverlay) {
+                    threadOverlay.classList.remove('active');
+                }
+
+                // re-render the active profile tab so deleted post disappears
+                let activeTab = document.querySelector('.profile-tab.active');
+                let activeTabName = activeTab ? activeTab.getAttribute('data-tab') : 'threads';
+                if (activeTabName == 'threads') {
+                    renderPosts();
+                } else if (activeTabName == 'media') {
+                    renderMedia();
+                } else if (activeTabName == 'reposts') {
+                    renderReposts();
+                }
+            };
+
+            deletePostOverlay.onclick = function(e) {
+                if (e.target === deletePostOverlay) {
+                    deletePostOverlay.classList.remove('active');
+                    deletePostOverlay._postElement = null;
+                    deletePostOverlay._profilePostElement = null;
+                }
+            };
+        }
+
+        // Attach delete handler for profile post menu Delete buttons
+        document.addEventListener('click', function(e) {
+            let deleteItem = e.target.closest('.post-menu-item.delete');
+            if (deleteItem) {
+                e.stopPropagation();
+                let profilePost = deleteItem.closest('.profile-post');
+                let deleteOverlay = document.getElementById('deletePostOverlay');
+                if (deleteOverlay && profilePost) {
+                    // close dropdown
+                    let dropdown = deleteItem.closest('.post-menu-dropdown');
+                    if (dropdown) dropdown.classList.remove('active');
+                    deleteOverlay.classList.add('active');
+                    deleteOverlay._profilePostElement = profilePost;
                 }
             }
         });
