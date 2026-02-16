@@ -2559,6 +2559,23 @@
                 if (!posts) {
                     posts = [];
                 }
+                // assign IDs to any posts missing one
+                let needsSave = false;
+                let maxId = 3000;
+                for (let i = 0; i < posts.length; i++) {
+                    if (posts[i].id && posts[i].id >= maxId) {
+                        maxId = posts[i].id + 1;
+                    }
+                }
+                for (let i = 0; i < posts.length; i++) {
+                    if (!posts[i].id) {
+                        posts[i].id = maxId++;
+                        needsSave = true;
+                    }
+                }
+                if (needsSave) {
+                    localStorage.setItem('threads_user_posts', JSON.stringify(posts));
+                }
                 return posts;
             } catch(e) {
                 return [];
@@ -3619,8 +3636,17 @@
                     // get existing posts
                     let posts = getUserPosts();
 
+                    // generate unique id
+                    let maxId = 3000;
+                    for (let i = 0; i < posts.length; i++) {
+                        if (posts[i].id && posts[i].id >= maxId) {
+                            maxId = posts[i].id + 1;
+                        }
+                    }
+
                     // make the new post object
                     let newPost = {
+                        id: maxId,
                         username: currentUser.username,
                         avatar: currentUser.avatar,
                         text: text,
