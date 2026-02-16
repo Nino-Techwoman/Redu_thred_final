@@ -2681,16 +2681,10 @@
                     menuDropdown.classList.toggle('active');
                 });
 
-                // attach delete handler to the Delete button in the dropdown
+                // set post id on delete button for event delegation
                 let delBtn = menuDropdown.querySelector('.post-menu-item.delete');
                 if (delBtn) {
-                    (function(pid) {
-                        delBtn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            menuDropdown.classList.remove('active');
-                            showDeleteConfirm(pid);
-                        });
-                    })(post.id);
+                    delBtn.setAttribute('data-delete-post-id', post.id);
                 }
 
                 headerDiv.appendChild(menuContainer);
@@ -2859,16 +2853,10 @@
                     menuDropdown.classList.toggle('active');
                 });
 
-                // attach delete handler
+                // set post id on delete button for event delegation
                 let delBtn = menuDropdown.querySelector('.post-menu-item.delete');
                 if (delBtn) {
-                    (function(pid) {
-                        delBtn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            menuDropdown.classList.remove('active');
-                            showDeleteConfirm(pid);
-                        });
-                    })(post.id);
+                    delBtn.setAttribute('data-delete-post-id', post.id);
                 }
 
                 headerDiv.appendChild(menuContainer);
@@ -3736,7 +3724,7 @@
                     allHtml += '<button class="thread-post-menu-item"><span>Hide like and share count</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>';
                     allHtml += '<button class="thread-post-menu-item"><span>Reply options</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>';
                     allHtml += '<div class="thread-post-menu-divider"></div>';
-                    allHtml += '<button class="thread-post-menu-item danger"><span>Delete</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></button>';
+                    allHtml += '<button class="thread-post-menu-item danger" data-delete-post-id="' + post.id + '"><span>Delete</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></button>';
                     allHtml += '<div class="thread-post-menu-divider"></div>';
                     allHtml += '<button class="thread-post-menu-item"><span>Copy link</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>';
                     allHtml += '</div>';
@@ -3778,20 +3766,6 @@
                             }
                         };
                     })(threadPostMoreBtns[tp]);
-                }
-                // attach delete button handlers
-                let threadDeleteBtns = threadContent.querySelectorAll('.thread-post-menu-item.danger');
-                for (let db = 0; db < threadDeleteBtns.length; db++) {
-                    (function(delBtn) {
-                        delBtn.onclick = function(e) {
-                            e.stopPropagation();
-                            let dropdown = delBtn.closest('.thread-post-more-dropdown');
-                            if (dropdown) dropdown.classList.remove('active');
-                            let threadPost = delBtn.closest('.thread-post');
-                            let pid = threadPost ? threadPost.getAttribute('data-id') : null;
-                            if (pid) showDeleteConfirm(pid);
-                        };
-                    })(threadDeleteBtns[db]);
                 }
                 threadOverlay.classList.add('active');
                 hidePostToast();
@@ -4840,32 +4814,41 @@
             }
         });
 
-        // Global variable to store ID of post being deleted
+        // ======= DELETE POST - GLOBAL EVENT DELEGATION =======
         var pendingDeletePostId = null;
 
-        // Delete post: show confirmation
-        function showDeleteConfirm(postId) {
-            pendingDeletePostId = postId;
-            var overlay = document.getElementById('deletePostOverlay');
-            if (overlay) overlay.classList.add('active');
-        }
+        // Single global click handler catches ALL delete buttons everywhere
+        document.addEventListener('click', function(e) {
+            // Check if clicked element or its parent has data-delete-post-id
+            var deleteBtn = e.target.closest('[data-delete-post-id]');
+            if (deleteBtn) {
+                e.stopPropagation();
+                e.preventDefault();
+                pendingDeletePostId = deleteBtn.getAttribute('data-delete-post-id');
+                // close any open menus
+                var openMenu = deleteBtn.closest('.post-menu-dropdown, .thread-post-more-dropdown');
+                if (openMenu) openMenu.classList.remove('active');
+                // show confirmation modal
+                var overlay = document.getElementById('deletePostOverlay');
+                if (overlay) overlay.classList.add('active');
+                return;
+            }
+        });
 
-        // Delete post: cancel
-        function hideDeleteConfirm() {
+        // Cancel button
+        document.getElementById('deletePostCancel').addEventListener('click', function() {
             pendingDeletePostId = null;
-            var overlay = document.getElementById('deletePostOverlay');
-            if (overlay) overlay.classList.remove('active');
-        }
+            document.getElementById('deletePostOverlay').classList.remove('active');
+        });
 
-        // Delete post: confirm and remove everywhere
-        function confirmDeletePost() {
-            if (pendingDeletePostId != null) {
-                // remove from localStorage
+        // Confirm delete button
+        document.getElementById('deletePostConfirm').addEventListener('click', function() {
+            if (pendingDeletePostId !== null && pendingDeletePostId !== undefined) {
                 var raw = localStorage.getItem('threads_user_posts');
                 var userPosts = raw ? JSON.parse(raw) : [];
                 var newPosts = [];
                 for (var i = 0; i < userPosts.length; i++) {
-                    if (userPosts[i].id != pendingDeletePostId) {
+                    if (String(userPosts[i].id) !== String(pendingDeletePostId)) {
                         newPosts.push(userPosts[i]);
                     }
                 }
@@ -4874,9 +4857,8 @@
 
             pendingDeletePostId = null;
 
-            // close overlay
-            var overlay = document.getElementById('deletePostOverlay');
-            if (overlay) overlay.classList.remove('active');
+            // close delete modal
+            document.getElementById('deletePostOverlay').classList.remove('active');
 
             // close thread overlay if open
             var threadOverlay = document.getElementById('threadOverlay');
@@ -4885,21 +4867,18 @@
             // re-render the active profile tab
             var activeTabEl = document.querySelector('.profile-tab.active');
             var tabName = activeTabEl ? activeTabEl.getAttribute('data-tab') : 'threads';
-            if (tabName == 'threads') {
-                renderPosts();
-            } else if (tabName == 'media') {
-                renderMedia();
-            } else if (tabName == 'reposts') {
-                renderReposts();
-            }
-        }
+            if (tabName === 'threads') renderPosts();
+            else if (tabName === 'media') renderMedia();
+            else if (tabName === 'reposts') renderReposts();
+        });
 
-        // Wire up the modal buttons
-        document.getElementById('deletePostCancel').onclick = hideDeleteConfirm;
-        document.getElementById('deletePostConfirm').onclick = confirmDeletePost;
-        document.getElementById('deletePostOverlay').onclick = function(e) {
-            if (e.target === this) hideDeleteConfirm();
-        };
+        // Click outside modal to cancel
+        document.getElementById('deletePostOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                pendingDeletePostId = null;
+                this.classList.remove('active');
+            }
+        });
 
         init();
         initSessionTimeout();
