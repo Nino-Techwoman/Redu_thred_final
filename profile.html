@@ -2614,13 +2614,8 @@
                 // avatar
                 let avatarImg = document.createElement('img');
                 avatarImg.className = 'profile-post-avatar';
-                avatarImg.alt = sanitize(post.username || currentUser.username);
-                let avatarSrc = post.avatar || currentUser.avatar;
-                if (typeof avatarSrc == 'string' && avatarSrc.length > 0) {
-                    avatarImg.src = avatarSrc;
-                } else {
-                    avatarImg.src = '';
-                }
+                avatarImg.alt = sanitize(currentUser.username);
+                avatarImg.src = currentUser.avatar || '';
                 div.appendChild(avatarImg);
 
                 // content
@@ -2633,7 +2628,7 @@
 
                 let usernameSpan = document.createElement('span');
                 usernameSpan.className = 'profile-post-username';
-                usernameSpan.textContent = post.username || currentUser.username;
+                usernameSpan.textContent = currentUser.username;
                 headerDiv.appendChild(usernameSpan);
 
                 let timeSpan = document.createElement('span');
@@ -2803,13 +2798,8 @@
 
                 let avatarImg = document.createElement('img');
                 avatarImg.className = 'profile-post-avatar';
-                avatarImg.alt = post.username || currentUser.username;
-                let avatarSrc = post.avatar || currentUser.avatar;
-                if (typeof avatarSrc == 'string' && avatarSrc.length > 0) {
-                    avatarImg.src = avatarSrc;
-                } else {
-                    avatarImg.src = '';
-                }
+                avatarImg.alt = currentUser.username;
+                avatarImg.src = currentUser.avatar || '';
                 div.appendChild(avatarImg);
 
                 let contentDiv = document.createElement('div');
@@ -2820,7 +2810,7 @@
 
                 let usernameSpan = document.createElement('span');
                 usernameSpan.className = 'profile-post-username';
-                usernameSpan.textContent = post.username || currentUser.username;
+                usernameSpan.textContent = currentUser.username;
                 headerDiv.appendChild(usernameSpan);
 
                 let timeSpan = document.createElement('span');
@@ -3687,7 +3677,7 @@
 
                 for (let p = 0; p < userPosts.length; p++) {
                     let post = userPosts[p];
-                    let safeUsername = sanitize(post.username || '');
+                    let safeUsername = sanitize(currentUser.username || '');
                     let safeText = sanitize(post.text || '');
                     safeText = safeText.replace(/#(\w+)/g, '<span class="post-hashtag">#$1</span>');
                     safeText = safeText.replace(/@(\w+)/g, '<span class="post-mention">@$1</span>');
@@ -3706,7 +3696,7 @@
 
                     allHtml += '<div class="thread-post" data-id="' + post.id + '">';
                     allHtml += '<div class="thread-post-header">';
-                    allHtml += '<img src="' + encodeURI(post.avatar || 'images/avatar1.jpg') + '" class="thread-post-avatar" alt="">';
+                    allHtml += '<img src="' + encodeURI(currentUser.avatar || 'images/avatar1.jpg') + '" class="thread-post-avatar" alt="">';
                     allHtml += '<span class="thread-post-username">' + safeUsername + '</span>';
                     allHtml += '<span class="thread-post-time">' + (post.time || '') + '</span>';
                     allHtml += '<div class="thread-post-more-container">';
